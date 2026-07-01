@@ -206,6 +206,7 @@ const FREQ = {
 const LENDERS = {
   rtmi: {
     name:"RTMI Capital", factorLabel:"Interest Rate Factor (Sell Rate)",
+    payoffBase:"total",
     cadence:"weekly",
     tiers:[{key:"100",label:"100% IF",forgive:1},{key:"50",label:"50% IF",forgive:.5}],
     defaults:{funded:300000, factor:1.25, term:18},
@@ -215,6 +216,7 @@ const LENDERS = {
   },
   kapitus: {
     name:"Kapitus", factorLabel:"Sell Rate (Buy Rate + Commission)",
+    payoffBase:"total",
     cadence:"monthly",
     tiers:[{key:"100",label:"100% IF",forgive:1},{key:"10",label:"10% IF (Standard)",forgive:.10}],
     defaults:{funded:300000, factor:1.30, term:12},
@@ -224,6 +226,7 @@ const LENDERS = {
   },
   ondeck: {
     name:"OnDeck", factorLabel:"Factor (from Cents-on-Dollar)",
+    payoffBase:"total",
     cadence:"weekly",
     tiers:[{key:"100",label:"100% IF",forgive:1},{key:"25",label:"25% IF (Standard)",forgive:.25}],
     defaults:{funded:275000, factor:1.314, term:24},
@@ -233,6 +236,7 @@ const LENDERS = {
   },
   mulligan: {
     name:"Mulligan Funding", factorLabel:"Factor (Total Repayment ÷ Funded)",
+    payoffBase:"remaining",
     cadence:"weekly",
     tiers:[{key:"100",label:"100% IF",forgive:1},{key:"50",label:"50% IF (Standard)",forgive:.5}],
     defaults:{funded:250000, factor:1.18, term:24},
@@ -242,6 +246,7 @@ const LENDERS = {
   },
   peac: {
     name:"Peac (WCL)", factorLabel:"Sell Rate (Factor)",
+    payoffBase:"remaining",
     cadence:"monthly",
     tiers:[{key:"100",label:"100% IF",forgive:1},{key:"30",label:"30% IF (Standard)",forgive:.30}],
     defaults:{funded:10000, factor:1.12, term:12},
@@ -330,9 +335,13 @@ function computeModel(){
   return { payback, financeCharge, n, payment, r: s.r, rows };
 }
 
-/* Total Payoff = full Total Payback − IF% of remaining (unearned) interest.
-   At 100% IF this = funded principal + interest accrued to date. */
-const payoffFor = (row, forgive, payback) => round2(payback - forgive*row.remainingInterest);
+/* Per-lender payoff convention, matching each lender's own documentation:
+   - "total":     Total Payback − IF%×remaining interest  (Kapitus/OnDeck/RTMI; 100% = funded + interest accrued to date)
+   - "remaining": remaining balance (RTR) − IF%×remaining interest  (Mulligan/Peac; 100% = remaining principal) */
+function payoffFor(row, forgive, payback, base){
+  const gross = (base === "remaining") ? row.rtr : payback;
+  return round2(gross - forgive*row.remainingInterest);
+}
 
 let MODEL = null;
 
@@ -343,6 +352,8 @@ function render(){
   const m = MODEL;
   const feeAmt = round2(state.feePct/100 * state.funded);
   const fw = FREQ[L.cadence];
+  const base = L.payoffBase;
+  const baseLabel = base === "remaining" ? "Balance" : "Total Payback";
 
   id("lenderName").textContent = L.name;
   id("cFunded").textContent  = fmt$0(state.funded);
@@ -355,13 +366,13 @@ function render(){
       : `Adjusts in 0.25% steps · added to the "Payoff + Fees" column.`;
   id("thPayoff").textContent = "Total Payoff (" + tier.label + ")";
   id("tierNote").textContent =
-    "Total Payoff = Total Payback − " + Math.round(tier.forgive*100) + "% of Remaining Interest" +
-    (tier.forgive===1 ? " (= funded principal + interest accrued to that point)" : "") +
+    "Total Payoff = " + baseLabel + " − " + Math.round(tier.forgive*100) + "% of Remaining Interest" +
+    (tier.forgive===1 ? (base==="remaining" ? " (= remaining principal)" : " (= funded principal + interest accrued to that point)") : "") +
     ". " + L.note;
 
   const tb = id("tbody");
   tb.innerHTML = m.rows.map(row=>{
-    const po = payoffFor(row, tier.forgive, m.payback);
+    const po = payoffFor(row, tier.forgive, m.payback, L.payoffBase);
     const pof = round2(po + feeAmt);
     return `<tr>
       <td>#${row.k}</td>
@@ -376,7 +387,7 @@ function render(){
 
   id("foot").textContent =
     `${L.name} · ${fmt$0(state.funded)} funded · factor ${fmtFactor(state.factor)} · ${state.term}-mo term · ${m.n} ${fw.word} payments · ` +
-    `payoff = total payback − ${Math.round(tier.forgive*100)}% × remaining interest` +
+    `payoff = ${baseLabel.toLowerCase()} − ${Math.round(tier.forgive*100)}% × remaining interest` +
     (state.feePct>0 ? ` · +${state.feePct.toFixed(2)}% (${fmt$0(feeAmt)}) fee` : "") +
     `. Estimate only — final terms per executed agreement.`;
 }
@@ -422,7 +433,7 @@ function downloadPDF(tierKey){
   y += Math.ceil(info.length/2)*17 + 12;
 
   const body = m.rows.map(row=>{
-    const po = payoffFor(row, tier.forgive, m.payback);
+    const po = payoffFor(row, tier.forgive, m.payback, L.payoffBase);
     const base = [ "#"+row.k,
       fmt$(row.principal), fmt$(row.interest), fmt$(row.rtr), fmt$(row.remainingInterest),
       fmt$(po) ];
