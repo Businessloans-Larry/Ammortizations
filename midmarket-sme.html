@@ -350,9 +350,10 @@ function computeModel(){
   if(mode === "apr"){
     // APR-amortizing (OnDeck LOC): periodic rate = APR ÷ payments-per-year; standard amortization payment.
     const r = (state.factor/100) / FREQ[L.cadence].perYear;
-    payment = round2( r<=0 ? funded/n : funded*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1) );
-    payback = round2(payment * n);
-    s = buildSchedule(funded, payment, n, r);
+    const pmtRaw = (r<=0 ? funded/n : funded*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1));
+    payment = round2(pmtRaw);
+    payback = round2(pmtRaw * n);
+    s = buildSchedule(funded, pmtRaw, n, r);   // full-precision payment (matches OnDeck's sheet)
   } else {
     payback = round2(funded * state.factor);
     payment = round2(payback / n);
@@ -363,16 +364,20 @@ function computeModel(){
   rows.forEach((row,i)=> row.k = i+1);
   let running = 0;
   for(let i=rows.length-1;i>=0;i--){ rows[i].remainingInterest = round2(running); running += rows[i].interest; }
-  rows.forEach(row=> row.rtr = round2(row.balance + row.remainingInterest)); // Balance = total still owed (payback − payments)
+  let cum = 0;
+  for(let i=0;i<rows.length;i++){ cum = round2(cum + rows[i].interest); rows[i].cumInt = cum; } // interest accrued through this row
+  rows.forEach(row=> row.rtr = round2(row.balance + row.remainingInterest));
   return { payback, financeCharge, n, payment, r: s.r, rows };
 }
 
 /* Per-lender payoff convention, matching each lender's own documentation:
    - "total":     Total Payback − IF%×remaining interest  (Kapitus/OnDeck/RTMI; 100% = funded + interest accrued to date)
    - "remaining": remaining balance (RTR) − IF%×remaining interest  (Mulligan/Peac; 100% = remaining principal) */
-function payoffFor(row, forgive, payback, base){
-  const gross = (base === "remaining") ? row.rtr : payback;
-  return round2(gross - forgive*row.remainingInterest);
+function payoffFor(row, forgive, base, funded){
+  const nonForgiven = (1-forgive)*row.remainingInterest;
+  return (base === "total")
+    ? round2(funded + row.cumInt + nonForgiven)   // funded principal + interest accrued to date + non-forgiven remainder
+    : round2(row.balance + nonForgiven);          // remaining principal + non-forgiven remainder
 }
 
 let MODEL = null;
@@ -397,20 +402,20 @@ function render(){
       ? `${state.feePct.toFixed(2)}% of loan = ${fmt$(feeAmt)} · added to "Payoff + Fees"`
       : `Adjusts in 0.25% steps · added to the "Payoff + Fees" column.`;
   id("thPayoff").textContent = "Total Payoff (" + tier.label + ")";
+  const anchor = (base==="total") ? "funded principal + interest accrued to that point" : "remaining principal";
+  const nfPct = Math.round((1-tier.forgive)*100);
   id("tierNote").textContent =
-    "Total Payoff = " + baseLabel + " − " + Math.round(tier.forgive*100) + "% of Remaining Interest" +
-    (tier.forgive===1 ? (base==="remaining" ? " (= remaining principal)" : " (= funded principal + interest accrued to that point)") : "") +
-    ". " + L.note;
+    "Total Payoff = " + anchor + (tier.forgive<1 ? " + " + nfPct + "% of remaining interest" : "") + ". " + L.note;
 
   const tb = id("tbody");
   tb.innerHTML = m.rows.map(row=>{
-    const po = payoffFor(row, tier.forgive, m.payback, L.payoffBase);
+    const po = payoffFor(row, tier.forgive, L.payoffBase, state.funded);
     const pof = round2(po + feeAmt);
     return `<tr>
       <td>#${row.k}</td>
       <td class="num">${fmt$(row.principal)}</td>
       <td class="num">${fmt$(row.interest)}</td>
-      <td class="num">${fmt$(row.rtr)}</td>
+      <td class="num">${fmt$(row.balance)}</td>
       <td class="num">${fmt$(row.remainingInterest)}</td>
       <td class="num pf">${fmt$(po)}</td>
       ${SHOW_FEES ? `<td class="num pff">${fmt$(pof)}</td>` : ""}
@@ -419,7 +424,7 @@ function render(){
 
   id("foot").textContent =
     `${L.name} · ${fmt$0(state.funded)} funded · ${rateStr()} · ${state.term}-mo term · ${m.n} ${fw.word} payments · ` +
-    `payoff = ${baseLabel.toLowerCase()} − ${Math.round(tier.forgive*100)}% × remaining interest` +
+    `payoff = ${base==="total"?"funded + interest accrued":"remaining principal"}${tier.forgive<1 ? " + "+nfPct+"% remaining interest" : ""}` +
     (state.feePct>0 ? ` · +${state.feePct.toFixed(2)}% (${fmt$0(feeAmt)}) fee` : "") +
     `. Estimate only — final terms per executed agreement.`;
 }
@@ -465,9 +470,9 @@ function downloadPDF(tierKey){
   y += Math.ceil(info.length/2)*17 + 12;
 
   const body = m.rows.map(row=>{
-    const po = payoffFor(row, tier.forgive, m.payback, L.payoffBase);
+    const po = payoffFor(row, tier.forgive, L.payoffBase, state.funded);
     const base = [ "#"+row.k,
-      fmt$(row.principal), fmt$(row.interest), fmt$(row.rtr), fmt$(row.remainingInterest),
+      fmt$(row.principal), fmt$(row.interest), fmt$(row.balance), fmt$(row.remainingInterest),
       fmt$(po) ];
     if(SHOW_FEES) base.push(fmt$(round2(po+feeAmt)));
     return base;
