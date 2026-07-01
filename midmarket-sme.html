@@ -141,7 +141,7 @@ tbody td.pay{font-weight:600;color:var(--bl-navy)}
       <div class="field">
         <div class="row"><label id="factorLbl">Sell Rate (Factor)</label><input class="numbox" id="factorBox" type="text" /></div>
         <input type="range" id="factorRange" min="1.05" max="1.60" step="0.001" />
-        <div class="hint">Total Payback = Funded × Factor.</div>
+        <div class="hint" id="factorHint">Total Payback = Funded × Factor.</div>
       </div>
       <div class="field">
         <div class="row"><label>Loan Term (Months)</label><input class="numbox" id="termBox" type="text" /></div>
@@ -234,6 +234,17 @@ const LENDERS = {
     count:m=> Math.round(m*52/12),
     note:"OnDeck weekly amortization = round(months × 52 ⁄ 12). Origination fee is a % of the loan (24-mo term is typically 4%)."
   },
+  ondeck_loc: {
+    name:"OnDeck LOC", factorLabel:"APR (%)",
+    rateMode:"apr", rateMin:10, rateMax:90, rateStep:0.1,
+    payoffBase:"remaining",
+    cadence:"weekly",
+    tiers:[{key:"100",label:"100% Prepay (anytime)",forgive:1}],
+    defaults:{funded:200000, factor:51.9, term:24},
+    feePct:0,
+    count:m=> Math.round(m*52/12),
+    note:"OnDeck Line of Credit — amortizes at the stated APR (daily rate, shown weekly). 100% prepay any time = the remaining principal balance."
+  },
   mulligan: {
     name:"Mulligan Funding", factorLabel:"Factor (Total Repayment ÷ Funded)",
     payoffBase:"remaining",
@@ -258,8 +269,8 @@ const LENDERS = {
 
 /* Per-version lender order + default tab (flipped by SHOW_FEES). RTMI always last. */
 const LENDER_ORDER = SHOW_FEES
-  ? ["mulligan","kapitus","ondeck","peac","rtmi"]
-  : ["ondeck","kapitus","mulligan","peac","rtmi"];
+  ? ["mulligan","kapitus","ondeck","ondeck_loc","peac","rtmi"]
+  : ["ondeck","ondeck_loc","kapitus","mulligan","peac","rtmi"];
 const DEFAULT_LENDER = LENDER_ORDER[0];
 const LS_KEY = SHOW_FEES ? "bl_amort_fee" : "bl_amort_nofee";
 
@@ -273,6 +284,8 @@ const round2 = x => Math.round((x + Number.EPSILON) * 100) / 100;
 const fmt$ = x => "$" + round2(x).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
 const fmt$0 = x => "$" + Math.round(x).toLocaleString("en-US");
 const fmtFactor = v => String(Math.round(v*1000)/1000);
+const rateMode = () => LENDERS[state.lender].rateMode || "factor";
+const rateStr  = () => rateMode()==="apr" ? Number(state.factor).toFixed(1)+"% APR" : "factor "+fmtFactor(state.factor);
 const id = x => document.getElementById(x);
 const parseNum = v => Number(String(v).replace(/[^0-9.]/g,"")) || 0;
 
@@ -301,8 +314,8 @@ function advanceDate(base, freq, k){
 }
 
 /* Standard declining-balance schedule of `funded` at `payment` over `n` periods (full-precision balance). */
-function buildSchedule(funded, payment, n){
-  const r = solveRate(funded, payment, n);
+function buildSchedule(funded, payment, n, rOverride){
+  const r = (rOverride != null) ? rOverride : solveRate(funded, payment, n);
   const rows = []; let bal = funded;
   for(let k=1;k<=n;k++){
     const interestRaw = bal * r;
@@ -321,12 +334,22 @@ function buildSchedule(funded, payment, n){
 
 function computeModel(){
   const L = LENDERS[state.lender];
-  const {funded, factor, term} = state;
-  const payback = round2(funded*factor);
-  const financeCharge = round2(payback - funded);
+  const funded = state.funded, term = state.term;
   const n = Math.max(1, L.count(term));
-  const payment = round2(payback / n);
-  const s = buildSchedule(funded, payment, n);
+  const mode = L.rateMode || "factor";
+  let payback, payment, s;
+  if(mode === "apr"){
+    // APR-amortizing (OnDeck LOC): periodic rate = APR ÷ payments-per-year; standard amortization payment.
+    const r = (state.factor/100) / FREQ[L.cadence].perYear;
+    payment = round2( r<=0 ? funded/n : funded*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1) );
+    payback = round2(payment * n);
+    s = buildSchedule(funded, payment, n, r);
+  } else {
+    payback = round2(funded * state.factor);
+    payment = round2(payback / n);
+    s = buildSchedule(funded, payment, n);
+  }
+  const financeCharge = round2(payback - funded);
   const rows = s.rows;
   rows.forEach((row,i)=> row.k = i+1);
   let running = 0;
@@ -386,7 +409,7 @@ function render(){
   }).join("");
 
   id("foot").textContent =
-    `${L.name} · ${fmt$0(state.funded)} funded · factor ${fmtFactor(state.factor)} · ${state.term}-mo term · ${m.n} ${fw.word} payments · ` +
+    `${L.name} · ${fmt$0(state.funded)} funded · ${rateStr()} · ${state.term}-mo term · ${m.n} ${fw.word} payments · ` +
     `payoff = ${baseLabel.toLowerCase()} − ${Math.round(tier.forgive*100)}% × remaining interest` +
     (state.feePct>0 ? ` · +${state.feePct.toFixed(2)}% (${fmt$0(feeAmt)}) fee` : "") +
     `. Estimate only — final terms per executed agreement.`;
@@ -418,7 +441,7 @@ function downloadPDF(tierKey){
   if(state.borrower){ doc.text("Borrower: "+state.borrower, 40, y); y+=18; }
   const info = [
     ["Funded Amount", fmt$0(state.funded)],
-    ["Factor (Sell Rate)", fmtFactor(state.factor)],
+    [(L.rateMode==="apr"?"APR":"Factor (Sell Rate)"), (L.rateMode==="apr"? Number(state.factor).toFixed(1)+"%" : fmtFactor(state.factor))],
     ["Total Payback", fmt$0(m.payback)],
     ["Finance Charge", fmt$0(m.financeCharge)],
     ["Term", state.term+" months  ("+m.n+" payments)"]
@@ -498,15 +521,22 @@ function buildLenderBar(){
 }
 
 function syncInputs(){
+  const L = LENDERS[state.lender];
   fundedBox.value = Math.round(state.funded).toLocaleString("en-US");
   fundedRange.value = state.funded;
-  factorBox.value = fmtFactor(state.factor);
+  factorRange.min = L.rateMin ?? 1.05;
+  factorRange.max = L.rateMax ?? 1.60;
+  factorRange.step = L.rateStep ?? 0.001;
   factorRange.value = state.factor;
+  factorBox.value = (L.rateMode==="apr") ? Number(state.factor).toFixed(1) : fmtFactor(state.factor);
   termBox.value = state.term;
   termRange.value = state.term;
   feeBox.value = state.feePct.toFixed(2);
   feeRange.value = state.feePct;
-  id("factorLbl").textContent = LENDERS[state.lender].factorLabel;
+  id("factorLbl").textContent = L.factorLabel;
+  id("factorHint").textContent = (L.rateMode==="apr")
+    ? "Amortized at this APR (periodic rate = APR ÷ payments per year)."
+    : "Total Payback = Funded × Factor.";
 }
 
 /* localStorage */
@@ -553,7 +583,7 @@ function init(){
   syncInputs();
 
   bindPair(fundedBox, fundedRange, "funded", v=>Math.round(v).toLocaleString("en-US"));
-  bindPair(factorBox, factorRange, "factor", v=>fmtFactor(v));
+  bindPair(factorBox, factorRange, "factor", v=> rateMode()==="apr" ? Number(v).toFixed(1) : fmtFactor(v));
   bindPair(termBox, termRange, "term", v=>Math.round(v));
   bindPair(feeBox, feeRange, "feePct", v=>Number(v).toFixed(2));
 
