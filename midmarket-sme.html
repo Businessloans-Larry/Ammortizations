@@ -242,13 +242,13 @@ const LENDERS = {
   ondeck_loc: {
     name:"OnDeck LOC", factorLabel:"APR (%)",
     rateMode:"apr", rateMin:10, rateMax:90, rateStep:0.1,
-    payoffBase:"remaining",
+    payoffBase:"total",
     cadence:"weekly",
     tiers:[{key:"100",label:"100% Prepay (anytime)",forgive:1}],
     defaults:{funded:200000, factor:51.9, term:24},
     feePct:0,
     count:m=> Math.round(m*52/12),
-    note:"OnDeck Line of Credit — amortizes at the stated APR (daily rate, shown weekly). 100% prepay any time = the remaining principal balance."
+    note:"OnDeck Line of Credit — amortizes at the stated APR (daily rate, shown weekly). 100% prepay any time; payoff = funded principal + interest accrued to date."
   },
   mulligan: {
     name:"Mulligan Funding", factorLabel:"Factor (Total Repayment ÷ Funded)",
