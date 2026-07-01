@@ -70,6 +70,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;heigh
 .lenderbar button{flex:1;min-width:130px;border:none;background:transparent;font-family:var(--font-display);font-size:19px;color:var(--bl-steel);padding:15px 12px;border-radius:10px;cursor:pointer;transition:.15s}
 .lenderbar button.on{background:var(--bl-navy);color:#fff;box-shadow:var(--shadow-md)}
 .lenderbar button:hover:not(.on){color:var(--bl-navy)}
+.sublender{display:none;gap:6px;background:var(--bl-pale);border-radius:var(--radius-sm);padding:4px;margin:-14px 0 22px;max-width:360px}
+.sublender button{flex:1;border:none;background:transparent;font-family:var(--font-body);font-size:13px;font-weight:600;color:var(--bl-steel);padding:9px 12px;border-radius:6px;cursor:pointer;transition:.15s}
+.sublender button.on{background:var(--bl-cyan);color:#fff;box-shadow:var(--shadow-md)}
+.sublender button:hover:not(.on){color:var(--bl-navy)}
 input[type=date]{font-family:var(--font-body);font-size:15px;color:var(--bl-navy);border:1.5px solid var(--bl-line);border-radius:var(--radius-sm);padding:10px 12px;width:100%}
 input[type=date]:focus{outline:none;border-color:var(--bl-cyan)}
 
@@ -118,6 +122,7 @@ tbody td.pay{font-weight:600;color:var(--bl-navy)}
   <div class="sub">Pick a lender, then enter the loan amount, sell rate, and term. <a id="versionLink" href="#" style="color:var(--bl-cyan);font-weight:600;text-decoration:none"></a></div>
 
   <div class="lenderbar" id="lenderSeg"></div>
+  <div class="sublender" id="subLenderSeg"></div>
 
   <div class="borrower">
     <label for="borrower">Borrower</label>
@@ -269,10 +274,14 @@ const LENDERS = {
 
 /* Per-version lender order + default tab (flipped by SHOW_FEES). RTMI always last. */
 const LENDER_ORDER = SHOW_FEES
-  ? ["mulligan","kapitus","ondeck","ondeck_loc","peac","rtmi"]
-  : ["ondeck","ondeck_loc","kapitus","mulligan","peac","rtmi"];
+  ? ["mulligan","kapitus","ondeck","peac","rtmi"]
+  : ["ondeck","kapitus","mulligan","peac","rtmi"];
 const DEFAULT_LENDER = LENDER_ORDER[0];
 const LS_KEY = SHOW_FEES ? "bl_amort_fee" : "bl_amort_nofee";
+
+/* Lenders that share one top-level tab with a product sub-toggle. */
+const SUBLENDERS = { ondeck: [{key:"ondeck",label:"Term Loan"},{key:"ondeck_loc",label:"Line of Credit"}] };
+const tabOf = k => Object.keys(SUBLENDERS).find(t => SUBLENDERS[t].some(m=>m.key===k)) || k;
 
 const state = {
   lender:DEFAULT_LENDER, funded:300000, factor:1.25, term:18,
@@ -512,12 +521,25 @@ function applyLenderDefaults(key){
 function selectLender(key){
   applyLenderDefaults(key);
   id("factorLbl").textContent = LENDERS[key].factorLabel;
-  buildLenderBar(); syncInputs(); buildTierControls(); render(); save();
+  buildLenderBar(); buildSubLenderControls(); syncInputs(); buildTierControls(); render(); save();
 }
 function buildLenderBar(){
+  const activeTab = tabOf(state.lender);
   id("lenderSeg").innerHTML = LENDER_ORDER.map(k=>
-    `<button data-l="${k}" class="${k===state.lender?"on":""}">${LENDERS[k].name}</button>`).join("");
-  id("lenderSeg").querySelectorAll("button").forEach(b=>{ b.onclick = ()=>selectLender(b.dataset.l); });
+    `<button data-l="${k}" class="${k===activeTab?"on":""}">${LENDERS[k].name}</button>`).join("");
+  id("lenderSeg").querySelectorAll("button").forEach(b=>{ b.onclick = ()=>{
+    const k=b.dataset.l;
+    if(tabOf(state.lender)===k) return;                       // already on this tab
+    selectLender(SUBLENDERS[k] ? SUBLENDERS[k][0].key : k);   // default to first product
+  };});
+}
+function buildSubLenderControls(){
+  const el = id("subLenderSeg");
+  const subs = SUBLENDERS[tabOf(state.lender)];
+  if(!subs){ el.style.display="none"; el.innerHTML=""; return; }
+  el.style.display="flex";
+  el.innerHTML = subs.map(s=>`<button data-sl="${s.key}" class="${s.key===state.lender?"on":""}">${s.label}</button>`).join("");
+  el.querySelectorAll("button").forEach(b=>{ b.onclick = ()=>selectLender(b.dataset.sl); });
 }
 
 function syncInputs(){
@@ -579,6 +601,7 @@ function init(){
   if(vl){ vl.textContent = SHOW_FEES ? "→ Switch to the Midmarket / SME version" : "→ Switch to the version with fees";
           vl.href = SHOW_FEES ? "midmarket-sme.html" : "index.html"; }
   buildLenderBar();
+  buildSubLenderControls();
   buildTierControls();
   syncInputs();
 
