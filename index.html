@@ -544,8 +544,8 @@ function init(){
     const th=id("thPayoffFees"); if(th) th.style.display="none";
   }
   const vl=id("versionLink");
-  if(vl){ vl.textContent = SHOW_FEES ? "→ Switch to the no-fee version" : "→ Switch to the version with fees";
-          vl.href = SHOW_FEES ? "no-fee.html" : "index.html"; }
+  if(vl){ vl.textContent = SHOW_FEES ? "→ Switch to the Midmarket / SME version" : "→ Switch to the version with fees";
+          vl.href = SHOW_FEES ? "midmarket-sme.html" : "index.html"; }
   buildLenderBar();
   buildTierControls();
   syncInputs();

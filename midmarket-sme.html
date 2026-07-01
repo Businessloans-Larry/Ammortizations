@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Amortization Schedules (No Fee) — BusinessLoans.com</title>
+<title>Amortization Schedules (Midmarket / SME) — BusinessLoans.com</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -544,8 +544,8 @@ function init(){
     const th=id("thPayoffFees"); if(th) th.style.display="none";
   }
   const vl=id("versionLink");
-  if(vl){ vl.textContent = SHOW_FEES ? "→ Switch to the no-fee version" : "→ Switch to the version with fees";
-          vl.href = SHOW_FEES ? "no-fee.html" : "index.html"; }
+  if(vl){ vl.textContent = SHOW_FEES ? "→ Switch to the Midmarket / SME version" : "→ Switch to the version with fees";
+          vl.href = SHOW_FEES ? "midmarket-sme.html" : "index.html"; }
   buildLenderBar();
   buildTierControls();
   syncInputs();
