@@ -249,11 +249,27 @@ const LENDERS = {
     feePctByTier:{"100":4, "50":2.5},
     count:(m,f)=> f==="biweekly"?Math.round(m*26/12) : f==="daily"?Math.round(m*21) : 2*Math.round(m*26/12),
     note:"Mulligan weekly = 2 × round(months × 26 ⁄ 12); daily = 21 × months. Early-payoff fee: 2.5% @ 50% IF, 4% @ 100% IF (editable)."
+  },
+  peac: {
+    name:"Peac (WCL)", factorLabel:"Sell Rate (Factor)",
+    freqs:["weekly","monthly"],
+    tiers:[{key:"full",label:"Full Payoff",forgive:1}],
+    defaults:{funded:10000, factor:1.12, term:12, freq:"monthly"},
+    feePct:0,
+    count:(m,f)=> f==="monthly"?Math.round(m):Math.round(m*52/12),
+    note:"Peac Working Capital Loan. Interest = balance × APR ⁄ periods; payoff = the remaining balance (unaccrued interest dropped)."
   }
 };
 
+/* Per-version lender order + default tab (flipped by SHOW_FEES). RTMI always last. */
+const LENDER_ORDER = SHOW_FEES
+  ? ["mulligan","kapitus","ondeck","peac","rtmi"]
+  : ["ondeck","kapitus","mulligan","peac","rtmi"];
+const DEFAULT_LENDER = LENDER_ORDER[0];
+const LS_KEY = SHOW_FEES ? "bl_amort_fee" : "bl_amort_nofee";
+
 const state = {
-  lender:"rtmi", funded:300000, factor:1.25, term:18, freq:"weekly",
+  lender:DEFAULT_LENDER, funded:300000, factor:1.25, term:18, freq:"weekly",
   feePct:0, start:null, tier:"100", borrower:""
 };
 
@@ -289,17 +305,10 @@ function advanceDate(base, freq, k){
   const d=new Date(base.getTime()); d.setDate(d.getDate() + k*(freq==="biweekly"?14:7)); return d;
 }
 
-function computeModel(){
-  const L = LENDERS[state.lender];
-  const {funded, factor, term, freq} = state;
-  const payback = round2(funded*factor);
-  const financeCharge = round2(payback - funded);
-  const n = Math.max(1, L.count(term, freq));
-  const payment = round2(payback / n);
+/* Standard declining-balance schedule of `funded` at `payment` over `n` periods (full-precision balance). */
+function buildSchedule(funded, payment, n){
   const r = solveRate(funded, payment, n);
-
-  const rows = [];
-  let bal = funded;
+  const rows = []; let bal = funded;
   for(let k=1;k<=n;k++){
     const interestRaw = bal * r;
     let interest, principal, pay;
@@ -310,8 +319,44 @@ function computeModel(){
       interest = round2(interestRaw); principal = round2(payment - interest);
       pay = payment; bal = bal - (payment - interestRaw);
     }
-    rows.push({ k, interest, principal, pay, balance: Math.max(0, round2(bal)) });
+    rows.push({ interest, principal, pay, balance: Math.max(0, round2(bal)) });
   }
+  return { rows, r };
+}
+
+function computeModel(){
+  const L = LENDERS[state.lender];
+  const {funded, factor, term, freq} = state;
+  const payback = round2(funded*factor);
+  const financeCharge = round2(payback - funded);
+  let rows, n, payment, r;
+
+  if(freq==="biweekly"){
+    /* Bi-weekly = WEEKLY amortization, but the borrower pays every 2 weeks.
+       Build the weekly schedule, then collect consecutive week-pairs into one row,
+       so the balance/payoff at each mark exactly matches the weekly schedule. */
+    const nw = Math.max(1, L.count(term, "weekly"));
+    const wkPay = round2(payback / nw);
+    const wk = buildSchedule(funded, wkPay, nw); r = wk.r;
+    rows = [];
+    for(let i=0;i<nw;i+=2){
+      const a = wk.rows[i], b = wk.rows[i+1];
+      rows.push({
+        interest:  round2(a.interest + (b?b.interest:0)),
+        principal: round2(a.principal + (b?b.principal:0)),
+        pay:       round2(a.pay + (b?b.pay:0)),
+        balance:   (b?b.balance:a.balance)
+      });
+    }
+    n = rows.length;
+    payment = round2(wkPay*2);
+  } else {
+    n = Math.max(1, L.count(term, freq));
+    payment = round2(payback / n);
+    const s = buildSchedule(funded, payment, n); rows = s.rows; r = s.r;
+  }
+
+  rows.forEach((row,i)=> row.k = i+1);
   let running = 0;
   for(let i=rows.length-1;i>=0;i--){ rows[i].remainingInterest = round2(running); running += rows[i].interest; }
   return { payback, financeCharge, n, payment, r, rows };
@@ -337,7 +382,7 @@ function render(){
   id("cPayback").textContent = fmt$0(m.payback);
   id("thPay").textContent = FREQ[state.freq].label + " Payment";
 
-  id("nPayHint").textContent = m.n + " " + fw.word + " payments";
+  id("nPayHint").textContent = m.n + " " + fw.word + " payments" + (state.freq==="biweekly" ? " · weekly amortization" : "");
   id("feeHint").textContent = state.feePct>0
       ? `${state.feePct.toFixed(2)}% of loan = ${fmt$(feeAmt)} · added to "Payoff + Fees"`
       : `Adjusts in 0.25% steps · added to the "Payoff + Fees" column.`;
@@ -472,18 +517,21 @@ function buildTierControls(){
   id("dlGroup").querySelectorAll("button").forEach(b=>{ b.onclick = ()=>downloadPDF(b.dataset.dl); });
 }
 
-function selectLender(key){
+function applyLenderDefaults(key){
   const L = LENDERS[key]; state.lender = key;
   const d = L.defaults;
   state.funded=d.funded; state.factor=d.factor; state.term=d.term; state.freq=d.freq;
   state.tier = L.tiers[0].key;
   state.feePct = defaultFeePct(L, state.tier);
-  id("factorLbl").textContent = L.factorLabel;
+}
+function selectLender(key){
+  applyLenderDefaults(key);
+  id("factorLbl").textContent = LENDERS[key].factorLabel;
   buildLenderBar(); syncInputs(); buildFreqControls(); buildTierControls(); render(); save();
 }
 function buildLenderBar(){
-  id("lenderSeg").innerHTML = Object.entries(LENDERS).map(([k,v])=>
-    `<button data-l="${k}" class="${k===state.lender?"on":""}">${v.name}</button>`).join("");
+  id("lenderSeg").innerHTML = LENDER_ORDER.map(k=>
+    `<button data-l="${k}" class="${k===state.lender?"on":""}">${LENDERS[k].name}</button>`).join("");
   id("lenderSeg").querySelectorAll("button").forEach(b=>{ b.onclick = ()=>selectLender(b.dataset.l); });
 }
 
@@ -501,14 +549,15 @@ function syncInputs(){
 
 /* localStorage */
 function save(){
-  try{ localStorage.setItem("bl_amort", JSON.stringify({...state, start: state.start.toISOString()})); }catch(e){}
+  try{ localStorage.setItem(LS_KEY, JSON.stringify({...state, start: state.start.toISOString()})); }catch(e){}
   const f=id("savedFlag"); f.textContent="✓ Auto-saved"; clearTimeout(save._t);
   save._t=setTimeout(()=>f.textContent="",1500);
 }
 function load(){
-  let s=null; try{ s=JSON.parse(localStorage.getItem("bl_amort")); }catch(e){}
-  if(s){ Object.assign(state, s); state.start = s.start ? new Date(s.start) : new Date(2026,6,1); }
-  else { state.start = new Date(2026,6,1); }
+  let s=null; try{ s=JSON.parse(localStorage.getItem(LS_KEY)); }catch(e){}
+  if(s && LENDERS[s.lender]){ Object.assign(state, s); state.start = s.start ? new Date(s.start) : new Date(2026,6,1); }
+  else { applyLenderDefaults(DEFAULT_LENDER); state.start = new Date(2026,6,1); }
+  if(!LENDERS[state.lender]) applyLenderDefaults(DEFAULT_LENDER);
   if(state.feePct===undefined) state.feePct = defaultFeePct(LENDERS[state.lender], state.tier);
   id("borrower").value = state.borrower||"";
 }
