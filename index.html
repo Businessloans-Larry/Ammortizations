@@ -181,9 +181,8 @@ tbody td.pay{font-weight:600;color:var(--bl-navy)}
       <table id="schedule">
         <thead>
           <tr>
-            <th>Payment</th>
+            <th>#</th>
             <th>Est. Payment Date</th>
-            <th id="thPay">Payment</th>
             <th>Principal</th>
             <th>Interest</th>
             <th>Balance</th>
@@ -225,12 +224,12 @@ const LENDERS = {
   },
   kapitus: {
     name:"Kapitus", factorLabel:"Sell Rate (Buy Rate + Commission)",
-    freqs:["weekly"],
+    freqs:["weekly","biweekly","monthly"],
     tiers:[{key:"100",label:"100% IF",forgive:1},{key:"10",label:"10% IF (Standard)",forgive:.10}],
     defaults:{funded:300000, factor:1.30, term:12, freq:"weekly"},
     feePct:0,
-    count:(m,f)=> Math.round(m*52/12)-1,
-    note:"Kapitus weekly payments = round(months × 52 ⁄ 12) − 1. (Kapitus's own sheet shows a monthly prepay-discount table — this is the per-payment view.)"
+    count:(m,f)=> f==="monthly"?Math.round(m):Math.round(m*52/12)-1,
+    note:"Kapitus weekly = round(months × 52 ⁄ 12) − 1; monthly = months; bi-weekly = weekly amortization paid every 2 weeks. (Kapitus's own sheet is a monthly prepay-discount table — this is the per-payment view.)"
   },
   ondeck: {
     name:"OnDeck", factorLabel:"Factor (from Cents-on-Dollar)",
@@ -380,7 +379,6 @@ function render(){
   id("cPayment").textContent = fmt$(m.payment);
   id("cCharge").textContent  = fmt$0(m.financeCharge);
   id("cPayback").textContent = fmt$0(m.payback);
-  id("thPay").textContent = FREQ[state.freq].label + " Payment";
 
   id("nPayHint").textContent = m.n + " " + fw.word + " payments" + (state.freq==="biweekly" ? " · weekly amortization" : "");
   id("feeHint").textContent = state.feePct>0
@@ -400,7 +398,6 @@ function render(){
     return `<tr>
       <td>#${row.k}</td>
       <td>${dt.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})}</td>
-      <td class="num pay">${fmt$(row.pay)}</td>
       <td class="num">${fmt$(row.principal)}</td>
       <td class="num">${fmt$(row.interest)}</td>
       <td class="num">${fmt$(row.balance)}</td>
@@ -463,12 +460,12 @@ function downloadPDF(tierKey){
     const po = payoffFor(row, tier.forgive);
     const base = [ "#"+row.k,
       dt.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}),
-      fmt$(row.pay), fmt$(row.principal), fmt$(row.interest), fmt$(row.balance),
+      fmt$(row.principal), fmt$(row.interest), fmt$(row.balance),
       fmt$(po) ];
     if(SHOW_FEES) base.push(fmt$(round2(po+feeAmt)));
     return base;
   });
-  const head = ["#","Est. Date",fw.label+" Pmt","Principal","Interest","Balance","Payoff ("+tier.label+")"];
+  const head = ["#","Est. Date","Principal","Interest","Balance","Payoff ("+tier.label+")"];
   if(SHOW_FEES) head.push("Payoff + Fees");
   doc.autoTable({
     startY: y,
