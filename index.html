@@ -86,11 +86,11 @@ input[type=date]:focus{outline:none;border-color:var(--bl-cyan)}
 .tablescroll{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:860px}
 thead th{position:sticky;top:0;background:var(--bl-navy);color:#fff;font-weight:600;text-align:right;padding:13px 16px;white-space:nowrap;font-size:12px;letter-spacing:.02em;z-index:2}
-thead th:first-child,thead th:nth-child(2){text-align:left}
+thead th:first-child{text-align:left}
 thead th.payoff{background:#013a80}
 thead th.payoff.fees{background:#014a9c}
 tbody td{text-align:right;padding:12px 16px;border-bottom:1px solid var(--bl-pale);white-space:nowrap;color:var(--bl-slate)}
-tbody td:first-child,tbody td:nth-child(2){text-align:left}
+tbody td:first-child{text-align:left}
 tbody td.num{font-variant-numeric:tabular-nums}
 tbody tr:nth-child(even){background:#fbfbfd}
 tbody td.pf{color:var(--bl-navy);font-weight:600;background:rgba(0,205,239,.06)}
@@ -154,10 +154,6 @@ tbody td.pay{font-weight:600;color:var(--bl-navy)}
         <input type="range" id="feeRange" min="0" max="10" step="0.25" />
         <div class="hint" id="feeHint">Adjusts in 0.25% steps · added to the "Payoff + Fees" column.</div>
       </div>
-      <div class="field">
-        <label style="display:block;margin-bottom:10px">Start Date</label>
-        <input type="date" id="startDate" />
-      </div>
       <div class="field" style="grid-column:1 / -1">
         <label style="display:block;margin-bottom:10px">Interest Forgiveness Tier <span style="font-weight:400;color:var(--bl-steel)">— drives the on-screen Payoff column</span></label>
         <div class="seg navy" id="tierSeg"></div>
@@ -178,10 +174,10 @@ tbody td.pay{font-weight:600;color:var(--bl-navy)}
         <thead>
           <tr>
             <th>#</th>
-            <th>Est. Payment Date</th>
             <th>Principal</th>
             <th>Interest</th>
             <th>Balance</th>
+            <th>Remaining Interest</th>
             <th class="payoff" id="thPayoff">Total Payoff</th>
             <th class="payoff fees" id="thPayoffFees">Payoff + Fees</th>
           </tr>
@@ -331,6 +327,7 @@ function computeModel(){
   rows.forEach((row,i)=> row.k = i+1);
   let running = 0;
   for(let i=rows.length-1;i>=0;i--){ rows[i].remainingInterest = round2(running); running += rows[i].interest; }
+  rows.forEach(row=> row.rtr = round2(row.balance + row.remainingInterest)); // Balance = total still owed (payback − payments)
   return { payback, financeCharge, n, payment, r: s.r, rows };
 }
 
@@ -359,21 +356,20 @@ function render(){
       : `Adjusts in 0.25% steps · added to the "Payoff + Fees" column.`;
   id("thPayoff").textContent = "Total Payoff (" + tier.label + ")";
   id("tierNote").textContent =
-    "Payoff = remaining principal + " +
-    (tier.forgive===1 ? "0% of remaining interest (fully forgiven)" : Math.round((1-tier.forgive)*100)+"% of remaining interest") +
+    "Total Payoff = Balance − " + Math.round(tier.forgive*100) + "% of Remaining Interest" +
+    (tier.forgive===1 ? " (all remaining interest forgiven → remaining principal)" : "") +
     ". " + L.note;
 
   const tb = id("tbody");
   tb.innerHTML = m.rows.map(row=>{
-    const dt = advanceDate(state.start, L.cadence, row.k);
     const po = payoffFor(row, tier.forgive);
     const pof = round2(po + feeAmt);
     return `<tr>
       <td>#${row.k}</td>
-      <td>${dt.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})}</td>
       <td class="num">${fmt$(row.principal)}</td>
       <td class="num">${fmt$(row.interest)}</td>
-      <td class="num">${fmt$(row.balance)}</td>
+      <td class="num">${fmt$(row.rtr)}</td>
+      <td class="num">${fmt$(row.remainingInterest)}</td>
       <td class="num pf">${fmt$(po)}</td>
       ${SHOW_FEES ? `<td class="num pff">${fmt$(pof)}</td>` : ""}
     </tr>`;
@@ -381,7 +377,7 @@ function render(){
 
   id("foot").textContent =
     `${L.name} · ${fmt$0(state.funded)} funded · factor ${fmtFactor(state.factor)} · ${state.term}-mo term · ${m.n} ${fw.word} payments · ` +
-    `payoff = balance + ${Math.round((1-tier.forgive)*100)}% × remaining interest` +
+    `payoff = balance − ${Math.round(tier.forgive*100)}% × remaining interest` +
     (state.feePct>0 ? ` · +${state.feePct.toFixed(2)}% (${fmt$0(feeAmt)}) fee` : "") +
     `. Estimate only — final terms per executed agreement.`;
 }
@@ -416,8 +412,7 @@ function downloadPDF(tierKey){
     ["Total Payback", fmt$0(m.payback)],
     ["Finance Charge", fmt$0(m.financeCharge)],
     [fw.label+" Payment", fmt$(m.payment)],
-    ["Term", state.term+" months  ("+m.n+" payments)"],
-    ["Start Date", state.start.toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})]
+    ["Term", state.term+" months  ("+m.n+" payments)"]
   ];
   if(SHOW_FEES) info.push(["Origination Fee", state.feePct>0 ? state.feePct.toFixed(2)+"%  ("+fmt$0(feeAmt)+")" : "None"]);
   const colW=(W-80)/2;
@@ -429,16 +424,14 @@ function downloadPDF(tierKey){
   y += Math.ceil(info.length/2)*17 + 12;
 
   const body = m.rows.map(row=>{
-    const dt = advanceDate(state.start, L.cadence, row.k);
     const po = payoffFor(row, tier.forgive);
     const base = [ "#"+row.k,
-      dt.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}),
-      fmt$(row.principal), fmt$(row.interest), fmt$(row.balance),
+      fmt$(row.principal), fmt$(row.interest), fmt$(row.rtr), fmt$(row.remainingInterest),
       fmt$(po) ];
     if(SHOW_FEES) base.push(fmt$(round2(po+feeAmt)));
     return base;
   });
-  const head = ["#","Est. Date","Principal","Interest","Balance","Payoff ("+tier.label+")"];
+  const head = ["#","Principal","Interest","Balance","Rem. Interest","Payoff ("+tier.label+")"];
   if(SHOW_FEES) head.push("Payoff + Fees");
   doc.autoTable({
     startY: y,
@@ -446,7 +439,7 @@ function downloadPDF(tierKey){
     body, theme:"striped",
     styles:{font:"helvetica", fontSize:7.5, cellPadding:2.5, textColor:[72,82,130], halign:"right"},
     headStyles:{fillColor:[0,47,104], textColor:255, fontSize:7.5, halign:"right"},
-    columnStyles:{0:{halign:"left"},1:{halign:"left"}},
+    columnStyles:{0:{halign:"left"}},
     alternateRowStyles:{fillColor:[246,246,249]},
     margin:{left:40,right:40},
     didDrawPage: ()=>{
@@ -549,16 +542,12 @@ function init(){
   buildLenderBar();
   buildTierControls();
   syncInputs();
-  id("startDate").value = state.start.toISOString().slice(0,10);
 
   bindPair(fundedBox, fundedRange, "funded", v=>Math.round(v).toLocaleString("en-US"));
   bindPair(factorBox, factorRange, "factor", v=>fmtFactor(v));
   bindPair(termBox, termRange, "term", v=>Math.round(v));
   bindPair(feeBox, feeRange, "feePct", v=>Number(v).toFixed(2));
 
-  id("startDate").addEventListener("change", e=>{
-    const [y,mm,dd]=e.target.value.split("-").map(Number); state.start=new Date(y,mm-1,dd); render(); save();
-  });
   id("borrower").addEventListener("input", e=>{ state.borrower=e.target.value; save(); });
 
   render();
