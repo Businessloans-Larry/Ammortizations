@@ -41,7 +41,7 @@ h1.page{font-family:var(--font-display);color:var(--bl-navy);font-size:34px;font
 .borrower input:focus{outline:none;border-color:var(--bl-cyan)}
 .saved{font-size:12px;color:var(--bl-green);font-weight:600}
 
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
 .card{background:var(--bl-white);border:1px solid var(--bl-pale);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow-md)}
 .card .k{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bl-steel);margin-bottom:8px}
 .card .v{font-family:var(--font-display);font-size:26px;color:var(--bl-navy);line-height:1.05}
@@ -127,7 +127,6 @@ tbody td.pay{font-weight:600;color:var(--bl-navy)}
 
   <div class="cards">
     <div class="card"><div class="k">Funded Amount</div><div class="v" id="cFunded">$0</div></div>
-    <div class="card hero"><div class="k" id="cPaymentLbl">Payment</div><div class="v" id="cPayment">$0</div></div>
     <div class="card"><div class="k">Finance Charge</div><div class="v" id="cCharge">$0</div></div>
     <div class="card accent"><div class="k">Total Payback</div><div class="v" id="cPayback">$0</div></div>
   </div>
@@ -244,11 +243,11 @@ const LENDERS = {
   peac: {
     name:"Peac (WCL)", factorLabel:"Sell Rate (Factor)",
     cadence:"monthly",
-    tiers:[{key:"full",label:"Full Payoff",forgive:1}],
+    tiers:[{key:"100",label:"100% IF",forgive:1},{key:"30",label:"30% IF (Standard)",forgive:.30}],
     defaults:{funded:10000, factor:1.12, term:12},
     feePct:0,
     count:m=> Math.round(m),
-    note:"Peac Working Capital Loan (monthly). Interest = balance × APR ⁄ 12; payoff = the remaining balance."
+    note:"Peac Working Capital Loan (monthly). Standard early-payoff forgiveness = 30%; full payoff = 100%."
   }
 };
 
@@ -331,7 +330,9 @@ function computeModel(){
   return { payback, financeCharge, n, payment, r: s.r, rows };
 }
 
-const payoffFor = (row, forgive) => round2(row.balance + (1-forgive)*row.remainingInterest);
+/* Total Payoff = full Total Payback − IF% of remaining (unearned) interest.
+   At 100% IF this = funded principal + interest accrued to date. */
+const payoffFor = (row, forgive, payback) => round2(payback - forgive*row.remainingInterest);
 
 let MODEL = null;
 
@@ -345,8 +346,6 @@ function render(){
 
   id("lenderName").textContent = L.name;
   id("cFunded").textContent  = fmt$0(state.funded);
-  id("cPaymentLbl").textContent = fw.label + " Payment";
-  id("cPayment").textContent = fmt$(m.payment);
   id("cCharge").textContent  = fmt$0(m.financeCharge);
   id("cPayback").textContent = fmt$0(m.payback);
 
@@ -356,13 +355,13 @@ function render(){
       : `Adjusts in 0.25% steps · added to the "Payoff + Fees" column.`;
   id("thPayoff").textContent = "Total Payoff (" + tier.label + ")";
   id("tierNote").textContent =
-    "Total Payoff = Balance − " + Math.round(tier.forgive*100) + "% of Remaining Interest" +
-    (tier.forgive===1 ? " (all remaining interest forgiven → remaining principal)" : "") +
+    "Total Payoff = Total Payback − " + Math.round(tier.forgive*100) + "% of Remaining Interest" +
+    (tier.forgive===1 ? " (= funded principal + interest accrued to that point)" : "") +
     ". " + L.note;
 
   const tb = id("tbody");
   tb.innerHTML = m.rows.map(row=>{
-    const po = payoffFor(row, tier.forgive);
+    const po = payoffFor(row, tier.forgive, m.payback);
     const pof = round2(po + feeAmt);
     return `<tr>
       <td>#${row.k}</td>
@@ -377,7 +376,7 @@ function render(){
 
   id("foot").textContent =
     `${L.name} · ${fmt$0(state.funded)} funded · factor ${fmtFactor(state.factor)} · ${state.term}-mo term · ${m.n} ${fw.word} payments · ` +
-    `payoff = balance − ${Math.round(tier.forgive*100)}% × remaining interest` +
+    `payoff = total payback − ${Math.round(tier.forgive*100)}% × remaining interest` +
     (state.feePct>0 ? ` · +${state.feePct.toFixed(2)}% (${fmt$0(feeAmt)}) fee` : "") +
     `. Estimate only — final terms per executed agreement.`;
 }
@@ -411,7 +410,6 @@ function downloadPDF(tierKey){
     ["Factor (Sell Rate)", fmtFactor(state.factor)],
     ["Total Payback", fmt$0(m.payback)],
     ["Finance Charge", fmt$0(m.financeCharge)],
-    [fw.label+" Payment", fmt$(m.payment)],
     ["Term", state.term+" months  ("+m.n+" payments)"]
   ];
   if(SHOW_FEES) info.push(["Origination Fee", state.feePct>0 ? state.feePct.toFixed(2)+"%  ("+fmt$0(feeAmt)+")" : "None"]);
@@ -424,7 +422,7 @@ function downloadPDF(tierKey){
   y += Math.ceil(info.length/2)*17 + 12;
 
   const body = m.rows.map(row=>{
-    const po = payoffFor(row, tier.forgive);
+    const po = payoffFor(row, tier.forgive, m.payback);
     const base = [ "#"+row.k,
       fmt$(row.principal), fmt$(row.interest), fmt$(row.rtr), fmt$(row.remainingInterest),
       fmt$(po) ];
