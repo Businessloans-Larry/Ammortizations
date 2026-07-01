@@ -247,12 +247,12 @@ const LENDERS = {
   peac: {
     name:"Peac (WCL)", factorLabel:"Sell Rate (Factor)",
     payoffBase:"remaining",
-    cadence:"monthly",
+    cadence:"weekly",
     tiers:[{key:"100",label:"100% IF",forgive:1},{key:"30",label:"30% IF (Standard)",forgive:.30}],
     defaults:{funded:10000, factor:1.12, term:12},
     feePct:0,
-    count:m=> Math.round(m),
-    note:"Peac Working Capital Loan (monthly). Standard early-payoff forgiveness = 30%; full payoff = 100%."
+    count:m=> Math.round(m*52/12),
+    note:"Peac Working Capital Loan (weekly amortization). Standard early-payoff forgiveness = 30%; full payoff = 100%."
   }
 };
 
