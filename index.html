@@ -158,10 +158,6 @@ tbody td.pay{font-weight:600;color:var(--bl-navy)}
         <label style="display:block;margin-bottom:10px">Start Date</label>
         <input type="date" id="startDate" />
       </div>
-      <div class="field">
-        <label style="display:block;margin-bottom:10px">Payment Frequency</label>
-        <div class="seg" id="freqSeg"></div>
-      </div>
       <div class="field" style="grid-column:1 / -1">
         <label style="display:block;margin-bottom:10px">Interest Forgiveness Tier <span style="font-weight:400;color:var(--bl-steel)">— drives the on-screen Payoff column</span></label>
         <div class="seg navy" id="tierSeg"></div>
@@ -215,48 +211,48 @@ const FREQ = {
 const LENDERS = {
   rtmi: {
     name:"RTMI Capital", factorLabel:"Interest Rate Factor (Sell Rate)",
-    freqs:["weekly","biweekly","monthly"],
+    cadence:"weekly",
     tiers:[{key:"100",label:"100% IF",forgive:1},{key:"50",label:"50% IF",forgive:.5}],
-    defaults:{funded:300000, factor:1.25, term:18, freq:"weekly"},
+    defaults:{funded:300000, factor:1.25, term:18},
     feePct:0,
-    count:(m,f)=> f==="monthly"?Math.round(m) : f==="biweekly"?Math.round(m*26/12) : Math.round(m*52/12),
-    note:"Weekly payments = round(months × 52 ⁄ 12)."
+    count:m=> Math.round(m*52/12),
+    note:"RTMI weekly amortization = round(months × 52 ⁄ 12) payments."
   },
   kapitus: {
     name:"Kapitus", factorLabel:"Sell Rate (Buy Rate + Commission)",
-    freqs:["weekly","biweekly","monthly"],
+    cadence:"monthly",
     tiers:[{key:"100",label:"100% IF",forgive:1},{key:"10",label:"10% IF (Standard)",forgive:.10}],
-    defaults:{funded:300000, factor:1.30, term:12, freq:"weekly"},
+    defaults:{funded:300000, factor:1.30, term:12},
     feePct:0,
-    count:(m,f)=> f==="monthly"?Math.round(m):Math.round(m*52/12)-1,
-    note:"Kapitus weekly = round(months × 52 ⁄ 12) − 1; monthly = months; bi-weekly = weekly amortization paid every 2 weeks. (Kapitus's own sheet is a monthly prepay-discount table — this is the per-payment view.)"
+    count:m=> Math.round(m),
+    note:"Kapitus payoff is quoted MONTH-BY-MONTH (monthly amortization over the term), matching Kapitus's own prepay schedule."
   },
   ondeck: {
     name:"OnDeck", factorLabel:"Factor (from Cents-on-Dollar)",
-    freqs:["weekly","daily"],
+    cadence:"weekly",
     tiers:[{key:"100",label:"100% IF",forgive:1},{key:"25",label:"25% IF (Standard)",forgive:.25}],
-    defaults:{funded:275000, factor:1.314, term:24, freq:"weekly"},
+    defaults:{funded:275000, factor:1.314, term:24},
     feePct:2.5,
-    count:(m,f)=> f==="daily"?Math.round(m*252/12):Math.round(m*52/12),
-    note:"OnDeck weekly = round(months × 52 ⁄ 12); daily = round(months × 252 ⁄ 12). Origination fee is a % of the loan (24-mo term is typically 4%)."
+    count:m=> Math.round(m*52/12),
+    note:"OnDeck weekly amortization = round(months × 52 ⁄ 12). Origination fee is a % of the loan (24-mo term is typically 4%)."
   },
   mulligan: {
     name:"Mulligan Funding", factorLabel:"Factor (Total Repayment ÷ Funded)",
-    freqs:["weekly","biweekly","daily"],
+    cadence:"weekly",
     tiers:[{key:"100",label:"100% IF",forgive:1},{key:"50",label:"50% IF (Standard)",forgive:.5}],
-    defaults:{funded:250000, factor:1.18, term:24, freq:"weekly"},
+    defaults:{funded:250000, factor:1.18, term:24},
     feePctByTier:{"100":4, "50":2.5},
-    count:(m,f)=> f==="biweekly"?Math.round(m*26/12) : f==="daily"?Math.round(m*21) : 2*Math.round(m*26/12),
-    note:"Mulligan weekly = 2 × round(months × 26 ⁄ 12); daily = 21 × months. Early-payoff fee: 2.5% @ 50% IF, 4% @ 100% IF (editable)."
+    count:m=> 2*Math.round(m*26/12),
+    note:"Mulligan weekly amortization = 2 × round(months × 26 ⁄ 12). Early-payoff fee: 2.5% @ 50% IF, 4% @ 100% IF (editable)."
   },
   peac: {
     name:"Peac (WCL)", factorLabel:"Sell Rate (Factor)",
-    freqs:["weekly","monthly"],
+    cadence:"monthly",
     tiers:[{key:"full",label:"Full Payoff",forgive:1}],
-    defaults:{funded:10000, factor:1.12, term:12, freq:"monthly"},
+    defaults:{funded:10000, factor:1.12, term:12},
     feePct:0,
-    count:(m,f)=> f==="monthly"?Math.round(m):Math.round(m*52/12),
-    note:"Peac Working Capital Loan. Interest = balance × APR ⁄ periods; payoff = the remaining balance (unaccrued interest dropped)."
+    count:m=> Math.round(m),
+    note:"Peac Working Capital Loan (monthly). Interest = balance × APR ⁄ 12; payoff = the remaining balance."
   }
 };
 
@@ -268,7 +264,7 @@ const DEFAULT_LENDER = LENDER_ORDER[0];
 const LS_KEY = SHOW_FEES ? "bl_amort_fee" : "bl_amort_nofee";
 
 const state = {
-  lender:DEFAULT_LENDER, funded:300000, factor:1.25, term:18, freq:"weekly",
+  lender:DEFAULT_LENDER, funded:300000, factor:1.25, term:18,
   feePct:0, start:null, tier:"100", borrower:""
 };
 
@@ -325,40 +321,17 @@ function buildSchedule(funded, payment, n){
 
 function computeModel(){
   const L = LENDERS[state.lender];
-  const {funded, factor, term, freq} = state;
+  const {funded, factor, term} = state;
   const payback = round2(funded*factor);
   const financeCharge = round2(payback - funded);
-  let rows, n, payment, r;
-
-  if(freq==="biweekly"){
-    /* Bi-weekly = WEEKLY amortization, but the borrower pays every 2 weeks.
-       Build the weekly schedule, then collect consecutive week-pairs into one row,
-       so the balance/payoff at each mark exactly matches the weekly schedule. */
-    const nw = Math.max(1, L.count(term, "weekly"));
-    const wkPay = round2(payback / nw);
-    const wk = buildSchedule(funded, wkPay, nw); r = wk.r;
-    rows = [];
-    for(let i=0;i<nw;i+=2){
-      const a = wk.rows[i], b = wk.rows[i+1];
-      rows.push({
-        interest:  round2(a.interest + (b?b.interest:0)),
-        principal: round2(a.principal + (b?b.principal:0)),
-        pay:       round2(a.pay + (b?b.pay:0)),
-        balance:   (b?b.balance:a.balance)
-      });
-    }
-    n = rows.length;
-    payment = round2(wkPay*2);
-  } else {
-    n = Math.max(1, L.count(term, freq));
-    payment = round2(payback / n);
-    const s = buildSchedule(funded, payment, n); rows = s.rows; r = s.r;
-  }
-
+  const n = Math.max(1, L.count(term));
+  const payment = round2(payback / n);
+  const s = buildSchedule(funded, payment, n);
+  const rows = s.rows;
   rows.forEach((row,i)=> row.k = i+1);
   let running = 0;
   for(let i=rows.length-1;i>=0;i--){ rows[i].remainingInterest = round2(running); running += rows[i].interest; }
-  return { payback, financeCharge, n, payment, r, rows };
+  return { payback, financeCharge, n, payment, r: s.r, rows };
 }
 
 const payoffFor = (row, forgive) => round2(row.balance + (1-forgive)*row.remainingInterest);
@@ -371,16 +344,16 @@ function render(){
   MODEL = computeModel();
   const m = MODEL;
   const feeAmt = round2(state.feePct/100 * state.funded);
-  const fw = FREQ[state.freq];
+  const fw = FREQ[L.cadence];
 
   id("lenderName").textContent = L.name;
   id("cFunded").textContent  = fmt$0(state.funded);
-  id("cPaymentLbl").textContent = FREQ[state.freq].label + " Payment";
+  id("cPaymentLbl").textContent = fw.label + " Payment";
   id("cPayment").textContent = fmt$(m.payment);
   id("cCharge").textContent  = fmt$0(m.financeCharge);
   id("cPayback").textContent = fmt$0(m.payback);
 
-  id("nPayHint").textContent = m.n + " " + fw.word + " payments" + (state.freq==="biweekly" ? " · weekly amortization" : "");
+  id("nPayHint").textContent = m.n + " " + fw.word + " payments";
   id("feeHint").textContent = state.feePct>0
       ? `${state.feePct.toFixed(2)}% of loan = ${fmt$(feeAmt)} · added to "Payoff + Fees"`
       : `Adjusts in 0.25% steps · added to the "Payoff + Fees" column.`;
@@ -392,7 +365,7 @@ function render(){
 
   const tb = id("tbody");
   tb.innerHTML = m.rows.map(row=>{
-    const dt = advanceDate(state.start, state.freq, row.k);
+    const dt = advanceDate(state.start, L.cadence, row.k);
     const po = payoffFor(row, tier.forgive);
     const pof = round2(po + feeAmt);
     return `<tr>
@@ -424,7 +397,7 @@ function downloadPDF(tierKey){
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({unit:"pt", format:"letter"});
   const W = doc.internal.pageSize.getWidth();
-  const fw = FREQ[state.freq];
+  const fw = FREQ[L.cadence];
 
   doc.setFillColor(0,47,104); doc.rect(0,0,W,74,"F");
   doc.setTextColor(255,255,255); doc.setFont("times","normal"); doc.setFontSize(20);
@@ -456,7 +429,7 @@ function downloadPDF(tierKey){
   y += Math.ceil(info.length/2)*17 + 12;
 
   const body = m.rows.map(row=>{
-    const dt = advanceDate(state.start, state.freq, row.k);
+    const dt = advanceDate(state.start, L.cadence, row.k);
     const po = payoffFor(row, tier.forgive);
     const base = [ "#"+row.k,
       dt.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}),
@@ -487,16 +460,6 @@ function downloadPDF(tierKey){
 }
 
 /* ---------- controls ---------- */
-function buildFreqControls(){
-  const L = LENDERS[state.lender];
-  if(!L.freqs.includes(state.freq)) state.freq = L.freqs[0];
-  id("freqSeg").innerHTML = L.freqs.map(f=>
-    `<button data-f="${f}" class="${f===state.freq?"on":""}">${FREQ[f].label}</button>`).join("");
-  id("freqSeg").querySelectorAll("button").forEach(b=>{
-    b.onclick = ()=>{ state.freq=b.dataset.f; buildFreqControls(); render(); save(); };
-  });
-}
-
 function buildTierControls(){
   const L = LENDERS[state.lender];
   if(!L.tiers.find(t=>t.key===state.tier)) state.tier = L.tiers[0].key;
@@ -517,14 +480,14 @@ function buildTierControls(){
 function applyLenderDefaults(key){
   const L = LENDERS[key]; state.lender = key;
   const d = L.defaults;
-  state.funded=d.funded; state.factor=d.factor; state.term=d.term; state.freq=d.freq;
+  state.funded=d.funded; state.factor=d.factor; state.term=d.term;
   state.tier = L.tiers[0].key;
   state.feePct = defaultFeePct(L, state.tier);
 }
 function selectLender(key){
   applyLenderDefaults(key);
   id("factorLbl").textContent = LENDERS[key].factorLabel;
-  buildLenderBar(); syncInputs(); buildFreqControls(); buildTierControls(); render(); save();
+  buildLenderBar(); syncInputs(); buildTierControls(); render(); save();
 }
 function buildLenderBar(){
   id("lenderSeg").innerHTML = LENDER_ORDER.map(k=>
@@ -584,7 +547,6 @@ function init(){
   if(vl){ vl.textContent = SHOW_FEES ? "→ Switch to the no-fee version" : "→ Switch to the version with fees";
           vl.href = SHOW_FEES ? "no-fee.html" : "index.html"; }
   buildLenderBar();
-  buildFreqControls();
   buildTierControls();
   syncInputs();
   id("startDate").value = state.start.toISOString().slice(0,10);
