@@ -214,7 +214,7 @@ const LENDERS = {
     payoffBase:"total",
     cadence:"weekly",
     tiers:[{key:"100",label:"100% IF",forgive:1},{key:"50",label:"50% IF",forgive:.5}],
-    defaults:{funded:300000, factor:1.25, term:18}, termMax:24,
+    defaults:{funded:100000, factor:1.20, term:18}, termMax:24,
     feePct:0,
     count:m=> Math.round(m*52/12),
     note:"RTMI weekly amortization = round(months × 52 ⁄ 12) payments."
@@ -224,7 +224,7 @@ const LENDERS = {
     payoffBase:"total",
     cadence:"monthly",
     tiers:[{key:"100",label:"100% IF",forgive:1},{key:"10",label:"10% IF (Standard)",forgive:.10}],
-    defaults:{funded:300000, factor:1.30, term:12}, termMax:48,
+    defaults:{funded:100000, factor:1.20, term:12}, termMax:48,
     feePct:0,
     count:m=> Math.round(m),
     note:"Kapitus payoff is quoted MONTH-BY-MONTH (monthly amortization over the term), matching Kapitus's own prepay schedule."
@@ -234,7 +234,7 @@ const LENDERS = {
     payoffBase:"total",
     cadence:"weekly",
     tiers:[{key:"100",label:"100% IF",forgive:1},{key:"25",label:"25% IF (Standard)",forgive:.25}],
-    defaults:{funded:275000, factor:1.314, term:24}, termMax:24,
+    defaults:{funded:100000, factor:1.20, term:24}, termMax:24,
     feePct:2.5,
     count:m=> Math.round(m*52/12),
     note:"OnDeck weekly amortization = round(months × 52 ⁄ 12). Origination fee is a % of the loan (24-mo term is typically 4%)."
@@ -245,7 +245,7 @@ const LENDERS = {
     payoffBase:"total",
     cadence:"weekly",
     tiers:[{key:"100",label:"100% Prepay (anytime)",forgive:1}],
-    defaults:{funded:200000, factor:51.9, term:24}, termMax:24,
+    defaults:{funded:100000, factor:51.9, term:24}, termMax:24,
     feePct:0,
     count:m=> Math.round(m*52/12),
     note:"OnDeck Line of Credit — amortizes at the stated APR (daily rate, shown weekly). 100% prepay any time; payoff = funded principal + interest accrued to date."
@@ -255,7 +255,7 @@ const LENDERS = {
     payoffBase:"total",
     cadence:"weekly",
     tiers:[{key:"100",label:"100% IF",forgive:1},{key:"50",label:"50% IF (Standard)",forgive:.5}],
-    defaults:{funded:250000, factor:1.18, term:24}, termMax:36,
+    defaults:{funded:100000, factor:1.20, term:24}, termMax:36,
     feePctByTier:{"100":4, "50":2.5},
     count:m=> 2*Math.round(m*26/12),
     note:"Mulligan weekly amortization = 2 × round(months × 26 ⁄ 12). Early-payoff fee: 2.5% @ 50% IF, 4% @ 100% IF (editable)."
@@ -265,7 +265,7 @@ const LENDERS = {
     payoffBase:"total",
     cadence:"weekly",
     tiers:[{key:"100",label:"100% IF",forgive:1},{key:"30",label:"30% IF (Standard)",forgive:.30}],
-    defaults:{funded:10000, factor:1.12, term:12}, termMax:24,
+    defaults:{funded:100000, factor:1.20, term:12}, termMax:24,
     feePct:0,
     count:m=> Math.round(m*52/12),
     note:"Peac Working Capital Loan (weekly amortization). Standard early-payoff forgiveness = 30%; full payoff = 100%."
