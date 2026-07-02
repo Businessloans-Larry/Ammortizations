@@ -245,7 +245,7 @@ const LENDERS = {
     payoffBase:"total",
     cadence:"weekly",
     tiers:[{key:"100",label:"100% Prepay (anytime)",forgive:1}],
-    defaults:{funded:100000, factor:51.9, term:24}, termMax:24,
+    defaults:{funded:100000, factor:null, term:24}, termMax:24,
     feePct:0,
     count:m=> Math.round(m*52/12),
     note:"OnDeck Line of Credit — amortizes at the stated APR (daily rate, shown weekly). 100% prepay any time; payoff = funded principal + interest accrued to date."
@@ -294,7 +294,8 @@ const fmt$ = x => "$" + round2(x).toLocaleString("en-US",{minimumFractionDigits:
 const fmt$0 = x => "$" + Math.round(x).toLocaleString("en-US");
 const fmtFactor = v => String(Math.round(v*1000)/1000);
 const rateMode = () => LENDERS[state.lender].rateMode || "factor";
-const rateStr  = () => rateMode()==="apr" ? Number(state.factor).toFixed(1)+"% APR" : "factor "+fmtFactor(state.factor);
+const rateStr  = () => (state.factor==null||state.factor==="") ? (rateMode()==="apr"?"APR —":"factor —")
+  : (rateMode()==="apr" ? Number(state.factor).toFixed(1)+"% APR" : "factor "+fmtFactor(state.factor));
 const id = x => document.getElementById(x);
 const parseNum = v => Number(String(v).replace(/[^0-9.]/g,"")) || 0;
 
@@ -349,7 +350,7 @@ function computeModel(){
   let payback, payment, s;
   if(mode === "apr"){
     // APR-amortizing (OnDeck LOC): periodic rate = APR ÷ payments-per-year; standard amortization payment.
-    const r = (state.factor/100) / FREQ[L.cadence].perYear;
+    const r = ((Number(state.factor)||0)/100) / FREQ[L.cadence].perYear;
     const pmtRaw = (r<=0 ? funded/n : funded*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1));
     payment = round2(pmtRaw);
     payback = round2(pmtRaw * n);
@@ -553,8 +554,9 @@ function syncInputs(){
   factorRange.min = L.rateMin ?? 1.05;
   factorRange.max = L.rateMax ?? 1.60;
   factorRange.step = L.rateStep ?? 0.001;
-  factorRange.value = state.factor;
-  factorBox.value = (L.rateMode==="apr") ? Number(state.factor).toFixed(1) : fmtFactor(state.factor);
+  const blankRate = (state.factor==null || state.factor==="");
+  factorRange.value = blankRate ? Number(factorRange.min) : state.factor;
+  factorBox.value = blankRate ? "" : ((L.rateMode==="apr") ? Number(state.factor).toFixed(1) : fmtFactor(state.factor));
   const tmax = L.termMax ?? 48;
   if(state.term > tmax) state.term = tmax;
   termRange.max = tmax;
@@ -569,18 +571,12 @@ function syncInputs(){
 }
 
 /* localStorage */
-function save(){
-  try{ localStorage.setItem(LS_KEY, JSON.stringify({...state, start: state.start.toISOString()})); }catch(e){}
-  const f=id("savedFlag"); f.textContent="✓ Auto-saved"; clearTimeout(save._t);
-  save._t=setTimeout(()=>f.textContent="",1500);
-}
+function save(){ /* session persistence disabled — always open at consistent defaults */ }
 function load(){
-  let s=null; try{ s=JSON.parse(localStorage.getItem(LS_KEY)); }catch(e){}
-  if(s && LENDERS[s.lender]){ Object.assign(state, s); state.start = s.start ? new Date(s.start) : new Date(2026,6,1); }
-  else { applyLenderDefaults(DEFAULT_LENDER); state.start = new Date(2026,6,1); }
-  if(!LENDERS[state.lender]) applyLenderDefaults(DEFAULT_LENDER);
-  if(state.feePct===undefined) state.feePct = defaultFeePct(LENDERS[state.lender], state.tier);
-  id("borrower").value = state.borrower||"";
+  applyLenderDefaults(DEFAULT_LENDER);   // always start at the default lender + its defaults
+  state.start = new Date(2026,6,1);
+  state.borrower = "";
+  id("borrower").value = "";
 }
 
 const fundedBox=id("fundedBox"), fundedRange=id("fundedRange"),
