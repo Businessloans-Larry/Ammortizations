@@ -252,7 +252,7 @@ const LENDERS = {
   },
   mulligan: {
     name:"Mulligan Funding", factorLabel:"Factor (Total Repayment ÷ Funded)",
-    payoffBase:"remaining",
+    payoffBase:"total",
     cadence:"weekly",
     tiers:[{key:"100",label:"100% IF",forgive:1},{key:"50",label:"50% IF (Standard)",forgive:.5}],
     defaults:{funded:250000, factor:1.18, term:24}, termMax:36,
@@ -262,7 +262,7 @@ const LENDERS = {
   },
   peac: {
     name:"Peac (WCL)", factorLabel:"Sell Rate (Factor)",
-    payoffBase:"remaining",
+    payoffBase:"total",
     cadence:"weekly",
     tiers:[{key:"100",label:"100% IF",forgive:1},{key:"30",label:"30% IF (Standard)",forgive:.30}],
     defaults:{funded:10000, factor:1.12, term:12}, termMax:24,
