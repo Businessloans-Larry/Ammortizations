@@ -455,7 +455,6 @@ function downloadPDF(tierKey){
   if(state.borrower){ doc.text("Borrower: "+state.borrower, 40, y); y+=18; }
   const info = [
     ["Funded Amount", fmt$0(state.funded)],
-    [(L.rateMode==="apr"?"APR":"Factor (Sell Rate)"), (L.rateMode==="apr"? Number(state.factor).toFixed(1)+"%" : fmtFactor(state.factor))],
     ["Total Payback", fmt$0(m.payback)],
     ["Finance Charge", fmt$0(m.financeCharge)],
     ["Term", state.term+" months  ("+m.n+" payments)"]
