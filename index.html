@@ -257,8 +257,8 @@ const LENDERS = {
     tiers:[{key:"100",label:"100% IF",forgive:1},{key:"50",label:"50% IF (Standard)",forgive:.5}],
     defaults:{funded:100000, factor:1.20, term:24}, termMax:36,
     feePctByTier:{"100":4, "50":2.5},
-    count:m=> 2*Math.round(m*26/12),
-    note:"Mulligan weekly amortization = 2 × round(months × 26 ⁄ 12). Early-payoff fee: 2.5% @ 50% IF, 4% @ 100% IF (editable)."
+    count:m=> Math.round(m*52/12),
+    note:"Mulligan weekly amortization = round(months × 52 ⁄ 12). Early-payoff fee: 2.5% @ 50% IF, 4% @ 100% IF (editable)."
   },
   peac: {
     name:"Peac (WCL)", factorLabel:"Sell Rate (Factor)",
