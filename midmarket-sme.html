@@ -66,6 +66,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;heigh
 .seg button{flex:1;border:none;background:transparent;font-family:var(--font-body);font-size:13px;font-weight:600;color:var(--bl-steel);padding:9px 8px;border-radius:6px;cursor:pointer;transition:.15s}
 .seg button.on{background:var(--bl-green);color:#fff;box-shadow:var(--shadow-md)}
 .seg.navy button.on{background:var(--bl-navy)}
+.locpaybox{display:none;align-items:center;justify-content:space-between;gap:14px 24px;margin:0 0 16px;padding:14px 18px;background:var(--bl-pale);border:1px solid rgba(0,47,104,.10);border-radius:var(--radius-sm);flex-wrap:wrap}
+.locpay-info{display:flex;flex-direction:column;gap:3px}
+.locpay-k{font-size:11px;font-weight:700;color:var(--bl-steel);text-transform:uppercase;letter-spacing:.05em}
+.locpay-v{font-size:22px;font-weight:800;color:var(--bl-navy);font-variant-numeric:tabular-nums}
+.locpay-seg{min-width:220px}
 .lenderbar{display:flex;gap:8px;background:var(--bl-pale);border-radius:var(--radius);padding:8px;margin-bottom:24px;flex-wrap:wrap}
 .lenderbar button{flex:1;min-width:130px;border:none;background:transparent;font-family:var(--font-display);font-size:19px;color:var(--bl-steel);padding:15px 12px;border-radius:10px;cursor:pointer;transition:.15s}
 .lenderbar button.on{background:var(--bl-navy);color:#fff;box-shadow:var(--shadow-md)}
@@ -172,6 +177,10 @@ tbody td.pay{font-weight:600;color:var(--bl-navy)}
         <div class="tier-note" id="tierNote"></div>
       </div>
       <div class="dlgroup" id="dlGroup"></div>
+    </div>
+    <div class="locpaybox" id="locPayBox">
+      <div class="locpay-info"><span class="locpay-k">Estimated payment</span><span class="locpay-v" id="locPayV">$0</span></div>
+      <div class="seg navy locpay-seg" id="locFreqSeg"></div>
     </div>
     <div class="tablescroll">
       <table id="schedule">
@@ -285,7 +294,7 @@ const tabOf = k => Object.keys(SUBLENDERS).find(t => SUBLENDERS[t].some(m=>m.key
 
 const state = {
   lender:DEFAULT_LENDER, funded:300000, factor:1.25, term:18,
-  feePct:0, start:null, tier:"100", borrower:""
+  feePct:0, start:null, tier:"100", borrower:"", locFreq:"weekly"
 };
 
 /* ---------- helpers ---------- */
@@ -397,6 +406,7 @@ function render(){
   id("cFunded").textContent  = fmt$0(state.funded);
   id("cCharge").textContent  = fmt$0(m.financeCharge);
   id("cPayback").textContent = fmt$0(m.payback);
+  renderLocPay(m);
 
   id("nPayHint").textContent = m.n + " " + fw.word + " payments";
   id("feeHint").textContent = state.feePct>0
@@ -496,6 +506,24 @@ function downloadPDF(tierKey){
 
   const fname = slug(`${L.name} - ${fmt$0(state.funded)} - ${state.term}mo - ${tier.label}`) + ".pdf";
   doc.save(fname);
+}
+
+/* ---------- OnDeck LOC weekly/monthly payment box (above schedule; schedule stays weekly) ---------- */
+function renderLocPay(m){
+  var box = id("locPayBox");
+  if(state.lender !== "ondeck_loc"){ box.style.display="none"; return; }
+  var apr=(Number(state.factor)||0)/100;
+  var nw=m.n, pw=m.payment;
+  var rm=apr/12, nm=state.term;
+  var pm=round2(rm<=0 ? state.funded/nm : state.funded*rm*Math.pow(1+rm,nm)/(Math.pow(1+rm,nm)-1));
+  var monthly = state.locFreq==="monthly";
+  var p = monthly?pm:pw, nn = monthly?nm:nw, w = monthly?"month":"week";
+  id("locPayV").textContent = fmt$(p) + " / " + w + "  \u00b7  " + nn + " payments";
+  id("locFreqSeg").innerHTML =
+    '<button data-f="weekly" class="'+(monthly?"":"on")+'">Weekly</button>'+
+    '<button data-f="monthly" class="'+(monthly?"on":"")+'">Monthly</button>';
+  id("locFreqSeg").querySelectorAll("button").forEach(function(b){ b.onclick=function(){ state.locFreq=b.dataset.f; render(); save(); }; });
+  box.style.display="flex";
 }
 
 /* ---------- controls ---------- */
