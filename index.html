@@ -468,6 +468,7 @@ function downloadPDF(tierKey){
     ["Funded Amount", fmt$0(state.funded)],
     ["Total Payback", fmt$0(m.payback)],
     ["Finance Charge", fmt$0(m.financeCharge)],
+    ["Estimated "+fw.label+" Payment", fmt$(m.payment)],
     ["Term", state.term+" months  ("+m.n+" payments)"]
   ];
   if(SHOW_FEES) info.push(["Origination Fee", state.feePct>0 ? state.feePct.toFixed(2)+"%  ("+fmt$0(feeAmt)+")" : "None"]);

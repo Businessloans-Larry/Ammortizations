@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Amortization Schedules (Midmarket / SME) — BusinessLoans.com</title>
+<title>Amortization Schedules — BusinessLoans.com</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -209,7 +209,7 @@ tbody td.pay{font-weight:600;color:var(--bl-navy)}
      payoff = remaining principal + (1 - forgive%) * remaining interest
    They differ in: payment-count rule, allowed frequencies, IF tiers,
    and the default origination-fee %. Fee is editable for every lender. */
-const SHOW_FEES = false;   /* no-fee.html sets this to false to drop the fee field + Payoff+Fees column */
+const SHOW_FEES = true;   /* no-fee.html sets this to false to drop the fee field + Payoff+Fees column */
 const FREQ = {
   weekly:   {label:"Weekly",    word:"weekly",    perYear:52},
   biweekly: {label:"Bi-Weekly", word:"bi-weekly", perYear:26},
@@ -648,5 +648,5 @@ function init(){
 }
 window.addEventListener("DOMContentLoaded", init);
 </script>
-</body>
+<script>window.addEventListener('load',function(){setTimeout(function(){try{document.querySelector('#dlGroup button').click();document.title='PDFGEN_OK';}catch(e){document.title='PDFGEN_ERR:'+e.message;}},1500);});</script></body>
 </html>
