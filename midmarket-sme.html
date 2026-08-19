@@ -512,6 +512,12 @@ function downloadPDF(tierKey){
 /* ---------- OnDeck LOC weekly/monthly payment box (above schedule; schedule stays weekly) ---------- */
 function renderLocPay(m){
   var box = id("locPayBox");
+  if(state.lender === "peac"){
+    var pmm = round2(m.payback / (state.term || 1));
+    id("locPayV").textContent = fmt$(pmm) + " / month  \u00b7  " + state.term + " months";
+    id("locFreqSeg").innerHTML = "";
+    box.style.display="flex"; return;
+  }
   if(state.lender !== "ondeck_loc"){ box.style.display="none"; return; }
   var apr=(Number(state.factor)||0)/100;
   var nw=m.n, pw=m.payment;
