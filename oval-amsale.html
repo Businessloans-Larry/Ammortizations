@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Amsale Aberra LLC — Rapid Finance Funding Options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<style>
+:root{
+  --bl-green:#00CD67; --bl-cyan:#00CDEF; --bl-navy:#002F68;
+  --bl-navy-900:#1A2763; --bl-slate:#485282; --bl-steel:#6A739A;
+  --bl-silver:#A3A9C1; --bl-line:#D1D4E0; --bl-pale:#E8E9EF;
+  --bl-bg:#F6F6F9; --bl-white:#FFFFFF; --bl-gold:#FFC858; --bl-error:#FB5038;
+  --bl-logo-blue:#60AFF0;
+  --font-display:'DM Serif Display',Georgia,serif;
+  --font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --radius:16px; --radius-sm:8px;
+  --shadow-md:0 4px 12px rgba(26,39,99,.10);
+  --shadow-lg:0 8px 24px rgba(26,39,99,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-body);background:var(--bl-bg);color:var(--bl-slate);line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:28px 20px 80px}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:8px}
+.brand{display:flex;align-items:center;gap:14px}
+.brand svg{height:34px;width:auto;display:block}
+.brand .divider{width:1px;height:30px;background:var(--bl-line)}
+.brand .lender{font-family:var(--font-display);color:var(--bl-navy);font-size:22px;line-height:1}
+.brand .lender small{display:block;font-family:var(--font-body);font-size:11px;letter-spacing:.10em;text-transform:uppercase;color:var(--bl-steel);margin-top:4px;font-weight:600}
+
+h1.page{font-family:var(--font-display);color:var(--bl-navy);font-size:34px;font-weight:400;margin:18px 0 2px}
+.sub{color:var(--bl-steel);font-size:14px;margin-bottom:6px}
+.sub b{color:var(--bl-navy);font-weight:700}
+.validline{font-size:12px;color:var(--bl-steel);margin-bottom:22px}
+.validline span{color:var(--bl-navy);font-weight:600}
+
+.viewbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.viewbar .lbl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bl-steel)}
+.seg{display:flex;background:var(--bl-pale);border-radius:var(--radius-sm);padding:4px;gap:4px}
+.seg button{border:none;background:transparent;font-family:var(--font-body);font-size:13px;font-weight:600;color:var(--bl-steel);padding:9px 16px;border-radius:6px;cursor:pointer;transition:.15s}
+.seg button.on{background:var(--bl-green);color:#fff;box-shadow:var(--shadow-md)}
+.seg.navy button.on{background:var(--bl-navy)}
+.seg.flex button{flex:1}
+.viewnote{font-size:12px;color:var(--bl-steel)}
+
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
+.card{background:var(--bl-white);border:1px solid var(--bl-pale);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow-md)}
+.card .k{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bl-steel);margin-bottom:8px}
+.card .v{font-family:var(--font-display);font-size:26px;color:var(--bl-navy);line-height:1.05;font-variant-numeric:tabular-nums}
+.card .s{font-size:11.5px;color:var(--bl-steel);margin-top:7px}
+.card.hero{background:var(--bl-navy);border-color:var(--bl-navy)}
+.card.hero .k{color:#9fb2d6}
+.card.hero .v{color:#fff;font-size:34px}
+.card.hero .s{color:#9fb2d6}
+.card.accent .v{color:var(--bl-green)}
+.cards.second{margin-bottom:24px}
+
+.panel{background:var(--bl-white);border:1px solid var(--bl-pale);border-radius:var(--radius);padding:26px 28px;box-shadow:var(--shadow-md);margin-bottom:24px}
+.panel h2{font-family:var(--font-display);color:var(--bl-navy);font-size:22px;font-weight:400;margin-bottom:20px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:26px 34px}
+.field{margin-bottom:4px}
+.field .row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.field label{font-size:13px;font-weight:600;color:var(--bl-navy)}
+.field .numbox{width:140px;text-align:right;font-family:var(--font-body);font-size:15px;font-weight:600;color:var(--bl-navy);border:1.5px solid var(--bl-line);border-radius:var(--radius-sm);padding:7px 10px}
+.field .numbox:focus{outline:none;border-color:var(--bl-cyan)}
+input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:999px;background:var(--bl-pale);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--bl-white);border:3px solid var(--bl-green);cursor:pointer;box-shadow:var(--shadow-md)}
+.field .hint{font-size:11px;color:var(--bl-steel);margin-top:7px}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.presets button{font-family:var(--font-body);font-size:11.5px;font-weight:600;color:var(--bl-navy);background:var(--bl-white);border:1.5px solid var(--bl-line);border-radius:999px;padding:6px 12px;cursor:pointer;transition:.15s}
+.presets button:hover{border-color:var(--bl-cyan);color:var(--bl-navy)}
+.presets button.on{background:var(--bl-navy);border-color:var(--bl-navy);color:#fff}
+.check{display:flex;align-items:flex-start;gap:10px;margin-top:4px}
+.check input{width:18px;height:18px;accent-color:var(--bl-green);margin-top:2px;cursor:pointer}
+.check .txt{font-size:13px;color:var(--bl-navy);font-weight:600}
+.check .txt small{display:block;font-weight:400;color:var(--bl-steel);font-size:11.5px;margin-top:3px}
+
+.tablecard{background:var(--bl-white);border:1px solid var(--bl-pale);border-radius:var(--radius);box-shadow:var(--shadow-md);overflow:hidden;margin-bottom:24px}
+.tablehead{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:22px 26px 16px}
+.tablehead h2{font-family:var(--font-display);color:var(--bl-navy);font-size:22px;font-weight:400}
+.tablehead .tier-note{font-size:12px;color:var(--bl-steel);margin-top:4px;max-width:660px}
+.dlgroup{display:flex;gap:10px;flex-wrap:wrap}
+.btn{font-family:var(--font-body);font-weight:600;font-size:13px;border:none;border-radius:var(--radius-sm);padding:11px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:.15s}
+.btn-primary{background:var(--bl-green);color:#fff}
+.btn-primary:hover{background:#00b85c}
+.btn-outline{background:var(--bl-white);color:var(--bl-navy);border:1.5px solid var(--bl-navy)}
+.btn-outline:hover{background:var(--bl-navy);color:#fff}
+.tablescroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:760px}
+thead th{background:var(--bl-navy);color:#fff;font-weight:600;text-align:right;padding:13px 16px;white-space:nowrap;font-size:12px;letter-spacing:.02em}
+thead th:first-child{text-align:left}
+thead th.broker{background:#013a80}
+tbody td{text-align:right;padding:13px 16px;border-bottom:1px solid var(--bl-pale);white-space:nowrap;color:var(--bl-slate);font-variant-numeric:tabular-nums}
+tbody td:first-child{text-align:left;font-variant-numeric:normal}
+tbody tr:nth-child(even){background:#fbfbfd}
+tbody tr.sel{background:rgba(0,205,103,.10)!important}
+tbody tr.sel td{color:var(--bl-navy);font-weight:600}
+tbody td.factor{color:var(--bl-navy);font-weight:700}
+tbody td.pay{color:var(--bl-navy);font-weight:600}
+tbody td.bro{background:rgba(0,205,239,.06);color:var(--bl-navy);font-weight:600}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:rgba(0,205,239,.07)}
+.termcell{display:flex;align-items:center;gap:9px}
+.pill{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--bl-gold);color:#5a3d00}
+.foot{padding:16px 26px;font-size:11.5px;color:var(--bl-steel);border-top:1px solid var(--bl-pale);background:var(--bl-bg)}
+
+.stips{display:grid;grid-template-columns:1fr 1fr;gap:26px 34px}
+.stips h3{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--bl-navy);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--bl-pale)}
+.stips ul{list-style:none}
+.stips li{font-size:13px;padding:6px 0 6px 22px;position:relative;color:var(--bl-slate)}
+.stips li:before{content:"";position:absolute;left:2px;top:13px;width:8px;height:8px;border-radius:50%;background:var(--bl-line)}
+.stips li.req:before{background:var(--bl-gold)}
+.stips li.got:before{background:var(--bl-green)}
+.stips li b{color:var(--bl-navy);font-weight:600}
+.stips li small{display:block;color:var(--bl-steel);font-size:11.5px}
+.poo{margin-top:12px;padding:14px 16px;background:var(--bl-bg);border:1px solid var(--bl-pale);border-radius:var(--radius-sm)}
+.poo .t{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--bl-steel);margin-bottom:8px}
+.poo ul{list-style:none}
+.poo li{font-size:12px;padding:3px 0 3px 14px;position:relative;color:var(--bl-slate)}
+.poo li:before{content:"—";position:absolute;left:0;color:var(--bl-silver)}
+
+.notes{font-size:12px;color:var(--bl-steel);line-height:1.75}
+.notes b{color:var(--bl-navy)}
+.notes ul{list-style:none;margin-top:8px}
+.notes li{padding:4px 0 4px 16px;position:relative}
+.notes li:before{content:"•";position:absolute;left:2px;color:var(--bl-silver)}
+
+@media(max-width:860px){
+  .cards{grid-template-columns:1fr}
+  .grid2,.stips{grid-template-columns:1fr}
+  h1.page{font-size:27px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 352.47 153.57" role="img" aria-label="BusinessLoans.com"><defs><style>.cls-1{fill:#002f68}.cls-2{fill:#00cd67}.cls-3{fill:#00cdef}.cls-4{fill:#60aff0}</style></defs><g><path class="cls-1" d="M22.92,31.64H16.77V42.82h6.15A11.74,11.74,0,1,1,11.18,54.56h0V25.81a10,10,0,0,0-10-10H0V54.56H0A22.92,22.92,0,1,0,22.92,31.64Z"/><path class="cls-2" d="M18,26.05H16.77V24.87a10,10,0,0,1,10-10H28v1.18A10,10,0,0,1,18,26.05Z"/><path class="cls-3" d="M14,0l-.83.83a10,10,0,0,0,0,14.15l.83.83.84-.83a10,10,0,0,0,0-14.15L14,0Z"/><path class="cls-1" d="M92.24,77H81.32V72.84a15.36,15.36,0,0,1-11.18,4.64,14.47,14.47,0,0,1-10.58-4C56,69.91,55,65.7,55,60.8V32.16H66.18V59.25c0,6.11,3.87,8.17,7.4,8.17s7.48-2.06,7.48-8.17V32.16H92.24Z"/><path class="cls-1" d="M138.42,36.89l-6.88,7c-2.58-2.33-6.45-3-10.4-3-4.48,0-6.37,2.06-6.37,4.3s1.29,3.52,4.65,3.87l7,.68c8.86.86,13.33,5.51,13.33,13.16,0,9.89-8.43,14.62-19,14.62-7.05,0-13.33-.77-19.09-6.45L109,63.72c3.61,3.7,8.51,4.22,11.95,4.22,3.87,0,7.92-1.29,7.92-4.65,0-2.23-1.12-3.78-4.73-4.13l-7.06-.68C109,57.7,104,54.18,104,45.92c0-9.37,8.17-14.28,17.29-14.28C128.36,31.64,134.12,32.93,138.42,36.89Z"/><path class="cls-1" d="M161.73,24.51H150.29V15.39h11.44ZM161.64,77H150.46V33.45h11.18Z"/><path class="cls-1" d="M208.08,35.6c3.61,3.7,4.56,7.83,4.56,12.73V77H201.46V49.88c0-6.11-3.79-8.17-7.4-8.17s-7.48,2.06-7.48,8.17V77H175.4V32.16h10.92v4.13a15.33,15.33,0,0,1,11.18-4.65C202,31.64,205.59,33,208.08,35.6Z"/><path class="cls-1" d="M262.78,53.32v4.73h-28c0,5.84,3.44,10,9.8,10,4.91,0,7.31-1.46,10.07-4.21l6.88,6.62c-4.56,4.64-9,7-17,7-10.67,0-20.73-4.81-20.73-23,0-14.62,7.91-22.88,19.52-22.88C255.72,31.64,262.78,40.59,262.78,53.32Zm-27.09-7.74a10.89,10.89,0,0,0-.95,4.81h16.94a10.89,10.89,0,0,0-.94-4.81,8.41,8.41,0,0,0-15.05,0Z"/><path class="cls-1" d="M306.72,36.89l-6.88,7c-2.58-2.33-6.45-3-10.4-3-4.48,0-6.37,2.06-6.37,4.3s1.29,3.52,4.65,3.87l7,.68c8.86.86,13.33,5.51,13.33,13.16,0,9.89-8.43,14.62-19,14.62-7,0-13.33-.77-19.09-6.45l7.31-7.31c3.61,3.7,8.51,4.22,11.95,4.22,3.87,0,7.92-1.29,7.92-4.65,0-2.23-1.12-3.78-4.73-4.13l-7.06-.68c-8.08-.78-13.07-4.3-13.07-12.56,0-9.37,8.17-14.28,17.29-14.28C296.66,31.64,302.42,32.93,306.72,36.89Z"/><path class="cls-1" d="M351.1,36.89l-6.88,7c-2.58-2.33-6.45-3-10.41-3-4.47,0-6.36,2.06-6.36,4.3s1.29,3.52,4.64,3.87l7.05.68c8.86.86,13.33,5.51,13.33,13.16,0,9.89-8.43,14.62-19,14.62-7.06,0-13.33-.77-19.09-6.45l7.3-7.31c3.62,3.7,8.52,4.22,12,4.22,3.87,0,7.91-1.29,7.91-4.65,0-2.23-1.12-3.78-4.73-4.13l-7.05-.68c-8.09-.78-13.07-4.3-13.07-12.56,0-9.37,8.17-14.28,17.28-14.28C341,31.64,346.8,32.93,351.1,36.89Z"/><path class="cls-4" d="M24.73,139.55c0,2.66,1.12,4,4,4H33v9.46H26.62c-9.2,0-13.07-6.36-13.07-12.81V91.82H24.73Z"/><path class="cls-4" d="M73.32,148.06c-2.84,2.93-7.31,5.51-13.93,5.51s-11-2.58-13.84-5.51c-4-4.3-5.08-9.37-5.08-17.46s1-13.07,5.08-17.37c2.83-2.92,7.22-5.5,13.84-5.5s11.09,2.49,13.93,5.5c4,4.3,5.08,9.29,5.08,17.37S77.45,143.85,73.32,148.06Zm-8.68-28.29a7.07,7.07,0,0,0-5.25-2,7,7,0,0,0-5.16,2c-2.32,2.24-2.58,6.28-2.58,10.83s.26,8.69,2.58,10.93a7,7,0,0,0,5.16,2,7.07,7.07,0,0,0,5.25-2c2.32-2.24,2.58-6.28,2.58-10.93S67,122,64.64,119.77Z"/><path class="cls-4" d="M124.23,123.55v29.5H113.31v-3.87c-3,3-5.84,4.3-11,4.3s-8.86-1.38-11.44-4a14.33,14.33,0,0,1-3.7-10.06c0-7.13,4.9-13,15.48-13h10.4v-2.24c0-4.9-2.4-7-8.34-7-4,0-6.19,1.12-8.6,3.87l-7-7c4.39-4.81,8.6-6.36,16.08-6.36C117.78,107.73,124.23,113.06,124.23,123.55Zm-19.69,10.58c-4.47,0-6.62,1.81-6.62,5.16,0,3.1,2.15,5.07,6.79,5.07,2.76,0,4.73-.34,6.62-2.15,1.29-1.11,1.72-2.83,1.72-5.67v-2.41Z"/><path class="cls-4" d="M170.24,111.69c3.62,3.69,4.56,7.82,4.56,12.72v28.64H163.62V126c0-6.1-3.78-8.17-7.39-8.17s-7.49,2.07-7.49,8.17v27.09H137.56v-44.8h10.93v4.12a15.34,15.34,0,0,1,11.18-4.64C164.14,107.73,167.75,109.11,170.24,111.69Z"/><path class="cls-4" d="M220.47,113l-6.88,7c-2.58-2.32-6.45-3-10.41-3-4.47,0-6.36,2.07-6.36,4.3s1.29,3.53,4.64,3.87l7,.69c8.86.86,13.33,5.5,13.33,13.16,0,9.89-8.42,14.62-19,14.62-7.05,0-13.33-.78-19.09-6.45l7.31-7.31c3.61,3.69,8.51,4.21,11.95,4.21,3.87,0,7.91-1.29,7.91-4.64,0-2.24-1.12-3.79-4.73-4.13l-7.05-.69c-8.08-.77-13.07-4.3-13.07-12.55,0-9.38,8.17-14.28,17.28-14.28C210.41,107.73,216.17,109,220.47,113Z"/></g></svg>
+      <div class="divider"></div>
+      <div class="lender">Rapid Finance<small>Term Loan · Weekly (Wed.)</small></div>
+    </div>
+  </div>
+
+  <h1 class="page">Funding Options Calculator</h1>
+  <div class="sub"><b>Amsale Aberra LLC</b> &nbsp;·&nbsp; prepared for <b>Oval Ventures</b></div>
+  <div class="validline">Lender proposal issued at <span id="quotedPtsTxt">8.00 points</span> &nbsp;·&nbsp; closing cost <span>$0.00</span> &nbsp;·&nbsp; quote valid through <span>Sep 9, 2026</span></div>
+
+  <div class="viewbar">
+    <span class="lbl">View</span>
+    <div class="seg navy" id="viewSeg">
+      <button data-view="broker" class="on">Broker</button>
+      <button data-view="client">Client</button>
+    </div>
+    <span class="viewnote" id="viewNote">Broker view — buy rate and commission are visible.</span>
+  </div>
+
+  <div class="panel">
+    <h2>Structure the offer</h2>
+    <div class="grid2">
+
+      <div class="field">
+        <div class="row">
+          <label for="amtR">Funding amount</label>
+          <input class="numbox" id="amtN" type="text" inputmode="numeric" />
+        </div>
+        <input id="amtR" type="range" min="50000" max="600000" step="5000" />
+        <div class="hint">Priced at <b>$250,000</b>. Client soft-qualifies up to <b>$600,000</b> with the larger-file stips at right.</div>
+      </div>
+
+      <div class="field" id="ptsField">
+        <div class="row">
+          <label for="ptsR">Commission points</label>
+          <input class="numbox" id="ptsN" type="text" inputmode="decimal" />
+        </div>
+        <input id="ptsR" type="range" min="0" max="8" step="0.25" />
+        <div class="presets" id="ptsPresets">
+          <button data-p="8">8.00 — as issued</button>
+          <button data-p="5">5.00 — win the deal</button>
+          <button data-p="3">3.00</button>
+          <button data-p="0">0.00 — buy rate</button>
+        </div>
+        <div class="hint">Each point adds <b>0.01</b> to the factor rate. Lender flagged this as a competitive file — contracts out at <b>5 points or under</b> to win it.</div>
+      </div>
+
+      <div class="field">
+        <div class="row"><label>Term</label></div>
+        <div class="seg flex" id="termSeg"></div>
+        <div class="hint">Weekly payments, drafted Wednesdays. Payment counts are the lender's.</div>
+      </div>
+
+      <div class="field">
+        <div class="row"><label>Payment stretch</label></div>
+        <label class="check">
+          <input type="checkbox" id="plus2" />
+          <span class="txt">Add 2 weeks to the term
+            <small>Lender-approved on every term: payback amount stays the same, weekly payment drops.</small></span>
+        </label>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card hero"><div class="k">Factor Rate</div><div class="v" id="cFactor">—</div><div class="s" id="cFactorSub">—</div></div>
+    <div class="card"><div class="k">Weekly Payment</div><div class="v" id="cPay">—</div><div class="s" id="cPaySub">—</div></div>
+    <div class="card"><div class="k">Total Payback</div><div class="v" id="cPayback">—</div><div class="s" id="cPaybackSub">—</div></div>
+  </div>
+  <div class="cards second">
+    <div class="card"><div class="k">Funding Amount</div><div class="v" id="cAmt">—</div><div class="s">Closing cost $0.00 · net to client</div></div>
+    <div class="card"><div class="k">Cost of Capital</div><div class="v" id="cCost">—</div><div class="s" id="cCostSub">—</div></div>
+    <div class="card accent" id="cCommCard"><div class="k">Commission to Oval Ventures</div><div class="v" id="cComm">—</div><div class="s" id="cCommSub">—</div></div>
+  </div>
+
+  <div class="tablecard">
+    <div class="tablehead">
+      <div>
+        <h2>All terms at <span id="tblPts">8.00</span> points</h2>
+        <div class="tier-note">Click any row to select that term. Weekly payment = total payback ÷ number of payments.</div>
+      </div>
+      <div class="dlgroup">
+        <button class="btn btn-outline" id="dlPdf">Download PDF</button>
+      </div>
+    </div>
+    <div class="tablescroll">
+      <table id="tbl">
+        <thead><tr id="thr"></tr></thead>
+        <tbody id="tb"></tbody>
+      </table>
+    </div>
+    <div class="foot" id="tblFoot"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Closing stipulations</h2>
+    <div class="stips">
+      <div>
+        <h3>Loans up to $250,000</h3>
+        <ul>
+          <li class="got"><b>Bank statements — May, June, July 2026</b><small>Received (accounts ending 5864, 8145, 4123)</small></li>
+          <li class="req"><b>Driver's License</b><small>Clarence Brown</small></li>
+          <li class="req"><b>Voided Check</b></li>
+          <li class="req"><b>Proof of Ownership — LLC</b><small>NY SOS does not show the owner's name</small></li>
+        </ul>
+        <div class="poo">
+          <div class="t">Accepted proof-of-ownership documents</div>
+          <ul>
+            <li>Most recent required federal return Form 1065 with Schedule K-1</li>
+            <li>Most recent required federal return Form 1120S with Schedule K-1</li>
+            <li>Most recent required 1040 Schedule C (single-member LLC) or Schedule F</li>
+            <li>Most recent executed Articles of Organization</li>
+            <li>Most recent executed Operating Agreement</li>
+            <li>Copy of the executed purchase agreement</li>
+            <li>Court documents or decree granting ownership</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <h3>Loans over $250,000</h3>
+        <ul>
+          <li class="got"><b>Everything in the column at left</b><small>Same bank statements, DL, voided check, proof of ownership</small></li>
+          <li class="req"><b>Bank Transaction History</b></li>
+          <li class="req"><b>2025 business tax return + YTD P&amp;L + YTD balance sheet</b><small>Or 2024 return with extension, plus 2025 YTD P&amp;L and balance sheet</small></li>
+        </ul>
+        <div class="poo">
+          <div class="t">Contracts</div>
+          <ul>
+            <li>Loan and Security Agreement</li>
+            <li>LSA ACH Authorization</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Notes</h2>
+    <div class="notes">
+      <ul>
+        <li><b>Factor rate</b> is the total-cost multiple: payback = funding amount × factor. There is no separate origination or closing cost on this file.</li>
+        <li><b>Points move the factor, not the funding.</b> Dropping from 8 to 5 points cuts 0.03 off the factor — on $250,000 that is $7,500 less payback for the client.</li>
+        <li><b>Final payment</b> may differ by a few cents so the payments sum exactly to the payback amount.</li>
+        <li><b>Amortization / early-payoff schedule</b> is not shown here — it will be built from the lender's own schedule once contracts are requested.</li>
+        <li><b>A line of credit option</b> is also available on this file; pricing on request.</li>
+        <li>Terms above reflect the lender's proposal and are subject to final underwriting and the stipulations listed.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ── Rapid Finance pricing grid ───────────────────────────────────────────────
+   Proposal was issued at 8.00 commission points. Each point = 0.01 on the
+   factor, so buy factor = quoted factor − (8 / 100).
+   Reconciles to the lender proposal at $250,000 / 8.00 pts:
+     18mo 1.34 → $335,000 / 78 = $4,294.87    15mo 1.31 → $327,500 / 65 = $5,038.46
+     12mo 1.24 → $310,000 / 52 = $5,961.54    10mo 1.23 → $307,500 / 43 = $7,151.16
+      9mo 1.22 → $305,000 / 39 = $7,820.51
+   ────────────────────────────────────────────────────────────────────────── */
+var QUOTED_PTS = 8;
+var TERMS = [
+  {m: 9,  quoted:1.22, n:39},
+  {m:10,  quoted:1.23, n:43},
+  {m:12,  quoted:1.24, n:52},
+  {m:15,  quoted:1.31, n:65},
+  {m:18,  quoted:1.34, n:78}
+];
+TERMS.forEach(function(t){ t.buy = round4(t.quoted - QUOTED_PTS/100); });
+
+var KEY='oval_amsale_v1';
+var state={amt:250000, pts:8, term:18, plus2:false, view:'broker'};
+try{ var s=JSON.parse(localStorage.getItem(KEY)||'null'); if(s){ for(var k in state) if(s[k]!==undefined) state[k]=s[k]; } }catch(e){}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+
+function round2(x){ return Math.round((x+Number.EPSILON)*100)/100; }
+function round4(x){ return Math.round((x+Number.EPSILON)*10000)/10000; }
+function money(x,dp){ if(dp===undefined) dp=2;
+  return '$'+x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp}); }
+function money0(x){ return money(x, x%1===0?0:2); }
+function fct(f){ var s=f.toFixed(4).replace(/0+$/,''); if(s.length-s.indexOf('.')<3) s=f.toFixed(2); return s; }
+function pts(p){ return p.toFixed(2); }
+
+function model(t){
+  var factor = round4(t.buy + state.pts/100);
+  var payback = round2(state.amt * factor);
+  var n = t.n + (state.plus2?2:0);
+  return { m:t.m, buy:t.buy, factor:factor, payback:payback, n:n,
+           pay: round2(payback/n), comm: round2(state.amt*state.pts/100),
+           cost: round2(payback - state.amt) };
+}
+function selTerm(){ for(var i=0;i<TERMS.length;i++) if(TERMS[i].m===state.term) return TERMS[i]; return TERMS[TERMS.length-1]; }
+
+/* ── controls ─────────────────────────────────────────────────────────────── */
+var amtR=document.getElementById('amtR'), amtN=document.getElementById('amtN'),
+    ptsR=document.getElementById('ptsR'), ptsN=document.getElementById('ptsN'),
+    plus2=document.getElementById('plus2');
+
+document.getElementById('quotedPtsTxt').textContent = pts(QUOTED_PTS)+' points';
+
+var termSeg=document.getElementById('termSeg');
+TERMS.forEach(function(t){
+  var b=document.createElement('button'); b.textContent=t.m+' mo'; b.dataset.m=t.m;
+  b.onclick=function(){ state.term=t.m; render(); }; termSeg.appendChild(b);
+});
+document.getElementById('ptsPresets').addEventListener('click',function(e){
+  var b=e.target.closest('button[data-p]'); if(!b) return;
+  state.pts=parseFloat(b.dataset.p); render();
+});
+document.getElementById('viewSeg').addEventListener('click',function(e){
+  var b=e.target.closest('button[data-view]'); if(!b) return;
+  state.view=b.dataset.view; render();
+});
+amtR.oninput=function(){ state.amt=parseInt(amtR.value,10); render(); };
+amtN.onchange=function(){
+  var v=parseFloat(String(amtN.value).replace(/[^0-9.]/g,''))||0;
+  state.amt=Math.min(600000,Math.max(10000,Math.round(v))); render();
+};
+ptsR.oninput=function(){ state.pts=parseFloat(ptsR.value); render(); };
+ptsN.onchange=function(){
+  var v=parseFloat(String(ptsN.value).replace(/[^0-9.]/g,''));
+  if(isNaN(v)) v=0; state.pts=Math.min(8,Math.max(0,v)); render();
+};
+plus2.onchange=function(){ state.plus2=plus2.checked; render(); };
+
+/* ── render ───────────────────────────────────────────────────────────────── */
+var BROKER_COLS=['Buy Factor','Points','Commission'];
+function render(){
+  var broker = state.view==='broker';
+
+  amtR.value=state.amt; amtN.value=money(state.amt,0);
+  ptsR.value=state.pts; ptsN.value=pts(state.pts);
+  plus2.checked=state.plus2;
+  Array.prototype.forEach.call(termSeg.children,function(b){
+    b.className = (+b.dataset.m===state.term)?'on':''; });
+  Array.prototype.forEach.call(document.getElementById('ptsPresets').children,function(b){
+    b.className = (parseFloat(b.dataset.p)===state.pts)?'on':''; });
+  Array.prototype.forEach.call(document.getElementById('viewSeg').children,function(b){
+    b.className = (b.dataset.view===state.view)?'on':''; });
+
+  document.getElementById('ptsField').style.display = broker?'':'none';
+  document.getElementById('cCommCard').style.display = broker?'':'none';
+  document.getElementById('viewNote').textContent = broker
+    ? 'Broker view — buy rate and commission are visible.'
+    : 'Client view — buy rate, points and commission are hidden. Safe to screen-share.';
+
+  var o=model(selTerm());
+
+  document.getElementById('cFactor').textContent = fct(o.factor);
+  document.getElementById('cFactorSub').textContent =
+    o.m+'-month term · '+o.n+' weekly payments' + (state.plus2?' (2 added)':'');
+  document.getElementById('cPay').textContent = money(o.pay);
+  document.getElementById('cPaySub').textContent = 'Every Wednesday · '+o.n+' payments';
+  document.getElementById('cPayback').textContent = money0(o.payback);
+  document.getElementById('cPaybackSub').textContent = money0(o.pay)+' × '+o.n+' payments';
+  document.getElementById('cAmt').textContent = money(state.amt,0);
+  document.getElementById('cCost').textContent = money0(o.cost);
+  document.getElementById('cCostSub').textContent =
+    (o.cost/state.amt*100).toFixed(1)+'¢ of total cost per dollar funded';
+  document.getElementById('cComm').textContent = money0(o.comm);
+  document.getElementById('cCommSub').textContent = pts(state.pts)+' points on '+money(state.amt,0);
+
+  document.querySelector('.tablehead h2').innerHTML = broker
+    ? 'All terms at '+pts(state.pts)+' points'
+    : 'All terms';
+
+  var cols=['Term','Factor Rate','Weekly Payment','Payments','Total Payback','Cost of Capital'];
+  if(broker) cols=cols.concat(BROKER_COLS);
+  var thr=document.getElementById('thr'); thr.innerHTML='';
+  cols.forEach(function(c){
+    var th=document.createElement('th');
+    th.textContent=c;
+    if(BROKER_COLS.indexOf(c)>-1) th.className='broker';
+    thr.appendChild(th);
+  });
+
+  var tb=document.getElementById('tb'); tb.innerHTML='';
+  TERMS.slice().reverse().forEach(function(t){
+    var r=model(t), tr=document.createElement('tr');
+    if(t.m===state.term) tr.className='sel';
+    tr.onclick=function(){ state.term=t.m; render(); };
+    var cells=[
+      {h:'<div class="termcell">'+r.m+' months'+(state.plus2?' <span class="pill">+2 wks</span>':'')+'</div>'},
+      {t:fct(r.factor), c:'factor'},
+      {t:money(r.pay), c:'pay'},
+      {t:String(r.n)},
+      {t:money0(r.payback)},
+      {t:money0(r.cost)}
+    ];
+    if(broker) cells=cells.concat([
+      {t:fct(r.buy), c:'bro'}, {t:pts(state.pts), c:'bro'}, {t:money0(r.comm), c:'bro'}
+    ]);
+    cells.forEach(function(c){
+      var td=document.createElement('td');
+      if(c.h) td.innerHTML=c.h; else td.textContent=c.t;
+      if(c.c) td.className=c.c;
+      tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  });
+
+  document.getElementById('tblFoot').textContent =
+    'Rapid Finance · term loan · weekly ACH (Wednesdays) · closing cost $0.00'
+    + (state.plus2?' · 2 weeks added to every term, payback unchanged':'')
+    + ' · funding amount '+money(state.amt,0)+'.';
+
+  save();
+}
+
+/* ── PDF ──────────────────────────────────────────────────────────────────── */
+document.getElementById('dlPdf').onclick=function(){
+  var broker = state.view==='broker';
+  var jsPDF=window.jspdf.jsPDF, doc=new jsPDF({unit:'pt',format:'letter'});
+  var NAVY=[0,47,104], STEEL=[106,115,154];
+  doc.setFont('helvetica','bold'); doc.setFontSize(17); doc.setTextColor.apply(doc,NAVY);
+  doc.text('Amsale Aberra LLC', 48, 58);
+  doc.setFont('helvetica','normal'); doc.setFontSize(10.5); doc.setTextColor.apply(doc,STEEL);
+  doc.text('Rapid Finance — term loan, weekly (Wed.)   ·   prepared for Oval Ventures', 48, 76);
+  doc.text('Funding amount '+money(state.amt,0)+'   ·   closing cost $0.00'
+    + (broker?('   ·   '+pts(state.pts)+' commission points'):'')
+    + (state.plus2?'   ·   2 weeks added to each term':''), 48, 92);
+
+  var head=['Term','Factor','Weekly Payment','Payments','Total Payback','Cost of Capital'];
+  if(broker) head=head.concat(['Buy Factor','Commission']);
+  var body=TERMS.slice().reverse().map(function(t){
+    var r=model(t);
+    var row=[r.m+' mo', fct(r.factor), money(r.pay), String(r.n), money0(r.payback), money0(r.cost)];
+    if(broker) row=row.concat([fct(r.buy), money0(r.comm)]);
+    return row;
+  });
+  doc.autoTable({
+    startY:112, head:[head], body:body,
+    styles:{font:'helvetica',fontSize:9.5,cellPadding:6,textColor:[72,82,130]},
+    headStyles:{fillColor:NAVY,textColor:255,fontStyle:'bold',fontSize:9},
+    alternateRowStyles:{fillColor:[251,251,253]},
+    columnStyles:{0:{halign:'left',fontStyle:'bold',textColor:NAVY}},
+    margin:{left:48,right:48},
+    didParseCell:function(d){ if(d.section==='body'&&d.column.index>0) d.cell.styles.halign='right'; }
+  });
+  var y=doc.lastAutoTable.finalY+26;
+  doc.setFontSize(9); doc.setTextColor.apply(doc,STEEL);
+  var lines=[
+    'Payback = funding amount x factor rate. Weekly payment = payback / number of payments; the final',
+    'payment may differ by a few cents. Stipulations: driver’s license, voided check, proof of ownership',
+    '(LLC); bank statements for May–July 2026 are already received. Loans over $250,000 also require bank',
+    'transaction history and the 2025 business tax return with YTD P&L and balance sheet.',
+    'Quote valid through September 9, 2026. Subject to final underwriting.'
+  ];
+  lines.forEach(function(l,i){ doc.text(l,48,y+i*13); });
+  var nm = broker?'Amsale-Aberra-RapidFinance-broker':'Amsale-Aberra-RapidFinance';
+  doc.save(nm+'-'+pts(state.pts).replace('.','_')+'pts.pdf');
+};
+
+render();
+</script>
+</body>
+</html>
