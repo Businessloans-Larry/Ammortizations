@@ -149,7 +149,7 @@ tbody tr:hover{background:rgba(0,205,239,.07)}
 
   <h1 class="page">Funding Options Calculator</h1>
   <div class="sub"><b>Amsale Aberra LLC</b> &nbsp;·&nbsp; prepared for <b>Oval Ventures</b></div>
-  <div class="validline">Lender proposal issued at <span id="quotedPtsTxt">8.00 points</span> &nbsp;·&nbsp; closing cost <span>$0.00</span> &nbsp;·&nbsp; quote valid through <span>Sep 9, 2026</span></div>
+  <div class="validline" id="validLine"></div>
 
   <div class="viewbar">
     <span class="lbl">View</span>
@@ -283,7 +283,7 @@ tbody tr:hover{background:rgba(0,205,239,.07)}
     <div class="notes">
       <ul>
         <li><b>Factor rate</b> is the total-cost multiple: payback = funding amount × factor. There is no separate origination or closing cost on this file.</li>
-        <li><b>Points move the factor, not the funding.</b> Dropping from 8 to 5 points cuts 0.03 off the factor — on $250,000 that is $7,500 less payback for the client.</li>
+        <li class="brokeronly"><b>Points move the factor, not the funding.</b> Dropping from 8 to 5 points cuts 0.03 off the factor — on $250,000 that is $7,500 less payback for the client.</li>
         <li><b>Final payment</b> may differ by a few cents so the payments sum exactly to the payback amount.</li>
         <li><b>Amortization / early-payoff schedule</b> is not shown here — it will be built from the lender's own schedule once contracts are requested.</li>
         <li><b>A line of credit option</b> is also available on this file; pricing on request.</li>
@@ -341,7 +341,8 @@ var amtR=document.getElementById('amtR'), amtN=document.getElementById('amtN'),
     ptsR=document.getElementById('ptsR'), ptsN=document.getElementById('ptsN'),
     plus2=document.getElementById('plus2');
 
-document.getElementById('quotedPtsTxt').textContent = pts(QUOTED_PTS)+' points';
+var VALID_BROKER='Lender proposal issued at '+pts(QUOTED_PTS)+' points · closing cost $0.00 · quote valid through Sep 9, 2026';
+var VALID_CLIENT='Closing cost $0.00 · quote valid through Sep 9, 2026';
 
 var termSeg=document.getElementById('termSeg');
 TERMS.forEach(function(t){
@@ -385,9 +386,12 @@ function render(){
 
   document.getElementById('ptsField').style.display = broker?'':'none';
   document.getElementById('cCommCard').style.display = broker?'':'none';
+  document.getElementById('validLine').textContent = broker?VALID_BROKER:VALID_CLIENT;
+  Array.prototype.forEach.call(document.querySelectorAll('.brokeronly'),function(el){
+    el.style.display = broker?'':'none'; });
   document.getElementById('viewNote').textContent = broker
     ? 'Broker view — buy rate and commission are visible.'
-    : 'Client view — buy rate, points and commission are hidden. Safe to screen-share.';
+    : 'Client view — safe to screen-share.';
 
   var o=model(selTerm());
 
