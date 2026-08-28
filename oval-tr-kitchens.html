@@ -293,19 +293,6 @@ tbody tr.clickable:hover{background:rgba(0,205,239,.07)}
     </div>
 
     <div class="panel">
-      <h2>Line of credit — also offered</h2>
-      <div class="locbox">
-        <div class="amt">$100,000<small>Credit limit</small></div>
-        <div class="txt">
-          Rapid also approved a <b>$100,000 line of credit</b> on this file alongside the term loan.
-          The difference that matters on stips: the <b>Wayflyer payoff letter is NOT required</b> for the LOC — only for the term loan.
-          Pricing on the LOC was not included in the proposal we received; ask Rapid for the draw fee and repayment terms
-          and this section gets filled in.
-        </div>
-      </div>
-    </div>
-
-    <div class="panel">
       <h2>Closing stipulations — Rapid Finance</h2>
       <div class="stips">
         <div>
@@ -314,7 +301,7 @@ tbody tr.clickable:hover{background:rgba(0,205,239,.07)}
             <li class="got"><b>Bank statements — May, June, July 2026</b><small>Received</small></li>
             <li class="req"><b>Bank statements — June &amp; July 2026, account ending 4449</b><small>Transfer account. If personal, the first page of the statement is enough; if business, the 2 most recent months</small></li>
             <li class="req"><b>Driver's License</b><small>Rene Glandian</small></li>
-            <li class="req"><b>Financing payoff letter — Wayflyer</b><small>Required for the term loan; NOT required for the line of credit</small></li>
+            <li class="req"><b>Financing payoff letter — Wayflyer</b></li>
             <li class="req"><b>Voided Check</b></li>
             <li class="waived"><b>Proof of Ownership — LLC</b><small>Waived</small></li>
           </ul>
@@ -343,6 +330,12 @@ tbody tr.clickable:hover{background:rgba(0,205,239,.07)}
             <div class="t">Open item — pricing</div>
             <ul>
               <li>Application for the second owner (unlocks the competitive rate)</li>
+            </ul>
+          </div>
+          <div class="poo">
+            <div class="t">Also approved</div>
+            <ul>
+              <li>$100,000 line of credit — pricing not received, not shown here</li>
             </ul>
           </div>
         </div>
@@ -495,6 +488,148 @@ tbody tr.clickable:hover{background:rgba(0,205,239,.07)}
 
   </section>
 
+  <!-- ══════════════ FORA ══════════════ -->
+  <section id="secFora" style="display:none">
+
+    <div class="alert">
+      <div class="ic">⚑</div>
+      <div>
+        <div class="t">Offer is still pending — two items are holding it</div>
+        <div class="b">Fora needs a <b>valid email address directly tied to the merchant/business</b>, and the <b>Wayflyer payoff letter</b> (pending net 30%). <span id="fCheckoutLine"></span></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Structure the offer</h2>
+      <div class="grid2">
+
+        <div class="field">
+          <div class="row">
+            <label for="fAmtR">Loan amount</label>
+            <input class="numbox" id="fAmtN" type="text" inputmode="numeric" />
+          </div>
+          <input id="fAmtR" type="range" min="10000" max="300000" step="5000" />
+          <div class="hint">Approved range <b>$10,000 – $300,000</b>. Quoted at the $300,000 max.</div>
+        </div>
+
+        <div class="field" id="fUpField">
+          <div class="row">
+            <label for="fUpR">Upsell</label>
+            <input class="numbox" id="fUpN" type="text" inputmode="decimal" />
+          </div>
+          <input id="fUpR" type="range" min="0" max="15" step="0.25" />
+          <div class="presets" id="fUpPresets">
+            <button data-p="8">8.00% — as quoted</button>
+            <button data-p="6">6.00%</button>
+            <button data-p="4">4.00%</button>
+            <button data-p="0">0.00% — buy rate</button>
+          </div>
+          <div class="hint">Fora allows up to <b>15%</b> here — the widest upsell of the three. Each point adds <b>0.01</b> to the factor rate.</div>
+        </div>
+
+        <div class="field">
+          <div class="row">
+            <label for="fOrigR">Origination fee</label>
+            <input class="numbox" id="fOrigN" type="text" inputmode="decimal" />
+          </div>
+          <input id="fOrigR" type="range" min="0" max="3" step="0.25" />
+          <div class="hint">Quoted at the <b>3.0%</b> max, range <b>0 – 3.0%</b>. Lowering it raises the client's net proceeds without changing the payback.</div>
+        </div>
+
+        <div class="field">
+          <div class="row"><label>Term</label></div>
+          <div class="locked">
+            <div class="lv">18 months · 74 weekly payments</div>
+            <div class="ln">Fora's portal lists other term lengths behind “Show All Terms,” but only the 18-month was in the screenshot we have. Send the rest and they get added as selectable terms. <b>Retention pricing: ineligible</b> on this file.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card hero"><div class="k">Factor Rate</div><div class="v" id="fFactor">—</div><div class="s" id="fFactorSub">—</div></div>
+      <div class="card"><div class="k">Weekly Payment</div><div class="v" id="fPay">—</div><div class="s" id="fPaySub">—</div></div>
+      <div class="card"><div class="k">Total Payback</div><div class="v" id="fPayback">—</div><div class="s" id="fPaybackSub">—</div></div>
+    </div>
+    <div class="cards second">
+      <div class="card accent"><div class="k">Net Proceeds to Client</div><div class="v" id="fNet">—</div><div class="s" id="fNetSub">—</div></div>
+      <div class="card"><div class="k">Cost of Capital</div><div class="v" id="fCost">—</div><div class="s" id="fCostSub">—</div></div>
+      <div class="card" id="fCommCard"><div class="k">Commission to Oval Ventures</div><div class="v" id="fComm">—</div><div class="s" id="fCommSub">—</div></div>
+    </div>
+
+    <div class="panel">
+      <h2>What the client actually receives</h2>
+      <ul class="waterfall" id="fWaterfall"></ul>
+      <div class="notes" style="margin-top:14px">Assumes the origination fee is deducted at funding. Fora's portal shows it as a fee line without a net-proceeds figure — worth confirming before this number goes to the merchant.</div>
+    </div>
+
+    <div class="tablecard">
+      <div class="tablehead">
+        <div>
+          <h2>Prepayment schedule — 18 month term</h2>
+          <div class="tier-note" id="fPreNote"></div>
+        </div>
+        <div class="dlgroup">
+          <button class="btn btn-outline" id="fDlPdf">Download PDF</button>
+        </div>
+      </div>
+      <div class="tablescroll">
+        <table><thead><tr id="fThr"></tr></thead><tbody id="fTb"></tbody></table>
+      </div>
+      <div class="foot" id="fFoot"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Required stipulations — Fora</h2>
+      <div class="stips">
+        <div>
+          <h3>Documents</h3>
+          <ul>
+            <li class="req"><b>Business bank statements</b><small>Last 3 months</small></li>
+            <li class="req"><b>Tax returns</b><small>Most recent year</small></li>
+            <li class="req"><b>YTD Profit &amp; Loss</b></li>
+            <li class="req"><b>YTD Balance Sheet</b></li>
+            <li id="fStipDL" class="req"><b>Driver's License</b><small id="fStipDLSub"></small></li>
+            <li id="fStipVC" class="req"><b>Voided Check</b><small id="fStipVCSub"></small></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Verifications &amp; pending items</h3>
+          <ul>
+            <li class="req"><b>Merchant interview</b></li>
+            <li class="req"><b>Recorded funding call</b></li>
+            <li class="req"><b>Valid merchant email address</b><small>Must be directly associated with the merchant/business — holding the offer</small></li>
+            <li class="req"><b>Wayflyer payoff letter</b><small>Pending net 30%</small></li>
+          </ul>
+          <div class="poo">
+            <div class="t">Checkout</div>
+            <ul>
+              <li id="fCheckoutStip"></li>
+              <li>At <b>$250,000 or less</b> the file qualifies for online checkout, which drops the driver's license and voided check</li>
+              <li>Retention pricing: ineligible</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Notes</h2>
+      <div class="notes">
+        <ul>
+          <li><b>Factor rate</b> is the total-cost multiple: payback = loan amount × factor. The origination fee is charged on top of that and comes out of the funded proceeds.</li>
+          <li class="brokeronly"><b>Fora's upsell runs to 15%</b> — the widest of the three lenders on this file. It moves the factor on the same one-point-equals-0.01 basis.</li>
+          <li><b>The prepayment schedule is a rate ladder, not a discount off the payback.</b> Pay off inside a month band and the whole balance settles at that month's rate — the first five months all hold at the same rate, so there is no penalty for paying off in month 5 versus month 1.</li>
+          <li class="brokeronly"><b>The ladder was quoted at the 8.00% upsell.</b> Move the upsell and the rates shift with it on the same one-point basis; at 8.00% the table matches Fora's screen exactly. Confirm with Fora before contracting at a different upsell.</li>
+          <li><b>Only the 18-month term</b> was included in the quote we received. Other terms exist in Fora's portal.</li>
+          <li>Offer is pending. Subject to final underwriting, the merchant interview, and the recorded funding call.</li>
+        </ul>
+      </div>
+    </div>
+
+  </section>
+
 </div>
 
 <script>
@@ -523,7 +658,10 @@ var LENDERS=[
    validClient:'Closing cost $0.00 · minimum funding $15,001 · qualified up to $468,000'},
   {id:'byz',   name:'Byzfunder',     kind:'MCA · 2nd Position · Weekly',
    valid:'Approved August 27, 2026 · valid until September 10, 2026 · 52 weekly payments (~13 months) · issued at 5.00 points',
-   validClient:'Approved August 27, 2026 · valid until September 10, 2026 · 52 weekly payments (~13 months)'}
+   validClient:'Approved August 27, 2026 · valid until September 10, 2026 · 52 weekly payments (~13 months)'},
+  {id:'fora',  name:'Fora',          kind:'Term Loan · 18 Months · Weekly',
+   valid:'Offer pending · quoted at 8.00% upsell and a 3.0% origination fee · 74 weekly payments · retention pricing ineligible',
+   validClient:'Offer pending · 18-month term · 74 weekly payments'}
 ];
 
 /* Rapid */
@@ -553,6 +691,23 @@ var EPD=[
   {lo:241, hi:270, buy:1.2399}
 ];
 
+/* Fora */
+var F_UPSELL=8, F_BUY=1.31, F_N=74, F_MONTHS=18, F_QAMT=300000, F_MIN=10000, F_MAX=300000,
+    F_ORIG=3.0, F_UPMAX=15;
+/* Prepayment schedule as quoted at the 8.00% upsell. Rate x loan amount = payback:
+   300,000 x 1.18 = 354,000 · x1.20 = 360,000 · x1.22 = 366,000 · x1.25 = 375,000 · x1.27 = 381,000 */
+var F_PREPAY=[
+  {mo: 1, lo:  1, hi: 30, rate:1.18},
+  {mo: 2, lo: 31, hi: 60, rate:1.18},
+  {mo: 3, lo: 61, hi: 90, rate:1.18},
+  {mo: 4, lo: 91, hi:120, rate:1.18},
+  {mo: 5, lo:121, hi:150, rate:1.18},
+  {mo: 6, lo:151, hi:180, rate:1.20},
+  {mo: 7, lo:181, hi:210, rate:1.22},
+  {mo: 8, lo:211, hi:240, rate:1.25},
+  {mo: 9, lo:241, hi:270, rate:1.27}
+];
+
 function round2(x){ return Math.round((x+Number.EPSILON)*100)/100; }
 function round4(x){ return Math.round((x+Number.EPSILON)*10000)/10000; }
 function ceil2(x){ return Math.ceil(x*100-1e-6)/100; }
@@ -567,7 +722,8 @@ TERMS.forEach(function(t){ t.buy = round4(t.quoted - R_PTS/100); });
 var KEY='tr_kitchens_v2';
 var state={lender:'rapid', view:'broker',
            amt:250000, pts:8, term:18, plus2:false,
-           adv:275000, bpts:5, orig:4.5};
+           adv:275000, bpts:5, orig:4.5,
+           famt:300000, fup:8, forig:3.0};
 try{ var s=JSON.parse(localStorage.getItem(KEY)||'null'); if(s){ for(var k in state) if(s[k]!==undefined) state[k]=s[k]; } }catch(e){}
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
 
@@ -604,6 +760,23 @@ function bModel(){
            comm: round2(state.adv * state.bpts/100),
            cost: round2(payback - state.adv) };
 }
+function fModel(){
+  var factor  = round4(F_BUY + state.fup/100);
+  var payback = round2(state.famt * factor);
+  var origFee = round2(state.famt * state.forig/100);
+  return { factor:factor, payback:payback, n:F_N, pay:round2(payback/F_N),
+           origFee:origFee, net:round2(state.famt-origFee),
+           comm:round2(state.famt*state.fup/100), cost:round2(payback-state.famt) };
+}
+/* Prepay rates were quoted at the 8.00% upsell; shift them with the upsell on the same
+   1 point = 0.01 rule the deal factor uses. At 8.00 this returns Fora's numbers exactly. */
+function fPrepay(row){
+  var rate = round4(row.rate - F_UPSELL/100 + state.fup/100);
+  return { mo:row.mo, lo:row.lo, hi:row.hi, rate:rate,
+           payback: round2(state.famt*rate),
+           save: round2(fModel().payback - state.famt*rate) };
+}
+
 function bEpd(row){
   var sell = round4(row.buy + state.bpts/100);
   var pre  = round2(state.adv * sell);
@@ -630,7 +803,10 @@ var amtR=document.getElementById('amtR'), amtN=document.getElementById('amtN'),
     plus2=document.getElementById('plus2'),
     bAdvR=document.getElementById('bAdvR'), bAdvN=document.getElementById('bAdvN'),
     bCommR=document.getElementById('bCommR'), bCommN=document.getElementById('bCommN'),
-    bOrigR=document.getElementById('bOrigR'), bOrigN=document.getElementById('bOrigN');
+    bOrigR=document.getElementById('bOrigR'), bOrigN=document.getElementById('bOrigN'),
+    fAmtR=document.getElementById('fAmtR'), fAmtN=document.getElementById('fAmtN'),
+    fUpR=document.getElementById('fUpR'), fUpN=document.getElementById('fUpN'),
+    fOrigR=document.getElementById('fOrigR'), fOrigN=document.getElementById('fOrigN');
 
 var termSeg=document.getElementById('termSeg');
 TERMS.slice().reverse().forEach(function(t){
@@ -671,6 +847,25 @@ bOrigN.onchange=function(){
   var v=parseFloat(String(bOrigN.value).replace(/[^0-9.]/g,'')); if(isNaN(v)) v=0;
   state.orig=Math.min(4.5,Math.max(0,v)); render();
 };
+document.getElementById('fUpPresets').addEventListener('click',function(e){
+  var b=e.target.closest('button[data-p]'); if(!b) return;
+  state.fup=parseFloat(b.dataset.p); render();
+});
+fAmtR.oninput=function(){ state.famt=parseInt(fAmtR.value,10); render(); };
+fAmtN.onchange=function(){
+  var v=parseFloat(String(fAmtN.value).replace(/[^0-9.]/g,''))||0;
+  state.famt=Math.min(F_MAX,Math.max(F_MIN,Math.round(v))); render();
+};
+fUpR.oninput=function(){ state.fup=parseFloat(fUpR.value); render(); };
+fUpN.onchange=function(){
+  var v=parseFloat(String(fUpN.value).replace(/[^0-9.]/g,'')); if(isNaN(v)) v=0;
+  state.fup=Math.min(F_UPMAX,Math.max(0,v)); render();
+};
+fOrigR.oninput=function(){ state.forig=parseFloat(fOrigR.value); render(); };
+fOrigN.onchange=function(){
+  var v=parseFloat(String(fOrigN.value).replace(/[^0-9.]/g,'')); if(isNaN(v)) v=0;
+  state.forig=Math.min(3,Math.max(0,v)); render();
+};
 
 /* ── render ───────────────────────────────────────────────────────────────── */
 var R_BRO=['Buy Factor','Points','Commission'];
@@ -678,8 +873,9 @@ var B_BRO=['Buy Rate','Upsell','Commission'];
 
 function render(){
   var broker = state.view==='broker';
-  var isR    = state.lender==='rapid';
-  var L      = isR?LENDERS[0]:LENDERS[1];
+  var L;
+  for(var i=0;i<LENDERS.length;i++) if(LENDERS[i].id===state.lender) L=LENDERS[i];
+  if(!L){ state.lender='rapid'; L=LENDERS[0]; }
 
   Array.prototype.forEach.call(lenderSeg.children,function(b){
     b.className = (b.dataset.id===state.lender)?'on':''; });
@@ -689,13 +885,16 @@ function render(){
   document.getElementById('validLine').textContent = broker?L.valid:L.validClient;
   Array.prototype.forEach.call(document.querySelectorAll('.brokeronly'),function(el){
     el.style.display = broker?'':'none'; });
-  document.getElementById('secRapid').style.display = isR?'':'none';
-  document.getElementById('secByz').style.display   = isR?'none':'';
+  document.getElementById('secRapid').style.display = state.lender==='rapid'?'':'none';
+  document.getElementById('secByz').style.display   = state.lender==='byz'  ?'':'none';
+  document.getElementById('secFora').style.display  = state.lender==='fora' ?'':'none';
   document.getElementById('viewNote').textContent = broker
     ? 'Broker view — buy rate and commission are visible.'
     : 'Client view — safe to screen-share.';
 
-  if(isR) renderRapid(broker); else renderByz(broker);
+  if(state.lender==='rapid') renderRapid(broker);
+  else if(state.lender==='byz') renderByz(broker);
+  else renderFora(broker);
   save();
 }
 
@@ -796,6 +995,87 @@ function renderRapid(broker){
     'Early payoff = funding amount + 80% of the fixed fee. The window runs in calendar months from funding, and the'
     +' payoff must be made in full — a partial prepayment does not earn the discount. The amendment is included in the'
     +' contract package, so this is committed pricing, not a courtesy.';
+}
+
+var F_OC_MAX=250000;   /* at or below this, the file is online-checkout eligible */
+
+function renderFora(broker){
+  fAmtR.value=state.famt;  fAmtN.value=money(state.famt,0);
+  fUpR.value=state.fup;    fUpN.value=state.fup.toFixed(2)+'%';
+  fOrigR.value=state.forig;fOrigN.value=state.forig.toFixed(2)+'%';
+  Array.prototype.forEach.call(document.getElementById('fUpPresets').children,function(b){
+    b.className = (parseFloat(b.dataset.p)===state.fup)?'on':''; });
+  document.getElementById('fUpField').style.display  = broker?'':'none';
+  document.getElementById('fCommCard').style.display = broker?'':'none';
+
+  var oc = state.famt <= F_OC_MAX;
+  document.getElementById('fCheckoutLine').innerHTML = oc
+    ? 'At '+money(state.famt,0)+' the file <b>is eligible for online checkout</b>, which drops the driver’s license and voided check from the stip list.'
+    : 'Above '+money(F_OC_MAX,0)+' online checkout is <b>not eligible</b>, so it goes e-sign or paper contracts — which also means the driver’s license and voided check <b>are</b> required.';
+  document.getElementById('fCheckoutStip').innerHTML = oc
+    ? 'Online checkout <b>eligible</b> at '+money(state.famt,0)
+    : 'Online checkout <b>not eligible</b> above '+money(F_OC_MAX,0)+' — e-sign or paper contracts only';
+  document.getElementById('fStipDL').className = oc?'waived':'req';
+  document.getElementById('fStipVC').className = oc?'waived':'req';
+  document.getElementById('fStipDLSub').textContent = oc
+    ? 'Not required — online checkout eligible at this amount'
+    : 'Required — the waiver only applies to online checkout';
+  document.getElementById('fStipVCSub').textContent = oc
+    ? 'Not required — online checkout eligible at this amount'
+    : 'Required for the same reason';
+
+  var o=fModel();
+  document.getElementById('fFactor').textContent = fct(o.factor);
+  document.getElementById('fFactorSub').textContent = '18-month term · 74 weekly payments';
+  document.getElementById('fPay').textContent = money(o.pay);
+  document.getElementById('fPaySub').textContent = 'Weekly · 74 payments';
+  document.getElementById('fPayback').textContent = money0(o.payback);
+  document.getElementById('fPaybackSub').textContent = money(state.famt,0)+' × '+fct(o.factor);
+  document.getElementById('fNet').textContent = money0(o.net);
+  document.getElementById('fNetSub').textContent = 'After the '+state.forig.toFixed(2)+'% origination fee';
+  document.getElementById('fCost').textContent = money0(o.cost);
+  document.getElementById('fCostSub').textContent =
+    money0(round2(o.cost+o.origFee))+' all-in once the origination fee is counted';
+  document.getElementById('fComm').textContent = money0(o.comm);
+  document.getElementById('fCommSub').textContent = state.fup.toFixed(2)+'% upsell on '+money(state.famt,0);
+
+  var wf=document.getElementById('fWaterfall'); wf.innerHTML='';
+  [['Loan amount', money(state.famt,0), ''],
+   ['Origination fee — '+state.forig.toFixed(2)+'%', '− '+money0(o.origFee), 'neg'],
+   ['Net proceeds to client', money0(o.net), 'tot']
+  ].forEach(function(r){
+    var li=document.createElement('li'); if(r[2]) li.className=r[2];
+    var a=document.createElement('span'); a.textContent=r[0];
+    var b=document.createElement('span'); b.textContent=r[1];
+    li.appendChild(a); li.appendChild(b); wf.appendChild(li);
+  });
+
+  var shifted = broker && state.fup!==F_UPSELL;
+  document.getElementById('fPreNote').innerHTML =
+    'Pay off inside a month band and the whole balance settles at that band’s rate instead of the full '
+    +money0(o.payback)+' payback. The first five months hold the same rate, so there is no penalty for paying off in month 5 rather than month 1.'
+    +(shifted?' <span class="pill">shifted from the 8.00% quote</span>':'');
+
+  var cols=['Month','Days','Payoff Rate','Payoff Amount','Client Saves'];
+  var thr=document.getElementById('fThr'); thr.innerHTML='';
+  cols.forEach(function(c){ var th=document.createElement('th'); th.textContent=c; thr.appendChild(th); });
+
+  var tb=document.getElementById('fTb'); tb.innerHTML='';
+  F_PREPAY.forEach(function(row){
+    var r=fPrepay(row), tr=document.createElement('tr');
+    [{t:'Month '+r.mo},{t:'Day '+r.lo+' – '+r.hi},{t:fct(r.rate),c:'factor'},
+     {t:money0(r.payback),c:'pay'},{t:money0(r.save),c:'save'}].forEach(function(c){
+      var td=document.createElement('td'); td.textContent=c.t;
+      if(c.c) td.className=c.c; tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  });
+
+  document.getElementById('fFoot').textContent =
+    'Fora · 18-month term loan · 74 weekly payments · loan amount '+money(state.famt,0)
+    +' · payoff amount = loan amount × payoff rate. The schedule Fora sent covers months 1–9;'
+    +' ask for months 10–18 to complete it.'
+    +(shifted?' Rates shown are shifted from Fora’s 8.00% quote — confirm before contracting.':'');
 }
 
 function renderByz(broker){
@@ -977,6 +1257,54 @@ document.getElementById('bDlPdf').onclick=function(){
   ].forEach(function(l,i){ doc.text(l,48,y+i*13); });
   doc.save((broker?'TR-Kitchens-Byzfunder-broker':'TR-Kitchens-Byzfunder')
     +'-'+pts(state.bpts).replace('.','_')+'pts.pdf');
+};
+document.getElementById('fDlPdf').onclick=function(){
+  var broker=state.view==='broker', o=fModel(), oc=state.famt<=F_OC_MAX;
+  var doc=new window.jspdf.jsPDF({unit:'pt',format:'letter'});
+  pdfHead(doc,'Fora — 18-month term loan, 74 weekly payments   ·   prepared for Oval Ventures',
+    'Loan amount '+money(state.famt,0)+'   ·   factor '+fct(o.factor)+'   ·   payback '+money0(o.payback)
+    +(broker?('   ·   '+state.fup.toFixed(2)+'% upsell'):''));
+  var terms=[
+    ['Loan amount', money(state.famt,0)],
+    ['Factor rate', fct(o.factor)],
+    ['Total payback', money0(o.payback)],
+    ['Weekly payment', money(o.pay)+'  (74 payments, 18 months)'],
+    ['Origination fee — '+state.forig.toFixed(2)+'%', '- '+money0(o.origFee)],
+    ['Net proceeds to client', money0(o.net)],
+    ['Cost of capital', money0(o.cost)],
+    ['Online checkout', oc?'Eligible at this amount':'Not eligible above '+money(F_OC_MAX,0)]
+  ];
+  if(broker){ terms.push(['Buy rate', fct(F_BUY)]);
+              terms.push(['Commission — '+state.fup.toFixed(2)+'% upsell', money0(o.comm)]); }
+  doc.autoTable({ startY:106, head:[['Deal terms','']], body:terms,
+    styles:{font:'helvetica',fontSize:10,cellPadding:6,textColor:[72,82,130]},
+    headStyles:{fillColor:NAVY,textColor:255,fontStyle:'bold',fontSize:9},
+    alternateRowStyles:{fillColor:[251,251,253]},
+    columnStyles:{0:{cellWidth:260,textColor:NAVY},1:{halign:'right',fontStyle:'bold'}},
+    margin:{left:48,right:48} });
+  doc.autoTable({ startY:doc.lastAutoTable.finalY+22,
+    head:[['Prepayment schedule','Days','Payoff Rate','Payoff Amount','Client Saves']],
+    body:F_PREPAY.map(function(row){ var r=fPrepay(row);
+      return ['Month '+r.mo, 'Day '+r.lo+'-'+r.hi, fct(r.rate), money0(r.payback), money0(r.save)]; }),
+    styles:{font:'helvetica',fontSize:9.5,cellPadding:5.5,textColor:[72,82,130]},
+    headStyles:{fillColor:NAVY,textColor:255,fontStyle:'bold',fontSize:9},
+    alternateRowStyles:{fillColor:[251,251,253]},
+    columnStyles:{0:{halign:'left',fontStyle:'bold',textColor:NAVY}},
+    margin:{left:48,right:48},
+    didParseCell:function(d){ if(d.section==='body'&&d.column.index>0) d.cell.styles.halign='right'; } });
+  var y=doc.lastAutoTable.finalY+22;
+  doc.setFontSize(9); doc.setTextColor.apply(doc,STEEL);
+  [ 'Payback = loan amount x factor rate. The origination fee is charged on top and comes out of the funded proceeds.',
+    'Pay off inside a month band and the balance settles at that band’s rate. Months 1-5 hold the same rate.',
+    'The schedule Fora sent covers months 1-9; ask for months 10-18 to complete it.'
+      +(broker&&state.fup!==F_UPSELL?' Rates shown are shifted from Fora’s 8.00% quote - confirm before contracting.':''),
+    oc ? 'At '+money(state.famt,0)+' the file is online-checkout eligible: driver’s license and voided check are not required.'
+       : 'Above '+money(F_OC_MAX,0)+' online checkout is not eligible - e-sign or paper contracts, and the license and voided check are required.',
+    'Stips: business bank statements (3 months), most recent tax return, YTD P&L, YTD balance sheet, merchant interview, recorded funding call.',
+    'Offer pending: needs a merchant-associated email address and the Wayflyer payoff letter. Retention pricing ineligible.'
+  ].forEach(function(l,i){ doc.text(l,48,y+i*13); });
+  doc.save((broker?'TR-Kitchens-Fora-broker':'TR-Kitchens-Fora')
+    +'-'+state.fup.toFixed(2).replace('.','_')+'up.pdf');
 };
 
 render();
