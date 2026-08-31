@@ -14,7 +14,6 @@
   --bl-navy-900:#1A2763; --bl-slate:#485282; --bl-steel:#6A739A;
   --bl-silver:#A3A9C1; --bl-line:#D1D4E0; --bl-pale:#E8E9EF;
   --bl-bg:#F6F6F9; --bl-white:#FFFFFF; --bl-gold:#FFC858; --bl-error:#FB5038;
-  --bl-logo-blue:#60AFF0;
   --font-display:'DM Serif Display',Georgia,serif;
   --font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   --radius:16px; --radius-sm:8px;
@@ -23,187 +22,175 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--font-body);background:var(--bl-bg);color:var(--bl-slate);line-height:1.5;-webkit-font-smoothing:antialiased}
-.wrap{max-width:1160px;margin:0 auto;padding:28px 20px 80px}
+.container{max-width:1500px;margin:0 auto;padding:26px 20px 70px}
 
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:8px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:10px}
 .brand{display:flex;align-items:center;gap:14px}
 .brand svg{height:34px;width:auto;display:block}
 .brand .divider{width:1px;height:30px;background:var(--bl-line)}
-.brand .lender{font-family:var(--font-display);color:var(--bl-navy);font-size:22px;line-height:1}
-.brand .lender small{display:block;font-family:var(--font-body);font-size:11px;letter-spacing:.10em;text-transform:uppercase;color:var(--bl-steel);margin-top:4px;font-weight:600}
+.brand .tag{font-family:var(--font-display);color:var(--bl-navy);font-size:20px;line-height:1}
+.brand .tag small{display:block;font-family:var(--font-body);font-size:10.5px;letter-spacing:.10em;text-transform:uppercase;color:var(--bl-steel);margin-top:4px;font-weight:600}
 
-h1.page{font-family:var(--font-display);color:var(--bl-navy);font-size:34px;font-weight:400;margin:18px 0 2px}
-.sub{color:var(--bl-steel);font-size:14px;margin-bottom:6px}
-.sub b{color:var(--bl-navy);font-weight:700}
-.validline{font-size:12px;color:var(--bl-steel);margin-bottom:22px}
-.validline span{color:var(--bl-navy);font-weight:600}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--bl-steel);margin:16px 0 8px}
+.borrower-bar{background:var(--bl-navy);border-radius:var(--radius);padding:20px 26px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:8px}
+.borrower-bar .l{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#9fb2d6}
+.borrower-bar .n{font-family:var(--font-display);font-size:30px;color:#fff;line-height:1.1;margin-top:5px}
+.borrower-bar .r{text-align:right;font-size:12px;color:#9fb2d6;line-height:1.7}
+.borrower-bar .r b{color:#fff;font-weight:600}
+.meta{font-size:11.5px;color:var(--bl-steel);margin-bottom:18px}
 
-.lenderbar{display:flex;gap:8px;background:var(--bl-pale);border-radius:var(--radius);padding:8px;margin-bottom:20px;flex-wrap:wrap}
-.lenderbar button{flex:1;min-width:150px;border:none;background:transparent;font-family:var(--font-display);font-size:19px;color:var(--bl-steel);padding:14px 12px;border-radius:10px;cursor:pointer;transition:.15s;line-height:1.15}
-.lenderbar button small{display:block;font-family:var(--font-body);font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-top:5px;opacity:.75}
-.lenderbar button.on{background:var(--bl-navy);color:#fff;box-shadow:var(--shadow-md)}
-.lenderbar button:hover:not(.on){color:var(--bl-navy)}
-
-.alert{display:flex;gap:14px;align-items:flex-start;background:#fff8e8;border:1px solid #f0dcae;border-left:4px solid var(--bl-gold);border-radius:var(--radius-sm);padding:16px 18px;margin-bottom:22px}
-.alert .ic{font-size:15px;line-height:1.3}
-.alert .t{font-size:13px;font-weight:700;color:#6b4b00;margin-bottom:3px}
-.alert .b{font-size:12.5px;color:#7a5c14;line-height:1.6}
-.alert .b b{color:#5a3d00}
-
-.viewbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
-.viewbar .lbl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bl-steel)}
+.viewbar{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin-bottom:18px}
+.viewbar .lbl{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bl-steel)}
 .seg{display:flex;background:var(--bl-pale);border-radius:var(--radius-sm);padding:4px;gap:4px}
-.seg button{border:none;background:transparent;font-family:var(--font-body);font-size:13px;font-weight:600;color:var(--bl-steel);padding:9px 16px;border-radius:6px;cursor:pointer;transition:.15s}
+.seg button{border:none;background:transparent;font-family:var(--font-body);font-size:13px;font-weight:600;color:var(--bl-steel);padding:8px 15px;border-radius:6px;cursor:pointer;transition:.15s}
 .seg button.on{background:var(--bl-green);color:#fff;box-shadow:var(--shadow-md)}
 .seg.navy button.on{background:var(--bl-navy)}
-.seg.flex{flex-wrap:wrap}
-.seg.flex button{flex:1;min-width:64px;padding:9px 6px}
+.seg.tight button{padding:7px 11px;font-size:12px}
 .viewnote{font-size:12px;color:var(--bl-steel)}
 
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
-.card{background:var(--bl-white);border:1px solid var(--bl-pale);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow-md)}
-.card .k{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bl-steel);margin-bottom:8px}
-.card .v{font-family:var(--font-display);font-size:26px;color:var(--bl-navy);line-height:1.05;font-variant-numeric:tabular-nums}
-.card .s{font-size:11.5px;color:var(--bl-steel);margin-top:7px}
-.card.hero{background:var(--bl-navy);border-color:var(--bl-navy)}
-.card.hero .k{color:#9fb2d6}
-.card.hero .v{color:#fff;font-size:34px}
-.card.hero .s{color:#9fb2d6}
-.card.accent .v{color:var(--bl-green)}
-.cards.second{margin-bottom:24px}
+.amtpanel{background:var(--bl-navy);border-radius:var(--radius);padding:22px 26px;margin-bottom:9px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.amtpanel .lab{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#9fb2d6;margin-bottom:9px}
+.edit-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.edit-hint{display:inline-block;background:var(--bl-gold);color:var(--bl-navy);font-size:26px;font-weight:700;padding:7px 17px;border-radius:999px;box-shadow:0 4px 14px rgba(0,0,0,.22);animation:editpulse 1.9s ease-in-out infinite}
+@keyframes editpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.82;transform:scale(1.045)}}
+.edit-arrow{font-size:58px;color:var(--bl-gold);line-height:1;animation:editnudge 1.4s ease-in-out infinite}
+@keyframes editnudge{0%,100%{transform:translateX(0)}50%{transform:translateX(9px)}}
+.amount-input-wrap{display:inline-flex;align-items:center;background:#fff;border:3px solid var(--bl-gold);border-radius:12px;padding:5px 15px;box-shadow:0 0 0 5px rgba(255,200,88,.30)}
+.amount-input-wrap .pfx{font-size:28px;font-weight:700;color:var(--bl-navy);margin-right:5px}
+.amount-input-wrap input{border:none;outline:none;font-family:var(--font-body);font-size:28px;font-weight:700;color:var(--bl-navy);width:190px}
+#amountHelp{display:none;font-size:13px;font-weight:600;color:var(--bl-gold);margin-top:9px}
+.amtside{flex:1;min-width:260px;font-size:12px;color:#9fb2d6;line-height:1.7}
+.amtside b{color:#fff}
+.amtslider{width:100%;margin-top:12px}
+input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:999px;background:rgba(255,255,255,.22);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;border:3px solid var(--bl-green);cursor:pointer;box-shadow:var(--shadow-md)}
 
-.panel{background:var(--bl-white);border:1px solid var(--bl-pale);border-radius:var(--radius);padding:26px 28px;box-shadow:var(--shadow-md);margin-bottom:24px}
-.panel h2{font-family:var(--font-display);color:var(--bl-navy);font-size:22px;font-weight:400;margin-bottom:20px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:26px 34px}
-.field{margin-bottom:4px}
-.field .row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
-.field label{font-size:13px;font-weight:600;color:var(--bl-navy)}
-.field .numbox{width:140px;text-align:right;font-family:var(--font-body);font-size:15px;font-weight:600;color:var(--bl-navy);border:1.5px solid var(--bl-line);border-radius:var(--radius-sm);padding:7px 10px}
-.field .numbox:focus{outline:none;border-color:var(--bl-cyan)}
-input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:999px;background:var(--bl-pale);outline:none}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--bl-white);border:3px solid var(--bl-green);cursor:pointer;box-shadow:var(--shadow-md)}
-.field .hint{font-size:11px;color:var(--bl-steel);margin-top:7px}
-.presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.presets button{font-family:var(--font-body);font-size:11.5px;font-weight:600;color:var(--bl-navy);background:var(--bl-white);border:1.5px solid var(--bl-line);border-radius:999px;padding:6px 12px;cursor:pointer;transition:.15s}
-.presets button:hover{border-color:var(--bl-cyan)}
-.presets button.on{background:var(--bl-navy);border-color:var(--bl-navy);color:#fff}
-.check{display:flex;align-items:flex-start;gap:10px;margin-top:4px}
-.check input{width:18px;height:18px;accent-color:var(--bl-green);margin-top:2px;cursor:pointer}
-.check .txt{font-size:13px;color:var(--bl-navy);font-weight:600}
-.check .txt small{display:block;font-weight:400;color:var(--bl-steel);font-size:11.5px;margin-top:3px}
-.locked{background:var(--bl-bg);border:1px solid var(--bl-pale);border-radius:var(--radius-sm);padding:13px 16px}
-.locked .lv{font-size:15px;font-weight:700;color:var(--bl-navy)}
-.locked .ln{font-size:11px;color:var(--bl-steel);margin-top:5px;line-height:1.55}
+.panel{background:var(--bl-white);border:1px solid var(--bl-pale);border-radius:var(--radius);padding:20px 24px;box-shadow:var(--shadow-md);margin-bottom:18px}
+.panel h2{font-family:var(--font-display);color:var(--bl-navy);font-size:21px;font-weight:400;margin-bottom:15px}
+.pricegrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px 26px}
+.pricegrid .field .row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.pricegrid label{font-size:12.5px;font-weight:600;color:var(--bl-navy)}
+.pricegrid .numbox{width:104px;text-align:right;font-family:var(--font-body);font-size:14px;font-weight:600;color:var(--bl-navy);border:1.5px solid var(--bl-line);border-radius:var(--radius-sm);padding:6px 9px}
+.pricegrid .numbox:focus{outline:none;border-color:var(--bl-cyan)}
+.pricegrid input[type=range]{background:var(--bl-pale)}
+.pricegrid .hint{font-size:10.5px;color:var(--bl-steel);margin-top:6px}
+.pricegrid .lname{font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--bl-cyan);margin-bottom:7px}
 
-.waterfall{list-style:none;font-size:13px}
-.waterfall li{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px dashed var(--bl-pale)}
-.waterfall li span:first-child{color:var(--bl-slate)}
-.waterfall li span:last-child{font-variant-numeric:tabular-nums;font-weight:600;color:var(--bl-navy);white-space:nowrap}
-.waterfall li.tot{border-bottom:none;border-top:2px solid var(--bl-navy);margin-top:4px;padding-top:12px}
-.waterfall li.tot span{font-weight:800;color:var(--bl-navy);font-size:14.5px}
-.waterfall li.neg span:last-child{color:var(--bl-error)}
+.section-title{font-family:var(--font-display);color:var(--bl-navy);font-size:24px;font-weight:400;margin:26px 0 5px}
+.section-sub{font-size:12.5px;color:var(--bl-steel);margin-bottom:14px;max-width:900px}
 
-.tablecard{background:var(--bl-white);border:1px solid var(--bl-pale);border-radius:var(--radius);box-shadow:var(--shadow-md);overflow:hidden;margin-bottom:24px}
-.tablehead{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:22px 26px 16px}
-.tablehead h2{font-family:var(--font-display);color:var(--bl-navy);font-size:22px;font-weight:400}
-.tablehead .tier-note{font-size:12px;color:var(--bl-steel);margin-top:4px;max-width:680px}
-.dlgroup{display:flex;gap:10px;flex-wrap:wrap}
-.btn{font-family:var(--font-body);font-weight:600;font-size:13px;border:none;border-radius:var(--radius-sm);padding:11px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:.15s}
+.tablecard{background:var(--bl-white);border:1px solid var(--bl-pale);border-radius:var(--radius);box-shadow:var(--shadow-md);overflow:hidden;margin-bottom:18px}
+.tablehead{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:18px 22px 12px}
+.tablehead h3{font-family:var(--font-display);color:var(--bl-navy);font-size:20px;font-weight:400}
+.tablehead .note{font-size:11.5px;color:var(--bl-steel);margin-top:3px;max-width:700px}
+.btn{font-family:var(--font-body);font-weight:600;font-size:13px;border:none;border-radius:var(--radius-sm);padding:10px 15px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:.15s}
 .btn-outline{background:var(--bl-white);color:var(--bl-navy);border:1.5px solid var(--bl-navy)}
 .btn-outline:hover{background:var(--bl-navy);color:#fff}
 .tablescroll{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:840px}
-thead th{background:var(--bl-navy);color:#fff;font-weight:600;text-align:right;padding:13px 14px;white-space:nowrap;font-size:12px;letter-spacing:.02em}
-thead th:first-child{text-align:left}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--bl-navy);color:#fff;font-weight:600;text-align:right;padding:9px 11px;white-space:nowrap;font-size:11.5px;letter-spacing:.01em;vertical-align:bottom}
+thead th:first-child,thead th.lft{text-align:left}
 thead th.broker{background:#013a80}
-tbody td{text-align:right;padding:13px 14px;border-bottom:1px solid var(--bl-pale);white-space:nowrap;color:var(--bl-slate);font-variant-numeric:tabular-nums}
-tbody td:first-child{text-align:left;font-variant-numeric:normal}
+thead th .th-note{display:block;font-size:8.5px;font-weight:400;letter-spacing:0;text-transform:none;color:#9fb2d6;margin-top:2px}
+tbody td{text-align:right;padding:9px 11px;border-bottom:1px solid var(--bl-pale);white-space:nowrap;color:var(--bl-slate);font-variant-numeric:tabular-nums}
+tbody td:first-child,tbody td.lft{text-align:left;font-variant-numeric:normal}
 tbody tr:nth-child(even){background:#fbfbfd}
-tbody tr.sel{background:rgba(0,205,103,.10)!important}
-tbody tr.sel td{color:var(--bl-navy);font-weight:600}
-tbody td.factor{color:var(--bl-navy);font-weight:700}
-tbody td.pay{color:var(--bl-navy);font-weight:600}
-tbody td.bro{background:rgba(0,205,239,.06);color:var(--bl-navy);font-weight:600}
+tbody td .sub{display:block;font-size:10.5px;color:var(--bl-steel);font-variant-numeric:normal;margin-top:2px;white-space:normal}
+tbody td.num{font-weight:700;color:var(--bl-navy)}
+tbody td.pay{font-weight:600;color:var(--bl-navy)}
 tbody td.save{color:var(--bl-green);font-weight:700}
-tbody tr.clickable{cursor:pointer}
-tbody tr.clickable:hover{background:rgba(0,205,239,.07)}
-.termcell{display:flex;align-items:center;gap:8px}
-.pill{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:3px 7px;border-radius:999px;background:var(--bl-gold);color:#5a3d00}
+tbody td.bro{background:rgba(0,205,239,.06);color:var(--bl-navy);font-weight:600}
+tbody td.none{color:var(--bl-green);font-weight:600}
+.offer-chart tbody td.offnum{font-family:var(--font-display);font-size:18px;color:var(--bl-navy)}
+.offer-chart tbody tr{border-left:3px solid transparent}
+.pill{display:inline-block;font-size:9px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:2px 6px;border-radius:999px;background:var(--bl-gold);color:#5a3d00;margin-left:5px}
 .pill.cap{background:var(--bl-pale);color:var(--bl-slate)}
-.foot{padding:16px 26px;font-size:11.5px;color:var(--bl-steel);border-top:1px solid var(--bl-pale);background:var(--bl-bg)}
+.foot{padding:13px 22px;font-size:11px;color:var(--bl-steel);border-top:1px solid var(--bl-pale);background:var(--bl-bg)}
 
-#cTermSeg{display:grid;grid-template-columns:repeat(4,1fr)}
-#cTermSeg button{min-width:0}
-table.cmp{min-width:640px}
-table.cmp thead th:first-child{width:34%}
-table.cmp thead th{text-align:center}
-table.cmp thead th.win{background:#014a9c}
-table.cmp tbody td{text-align:center;font-weight:600;color:var(--bl-navy)}
-table.cmp tbody td:first-child{text-align:left;font-weight:500;color:var(--bl-slate);font-variant-numeric:normal}
-table.cmp tbody td .sub{display:block;font-size:11px;font-weight:400;color:var(--bl-steel);margin-top:3px}
-table.cmp tbody tr.head td{background:var(--bl-navy);color:#fff;font-family:var(--font-display);font-size:15px;font-weight:400;text-align:left;padding:11px 14px}
-table.cmp tbody tr.head td:first-child{color:#fff}
-table.cmp tbody td.better{background:rgba(0,205,103,.12)}
-table.cmp tbody td.better:after{content:" ✓";color:var(--bl-green);font-weight:800}
-.cmpwrap{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
-.verdict{background:var(--bl-white);border:1px solid var(--bl-pale);border-left:4px solid var(--bl-green);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow-md)}
-.verdict .k{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bl-steel);margin-bottom:8px}
-.verdict .v{font-family:var(--font-display);font-size:20px;color:var(--bl-navy);line-height:1.2;margin-bottom:8px}
-.verdict .b{font-size:12.5px;line-height:1.65}
-.verdict .b b{color:var(--bl-navy)}
-.verdict.alt{border-left-color:var(--bl-cyan)}
-.stips{display:grid;grid-template-columns:1fr 1fr;gap:26px 34px}
-.stips h3{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--bl-navy);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--bl-pale)}
-.stips ul{list-style:none}
-.stips li{font-size:13px;padding:6px 0 6px 22px;position:relative;color:var(--bl-slate)}
-.stips li:before{content:"";position:absolute;left:2px;top:13px;width:8px;height:8px;border-radius:50%;background:var(--bl-line)}
-.stips li.req:before{background:var(--bl-gold)}
-.stips li.got:before{background:var(--bl-green)}
-.stips li.waived:before{background:var(--bl-cyan)}
-.stips li b{color:var(--bl-navy);font-weight:600}
-.stips li small{display:block;color:var(--bl-steel);font-size:11.5px}
-.poo{margin-top:12px;padding:14px 16px;background:var(--bl-bg);border:1px solid var(--bl-pale);border-radius:var(--radius-sm)}
-.poo .t{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--bl-steel);margin-bottom:8px}
-.poo ul{list-style:none}
-.poo li{font-size:12px;padding:3px 0 3px 14px;position:relative;color:var(--bl-slate)}
-.poo li:before{content:"—";position:absolute;left:0;color:var(--bl-silver)}
+.offerhead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:24px 0 4px}
+.offerhead .n{font-family:var(--font-display);font-size:23px;color:var(--bl-navy);line-height:1.1}
+.offerhead .s{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--bl-steel)}
+.statrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:11px;margin-bottom:14px}
+.stat{background:var(--bl-white);border:1px solid var(--bl-pale);border-radius:var(--radius-sm);padding:13px 15px;box-shadow:var(--shadow-md)}
+.stat .k{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--bl-steel);margin-bottom:5px}
+.stat .v{font-family:var(--font-display);font-size:21px;color:var(--bl-navy);line-height:1.05;font-variant-numeric:tabular-nums}
+.stat .s{font-size:10.5px;color:var(--bl-steel);margin-top:4px}
+.stat.hero{background:var(--bl-navy);border-color:var(--bl-navy)}
+.stat.hero .k{color:#9fb2d6}
+.stat.hero .v{color:#fff}
+.stat.hero .s{color:#9fb2d6}
+.stat.green .v{color:var(--bl-green)}
 
-.locbox{display:flex;gap:18px;align-items:flex-start;background:rgba(0,205,239,.06);border:1px solid rgba(0,205,239,.30);border-radius:var(--radius-sm);padding:18px 20px}
-.locbox .amt{font-family:var(--font-display);font-size:28px;color:var(--bl-navy);line-height:1;white-space:nowrap}
-.locbox .amt small{display:block;font-family:var(--font-body);font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--bl-steel);margin-top:6px}
-.locbox .txt{font-size:12.5px;line-height:1.65}
-.locbox .txt b{color:var(--bl-navy)}
+.waterfall{list-style:none;font-size:12.5px}
+.waterfall li{display:flex;justify-content:space-between;gap:14px;padding:7px 0;border-bottom:1px dashed var(--bl-pale)}
+.waterfall li span:last-child{font-variant-numeric:tabular-nums;font-weight:600;color:var(--bl-navy);white-space:nowrap}
+.waterfall li.tot{border-bottom:none;border-top:2px solid var(--bl-navy);margin-top:3px;padding-top:10px}
+.waterfall li.tot span{font-weight:800;color:var(--bl-navy);font-size:13.5px}
+.waterfall li.neg span:last-child{color:var(--bl-error)}
 
-.notes{font-size:12px;color:var(--bl-steel);line-height:1.75}
-.notes b{color:var(--bl-navy)}
-.notes ul{list-style:none;margin-top:8px}
-.notes li{padding:4px 0 4px 16px;position:relative}
-.notes li:before{content:"•";position:absolute;left:2px;color:var(--bl-silver)}
+.closing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.closing{background:var(--bl-white);border:1px solid var(--bl-pale);border-radius:var(--radius-sm);padding:14px 16px;box-shadow:var(--shadow-md)}
+.closing h4{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--bl-navy);margin-bottom:9px;padding-bottom:7px;border-bottom:2px solid var(--bl-pale)}
+.closing ul{list-style:none}
+.closing li{font-size:12px;padding:4px 0 4px 18px;position:relative;color:var(--bl-slate)}
+.closing li:before{content:"";position:absolute;left:2px;top:10px;width:7px;height:7px;border-radius:50%;background:var(--bl-line)}
+.closing li.req:before{background:var(--bl-gold)}
+.closing li.got:before{background:var(--bl-green)}
+.closing li.waived:before{background:var(--bl-cyan)}
+.closing li b{color:var(--bl-navy);font-weight:600}
+.closing li small{display:block;color:var(--bl-steel);font-size:10.5px}
 
-@media(max-width:860px){
-  .cards{grid-template-columns:1fr}
-  .grid2,.stips{grid-template-columns:1fr}
-  h1.page{font-size:27px}
-  .locbox{flex-direction:column;gap:12px}
+.alert{display:flex;gap:12px;align-items:flex-start;background:#fff8e8;border:1px solid #f0dcae;border-left:4px solid var(--bl-gold);border-radius:var(--radius-sm);padding:13px 16px;margin-bottom:14px}
+.alert .t{font-size:12.5px;font-weight:700;color:#6b4b00;margin-bottom:2px}
+.alert .b{font-size:12px;color:#7a5c14;line-height:1.6}
+.alert .b b{color:#5a3d00}
+
+.disclosure{font-size:11px;color:var(--bl-steel);line-height:1.75;margin-top:22px}
+.disclosure b{color:var(--bl-navy)}
+.disclosure ul{list-style:none;margin-top:7px}
+.disclosure li{padding:3px 0 3px 15px;position:relative}
+.disclosure li:before{content:"•";position:absolute;left:2px;color:var(--bl-silver)}
+footer{margin-top:24px;padding-top:16px;border-top:1px solid var(--bl-line);font-size:10.5px;color:var(--bl-steel)}
+
+@media(max-width:700px){
+  .borrower-bar .n{font-size:23px}
+  .borrower-bar .r{text-align:left}
+  .edit-arrow{display:none}
+  .edit-hint{font-size:19px}
+  .amount-input-wrap input{width:150px;font-size:24px}
+  .section-title{font-size:20px}
+  table{font-size:12px}
+  .offer-chart thead{display:none}
+  .offer-chart tbody tr{display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:2px solid var(--bl-line);padding:8px 0}
+  .offer-chart tbody td{border:none;text-align:left!important;padding:6px 11px;white-space:normal}
+  .offer-chart tbody td:before{content:attr(data-label);display:block;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--bl-steel);margin-bottom:2px}
+  .offer-chart tbody td.offnum{grid-column:1 / -1;font-size:16px}
 }
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="container">
 
   <div class="topbar">
     <div class="brand">
       <svg viewBox="0 0 352.47 153.57" role="img" aria-label="BusinessLoans.com"><defs><style>.cls-1{fill:#002f68}.cls-2{fill:#00cd67}.cls-3{fill:#00cdef}.cls-4{fill:#60aff0}</style></defs><g><path class="cls-1" d="M22.92,31.64H16.77V42.82h6.15A11.74,11.74,0,1,1,11.18,54.56h0V25.81a10,10,0,0,0-10-10H0V54.56H0A22.92,22.92,0,1,0,22.92,31.64Z"/><path class="cls-2" d="M18,26.05H16.77V24.87a10,10,0,0,1,10-10H28v1.18A10,10,0,0,1,18,26.05Z"/><path class="cls-3" d="M14,0l-.83.83a10,10,0,0,0,0,14.15l.83.83.84-.83a10,10,0,0,0,0-14.15L14,0Z"/><path class="cls-1" d="M92.24,77H81.32V72.84a15.36,15.36,0,0,1-11.18,4.64,14.47,14.47,0,0,1-10.58-4C56,69.91,55,65.7,55,60.8V32.16H66.18V59.25c0,6.11,3.87,8.17,7.4,8.17s7.48-2.06,7.48-8.17V32.16H92.24Z"/><path class="cls-1" d="M138.42,36.89l-6.88,7c-2.58-2.33-6.45-3-10.4-3-4.48,0-6.37,2.06-6.37,4.3s1.29,3.52,4.65,3.87l7,.68c8.86.86,13.33,5.51,13.33,13.16,0,9.89-8.43,14.62-19,14.62-7.05,0-13.33-.77-19.09-6.45L109,63.72c3.61,3.7,8.51,4.22,11.95,4.22,3.87,0,7.92-1.29,7.92-4.65,0-2.23-1.12-3.78-4.73-4.13l-7.06-.68C109,57.7,104,54.18,104,45.92c0-9.37,8.17-14.28,17.29-14.28C128.36,31.64,134.12,32.93,138.42,36.89Z"/><path class="cls-1" d="M161.73,24.51H150.29V15.39h11.44ZM161.64,77H150.46V33.45h11.18Z"/><path class="cls-1" d="M208.08,35.6c3.61,3.7,4.56,7.83,4.56,12.73V77H201.46V49.88c0-6.11-3.79-8.17-7.4-8.17s-7.48,2.06-7.48,8.17V77H175.4V32.16h10.92v4.13a15.33,15.33,0,0,1,11.18-4.65C202,31.64,205.59,33,208.08,35.6Z"/><path class="cls-1" d="M262.78,53.32v4.73h-28c0,5.84,3.44,10,9.8,10,4.91,0,7.31-1.46,10.07-4.21l6.88,6.62c-4.56,4.64-9,7-17,7-10.67,0-20.73-4.81-20.73-23,0-14.62,7.91-22.88,19.52-22.88C255.72,31.64,262.78,40.59,262.78,53.32Zm-27.09-7.74a10.89,10.89,0,0,0-.95,4.81h16.94a10.89,10.89,0,0,0-.94-4.81,8.41,8.41,0,0,0-15.05,0Z"/><path class="cls-1" d="M306.72,36.89l-6.88,7c-2.58-2.33-6.45-3-10.4-3-4.48,0-6.37,2.06-6.37,4.3s1.29,3.52,4.65,3.87l7,.68c8.86.86,13.33,5.51,13.33,13.16,0,9.89-8.43,14.62-19,14.62-7,0-13.33-.77-19.09-6.45l7.31-7.31c3.61,3.7,8.51,4.22,11.95,4.22,3.87,0,7.92-1.29,7.92-4.65,0-2.23-1.12-3.78-4.73-4.13l-7.06-.68c-8.08-.78-13.07-4.3-13.07-12.56,0-9.37,8.17-14.28,17.29-14.28C296.66,31.64,302.42,32.93,306.72,36.89Z"/><path class="cls-1" d="M351.1,36.89l-6.88,7c-2.58-2.33-6.45-3-10.41-3-4.47,0-6.36,2.06-6.36,4.3s1.29,3.52,4.64,3.87l7.05.68c8.86.86,13.33,5.51,13.33,13.16,0,9.89-8.43,14.62-19,14.62-7.06,0-13.33-.77-19.09-6.45l7.3-7.31c3.62,3.7,8.52,4.22,12,4.22,3.87,0,7.91-1.29,7.91-4.65,0-2.23-1.12-3.78-4.73-4.13l-7.05-.68c-8.09-.78-13.07-4.3-13.07-12.56,0-9.37,8.17-14.28,17.28-14.28C341,31.64,346.8,32.93,351.1,36.89Z"/><path class="cls-4" d="M24.73,139.55c0,2.66,1.12,4,4,4H33v9.46H26.62c-9.2,0-13.07-6.36-13.07-12.81V91.82H24.73Z"/><path class="cls-4" d="M73.32,148.06c-2.84,2.93-7.31,5.51-13.93,5.51s-11-2.58-13.84-5.51c-4-4.3-5.08-9.37-5.08-17.46s1-13.07,5.08-17.37c2.83-2.92,7.22-5.5,13.84-5.5s11.09,2.49,13.93,5.5c4,4.3,5.08,9.29,5.08,17.37S77.45,143.85,73.32,148.06Zm-8.68-28.29a7.07,7.07,0,0,0-5.25-2,7,7,0,0,0-5.16,2c-2.32,2.24-2.58,6.28-2.58,10.83s.26,8.69,2.58,10.93a7,7,0,0,0,5.16,2,7.07,7.07,0,0,0,5.25-2c2.32-2.24,2.58-6.28,2.58-10.93S67,122,64.64,119.77Z"/><path class="cls-4" d="M124.23,123.55v29.5H113.31v-3.87c-3,3-5.84,4.3-11,4.3s-8.86-1.38-11.44-4a14.33,14.33,0,0,1-3.7-10.06c0-7.13,4.9-13,15.48-13h10.4v-2.24c0-4.9-2.4-7-8.34-7-4,0-6.19,1.12-8.6,3.87l-7-7c4.39-4.81,8.6-6.36,16.08-6.36C117.78,107.73,124.23,113.06,124.23,123.55Zm-19.69,10.58c-4.47,0-6.62,1.81-6.62,5.16,0,3.1,2.15,5.07,6.79,5.07,2.76,0,4.73-.34,6.62-2.15,1.29-1.11,1.72-2.83,1.72-5.67v-2.41Z"/><path class="cls-4" d="M170.24,111.69c3.62,3.69,4.56,7.82,4.56,12.72v28.64H163.62V126c0-6.1-3.78-8.17-7.39-8.17s-7.49,2.07-7.49,8.17v27.09H137.56v-44.8h10.93v4.12a15.34,15.34,0,0,1,11.18-4.64C164.14,107.73,167.75,109.11,170.24,111.69Z"/><path class="cls-4" d="M220.47,113l-6.88,7c-2.58-2.32-6.45-3-10.41-3-4.47,0-6.36,2.07-6.36,4.3s1.29,3.53,4.64,3.87l7,.69c8.86.86,13.33,5.5,13.33,13.16,0,9.89-8.42,14.62-19,14.62-7.05,0-13.33-.78-19.09-6.45l7.31-7.31c3.61,3.69,8.51,4.21,11.95,4.21,3.87,0,7.91-1.29,7.91-4.64,0-2.24-1.12-3.79-4.73-4.13l-7.05-.69c-8.08-.77-13.07-4.3-13.07-12.55,0-9.38,8.17-14.28,17.28-14.28C210.41,107.73,216.17,109,220.47,113Z"/></g></svg>
       <div class="divider"></div>
-      <div class="lender" id="brandLender">Rapid Finance<small id="brandSub">Term Loan · Weekly (Thu.)</small></div>
+      <div class="tag">Oval Ventures<small>Broker Pricing Tool</small></div>
     </div>
   </div>
 
-  <h1 class="page">Funding Options Calculator</h1>
-  <div class="sub"><b>T&amp;R Kitchens</b> &nbsp;·&nbsp; prepared for <b>Oval Ventures</b></div>
-  <div class="validline" id="validLine"></div>
-
-  <div class="lenderbar" id="lenderSeg"></div>
+  <div class="eyebrow">Funding Offers</div>
+  <div class="borrower-bar">
+    <div>
+      <div class="l">Prepared For</div>
+      <div class="n">T&amp;R Kitchens</div>
+    </div>
+    <div class="r">
+      <b>3 live offers</b> · Rapid Finance, Byzfunder, Fora<br>
+      Bootylicious / Bootylicious Muffins / Stud Bites
+    </div>
+  </div>
+  <div class="meta" id="metaLine"></div>
 
   <div class="viewbar">
     <span class="lbl">View</span>
@@ -211,564 +198,237 @@ table.cmp tbody td.better:after{content:" ✓";color:var(--bl-green);font-weight
       <button data-view="broker" class="on">Broker</button>
       <button data-view="client">Client</button>
     </div>
-    <span class="viewnote" id="viewNote">Broker view — buy rate and commission are visible.</span>
+    <span class="viewnote" id="viewNote"></span>
   </div>
 
-  <!-- ══════════════ RAPID FINANCE ══════════════ -->
-  <section id="secRapid">
+  <div class="amtpanel">
+    <div>
+      <div class="lab" id="amtLab">Requested Amount</div>
+      <div class="edit-row">
+        <span class="edit-hint">&#9998; Edit this amount — every offer updates</span>
+        <span class="edit-arrow">&#10142;</span>
+        <span class="amount-input-wrap"><span class="pfx">$</span><input id="amtN" type="text" inputmode="numeric" /></span>
+      </div>
+      <div id="amountHelp"></div>
+    </div>
+    <div class="amtside">
+      <span id="amtSide"></span>
+      <input class="amtslider" id="amtR" type="range" min="20000" max="468000" step="2000" />
+    </div>
+  </div>
 
-    <div class="alert">
-      <div class="ic">⚑</div>
+  <div class="panel brokeronly" id="pricePanel">
+    <h2>Pricing controls</h2>
+    <div class="pricegrid">
+
+      <div class="field">
+        <div class="lname">Rapid Finance</div>
+        <div class="row"><label for="rPtsR">Commission points</label><input class="numbox" id="rPtsN" type="text" /></div>
+        <input id="rPtsR" type="range" min="0" max="8" step="0.25" />
+        <div class="hint">Quoted at 8.00. Each point = 0.01 on the factor.</div>
+      </div>
+
+      <div class="field">
+        <div class="lname">Rapid Finance</div>
+        <div class="row"><label>Term shown</label></div>
+        <div class="seg tight" id="rTermSeg" style="flex-wrap:wrap"></div>
+        <div class="hint">8 terms approved. The full ladder is in Rapid's section below.</div>
+      </div>
+
+      <div class="field">
+        <div class="lname">Byzfunder</div>
+        <div class="row"><label for="bPtsR">Commission / upsell</label><input class="numbox" id="bPtsN" type="text" /></div>
+        <input id="bPtsR" type="range" min="0" max="5" step="0.25" />
+        <div class="hint">Quoted at 5.00, portal caps at 5.</div>
+      </div>
+
+      <div class="field">
+        <div class="lname">Byzfunder</div>
+        <div class="row"><label for="bOrigR">Origination fee</label><input class="numbox" id="bOrigN" type="text" /></div>
+        <input id="bOrigR" type="range" min="0" max="4.5" step="0.25" />
+        <div class="hint">Quoted at 4.5%. A flat $995 processing fee also applies.</div>
+      </div>
+
+      <div class="field">
+        <div class="lname">Fora</div>
+        <div class="row"><label for="fUpR">Upsell</label><input class="numbox" id="fUpN" type="text" /></div>
+        <input id="fUpR" type="range" min="0" max="15" step="0.25" />
+        <div class="hint">Quoted at 8.00%. Fora allows up to 15% — widest of the three.</div>
+      </div>
+
+      <div class="field">
+        <div class="lname">Fora</div>
+        <div class="row"><label for="fOrigR">Origination fee</label><input class="numbox" id="fOrigN" type="text" /></div>
+        <input id="fOrigR" type="range" min="0" max="3" step="0.25" />
+        <div class="hint">Quoted at the 3.0% max.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section-title">All three offers</div>
+  <div class="section-sub">Every offer at the requested amount, cheapest term first. An offer capped below the
+    requested amount is marked <span class="pill cap">max</span>.</div>
+
+  <div class="tablecard">
+    <div class="tablehead">
       <div>
-        <div class="t">To get the competitive rate: add the second owner's application</div>
-        <div class="b">A competing offer is out with an application from <b>two owners</b>, which scores lower risk and prices better. Rapid will re-price this file if we submit an application for the <b>second owner</b>. The grid below is today's single-owner pricing — treat it as the floor, not the ceiling.</div>
+        <h3 id="chartTitle">Offer comparison</h3>
+        <div class="note">Rapid and Fora are term loans; Byzfunder is a purchase of receivables in 2nd position. All three repay weekly.</div>
       </div>
+      <button class="btn btn-outline" id="dlAll">Download PDF</button>
     </div>
-
-    <div class="panel">
-      <h2>Structure the offer</h2>
-      <div class="grid2">
-
-        <div class="field">
-          <div class="row">
-            <label for="amtR">Funding amount requested</label>
-            <input class="numbox" id="amtN" type="text" inputmode="numeric" />
-          </div>
-          <input id="amtR" type="range" min="20000" max="468000" step="2000" />
-          <div class="hint" id="amtHint"></div>
-        </div>
-
-        <div class="field" id="ptsField">
-          <div class="row">
-            <label for="ptsR">Commission points</label>
-            <input class="numbox" id="ptsN" type="text" inputmode="decimal" />
-          </div>
-          <input id="ptsR" type="range" min="0" max="8" step="0.25" />
-          <div class="presets" id="ptsPresets">
-            <button data-p="8">8.00 — as issued</button>
-            <button data-p="6">6.00</button>
-            <button data-p="5">5.00</button>
-            <button data-p="3">3.00</button>
-            <button data-p="0">0.00 — buy rate</button>
-          </div>
-          <div class="hint">Each point adds <b>0.01</b> to the factor rate. Competing ISO is already in on this file.</div>
-        </div>
-
-        <div class="field">
-          <div class="row"><label>Term</label></div>
-          <div class="seg flex" id="termSeg"></div>
-          <div class="hint">Weekly payments, drafted Thursdays. Payment counts are the lender's. Short terms carry a lower funding cap.</div>
-        </div>
-
-        <div class="field">
-          <div class="row"><label>Payment stretch</label></div>
-          <label class="check">
-            <input type="checkbox" id="plus2" />
-            <span class="txt">Add 2 weeks to the term
-              <small>Lender-approved on every term: payback amount stays the same, weekly payment drops.</small></span>
-          </label>
-        </div>
-
-      </div>
+    <div class="tablescroll">
+      <table class="offer-chart"><thead><tr id="chartThr"></tr></thead><tbody id="chartTb"></tbody></table>
     </div>
+    <div class="foot" id="chartFoot"></div>
+  </div>
 
-    <div class="cards">
-      <div class="card hero"><div class="k">Factor Rate</div><div class="v" id="cFactor">—</div><div class="s" id="cFactorSub">—</div></div>
-      <div class="card"><div class="k">Weekly Payment</div><div class="v" id="cPay">—</div><div class="s" id="cPaySub">—</div></div>
-      <div class="card"><div class="k">Total Payback</div><div class="v" id="cPayback">—</div><div class="s" id="cPaybackSub">—</div></div>
+  <!-- ═══════════ per-offer detail, stacked ═══════════ -->
+  <div class="section-title">Offer detail</div>
+  <div class="section-sub">The early-payoff structures are the biggest difference between these three, and each
+    works differently — the schedules below come straight from each lender.</div>
+
+  <!-- RAPID -->
+  <div class="offerhead"><span class="n" id="rHead">Rapid Finance</span><span class="s">Term loan · weekly (Thu.) · no closing cost</span></div>
+  <div class="alert">
+    <div>
+      <div class="t">Adding the second owner's application re-prices this file</div>
+      <div class="b">A competing offer is out with an application from <b>two owners</b>, which scores lower risk and prices better. Rapid will re-quote if we submit the <b>second owner's</b> application — treat the ladder below as the floor, not the ceiling.</div>
     </div>
-    <div class="cards second">
-      <div class="card"><div class="k">Funding Amount</div><div class="v" id="cAmt">—</div><div class="s" id="cAmtSub">—</div></div>
-      <div class="card"><div class="k">Cost of Capital</div><div class="v" id="cCost">—</div><div class="s" id="cCostSub">—</div></div>
-      <div class="card accent" id="cCommCard"><div class="k">Commission to Oval Ventures</div><div class="v" id="cComm">—</div><div class="s" id="cCommSub">—</div></div>
+  </div>
+  <div class="statrow" id="rStats"></div>
+  <div class="tablecard">
+    <div class="tablehead"><div><h3>All approved terms</h3>
+      <div class="note">Click a row to make it the term shown in the comparison above.</div></div></div>
+    <div class="tablescroll"><table><thead><tr id="rThr"></tr></thead><tbody id="rTb"></tbody></table></div>
+    <div class="foot" id="rFoot"></div>
+  </div>
+  <div class="tablecard">
+    <div class="tablehead"><div><h3>Early payment amendment — 20% off the fixed fee</h3>
+      <div class="note">Added to the financing agreement package automatically. Repay in full inside the window and the <b>fixed fee</b> — the dollar cost of the loan, not the payback — is discounted 20%.</div></div></div>
+    <div class="tablescroll"><table><thead><tr id="rEpThr"></tr></thead><tbody id="rEpTb"></tbody></table></div>
+    <div class="foot">Early payoff = funding amount + 80% of the fixed fee. The window runs in calendar months from funding and the payoff must be in full — a partial prepayment earns nothing.</div>
+  </div>
+
+  <!-- BYZFUNDER -->
+  <div class="offerhead"><span class="n" id="bHead">Byzfunder</span><span class="s">Purchase of receivables · 2nd position · 52 weekly payments</span></div>
+  <div class="statrow" id="bStats"></div>
+  <div class="panel">
+    <h2>What the client actually receives</h2>
+    <ul class="waterfall" id="bWf"></ul>
+  </div>
+  <div class="tablecard">
+    <div class="tablehead"><div><h3>Early payment discounts</h3>
+      <div class="note" id="bEpdNote"></div></div></div>
+    <div class="tablescroll"><table><thead><tr id="bThr"></tr></thead><tbody id="bTb"></tbody></table></div>
+    <div class="foot" id="bFoot"></div>
+  </div>
+
+  <!-- FORA -->
+  <div class="offerhead"><span class="n" id="fHead">Fora</span><span class="s">Term loan · 18 months · 74 weekly payments</span></div>
+  <div class="alert">
+    <div>
+      <div class="t">Offer is still pending — two items are holding it</div>
+      <div class="b">Fora needs a <b>valid email address directly tied to the merchant/business</b> and the <b>Wayflyer payoff letter</b> (pending net 30%). <span id="fCheckoutLine"></span></div>
     </div>
+  </div>
+  <div class="statrow" id="fStats"></div>
+  <div class="panel">
+    <h2>What the client actually receives</h2>
+    <ul class="waterfall" id="fWf"></ul>
+    <div class="disclosure" style="margin-top:11px">Assumes the origination fee is deducted at funding. Fora's portal shows it as a fee line with no net figure — confirm before this number goes to the merchant.</div>
+  </div>
+  <div class="tablecard">
+    <div class="tablehead"><div><h3>Prepayment schedule</h3>
+      <div class="note" id="fPreNote"></div></div></div>
+    <div class="tablescroll"><table><thead><tr id="fThr"></tr></thead><tbody id="fTb"></tbody></table></div>
+    <div class="foot" id="fFoot"></div>
+  </div>
 
-    <div class="tablecard">
-      <div class="tablehead">
-        <div>
-          <h2 id="rapidTblTitle">All terms</h2>
-          <div class="tier-note">Click any row to select that term. Weekly payment = total payback ÷ number of payments.</div>
-        </div>
-        <div class="dlgroup">
-          <button class="btn btn-outline" id="dlPdf">Download PDF</button>
-        </div>
-      </div>
-      <div class="tablescroll">
-        <table><thead><tr id="thr"></tr></thead><tbody id="tb"></tbody></table>
-      </div>
-      <div class="foot" id="tblFoot"></div>
+  <!-- ═══════════ stips ═══════════ -->
+  <div class="section-title">Closing stipulations</div>
+  <div class="section-sub">What each lender needs to fund. Bank statements for May–July 2026 are already in on all three.</div>
+  <div class="closing-grid">
+    <div class="closing">
+      <h4>Rapid Finance</h4>
+      <ul>
+        <li class="got"><b>Bank statements — May, June, July 2026</b><small>Received</small></li>
+        <li class="req"><b>Statements for account ending 4449</b><small>June &amp; July. If personal, first page only; if business, 2 most recent months</small></li>
+        <li class="req"><b>Driver's License</b><small>Rene Glandian</small></li>
+        <li class="req"><b>Wayflyer payoff letter</b></li>
+        <li class="req"><b>Voided Check</b></li>
+        <li class="waived"><b>Proof of Ownership — LLC</b><small>Waived</small></li>
+        <li id="rOver150"></li>
+        <li id="rOver250"></li>
+      </ul>
     </div>
-
-    <div class="tablecard">
-      <div class="tablehead">
-        <div>
-          <h2>Early payment amendment — 20% off the fixed fee</h2>
-          <div class="tier-note">The amendment is added to the financing agreement package automatically. If the client repays the specified amount <b>in full</b> inside the window below, the <b>fixed fee</b> — the total dollar cost of the loan, not the payback amount — is discounted <b>20%</b>.</div>
-        </div>
-      </div>
-      <div class="tablescroll">
-        <table><thead><tr id="epThr"></tr></thead><tbody id="epTb"></tbody></table>
-      </div>
-      <div class="foot" id="epFoot"></div>
+    <div class="closing">
+      <h4>Byzfunder</h4>
+      <ul>
+        <li class="req"><b>Active Driver's License</b></li>
+        <li class="req"><b>Voided Check</b></li>
+        <li class="req"><b>Bank VOD</b><small>Verification of deposit</small></li>
+        <li class="req"><b>Merchant interview</b></li>
+        <li class="req"><b>Verify SSN</b></li>
+        <li class="req"><b>Signed contracts</b></li>
+        <li><small>Account ID 10399731 · approved Aug 27, 2026 · 2nd position</small></li>
+      </ul>
     </div>
-
-    <div class="panel">
-      <h2>Closing stipulations — Rapid Finance</h2>
-      <div class="stips">
-        <div>
-          <h3>Loans up to $150,000</h3>
-          <ul>
-            <li class="got"><b>Bank statements — May, June, July 2026</b><small>Received</small></li>
-            <li class="req"><b>Bank statements — June &amp; July 2026, account ending 4449</b><small>Transfer account. If personal, the first page of the statement is enough; if business, the 2 most recent months</small></li>
-            <li class="req"><b>Driver's License</b><small>Rene Glandian</small></li>
-            <li class="req"><b>Financing payoff letter — Wayflyer</b></li>
-            <li class="req"><b>Voided Check</b></li>
-            <li class="waived"><b>Proof of Ownership — LLC</b><small>Waived</small></li>
-          </ul>
-          <div class="poo">
-            <div class="t">Contracts</div>
-            <ul>
-              <li>Loan and Security Agreement</li>
-              <li>LSA ACH Authorization</li>
-            </ul>
-          </div>
-        </div>
-        <div>
-          <h3>Loans over $150,000</h3>
-          <ul>
-            <li class="got"><b>Everything in the column at left</b><small>Same statements, DL, Wayflyer payoff, voided check; proof of ownership still waived</small></li>
-            <li class="req"><b>Bank Transaction History</b></li>
-          </ul>
-          <div class="poo">
-            <div class="t">Additional — funding over $250,000</div>
-            <ul>
-              <li>2025 business tax return with YTD P&amp;L and YTD balance sheet</li>
-              <li>Or 2024 return with extension, plus 2025 YTD P&amp;L and balance sheet</li>
-            </ul>
-          </div>
-          <div class="poo">
-            <div class="t">Open item — pricing</div>
-            <ul>
-              <li>Application for the second owner (unlocks the competitive rate)</li>
-            </ul>
-          </div>
-          <div class="poo">
-            <div class="t">Also approved</div>
-            <ul>
-              <li>$100,000 line of credit — pricing not received, not shown here</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+    <div class="closing">
+      <h4>Fora</h4>
+      <ul>
+        <li class="req"><b>Business bank statements</b><small>Last 3 months</small></li>
+        <li class="req"><b>Tax returns</b><small>Most recent year</small></li>
+        <li class="req"><b>YTD Profit &amp; Loss</b></li>
+        <li class="req"><b>YTD Balance Sheet</b></li>
+        <li class="req"><b>Merchant interview</b></li>
+        <li class="req"><b>Recorded funding call</b></li>
+        <li id="fStipDL"></li>
+        <li id="fStipVC"></li>
+        <li class="req"><b>Merchant-associated email + Wayflyer payoff</b><small>Both pending — holding the offer</small></li>
+      </ul>
     </div>
+  </div>
 
-    <div class="panel">
-      <h2>Notes</h2>
-      <div class="notes">
-        <ul>
-          <li><b>Factor rate</b> is the total-cost multiple: payback = funding amount × factor. No origination or closing cost on this file.</li>
-          <li class="brokeronly"><b>Points move the factor, not the funding.</b> Each point off cuts 0.01 from the factor — on $250,000 that is $2,500 less payback for the client per point.</li>
-          <li><b>Short terms cap out lower.</b> The lender's proposal maxes the 6-month at $214,000 and the 4-month at $147,000; the 8-month and longer were quoted at $250,000 and the client soft-qualifies to $468,000.</li>
-          <li><b>Final payment</b> may differ by a few cents so the payments sum exactly to the payback amount.</li>
-          <li><b>The early payment amendment discounts the fee, not the payback.</b> Repay in full inside the window and 20% of the fixed fee comes off; the table above gives the exact payoff for every term. It rides along in the contract package automatically, so it is committed pricing, not a courtesy.</li>
-          <li><b>A payment-by-payment amortization schedule</b> is not shown here — it will be built from the lender's own schedule once contracts are requested.</li>
-          <li>Terms above reflect the lender's proposal and are subject to final underwriting and the stipulations listed.</li>
-        </ul>
-      </div>
-    </div>
+  <div class="disclosure">
+    <ul>
+      <li><b>Factor / sell rate</b> is the total-cost multiple: payback = amount × rate. None of the three calculates interest, so there is no amortization schedule on any of them.</li>
+      <li><b>Fees are where these differ most.</b> Rapid has no closing or origination cost. Fora deducts an origination fee at funding. Byzfunder deducts an origination fee plus a flat $995 processing fee. The same headline amount does not put the same money in the account.</li>
+      <li><b>Payment counts differ by lender</b> — Rapid uses 78 weekly payments on an 18-month, Fora uses 74, Byzfunder uses 52 over ~13 months. That alone moves the weekly payment even at an identical payback.</li>
+      <li><b>Early payoff works three different ways.</b> Rapid discounts 20% of the fixed fee inside a window that scales with the term. Fora settles the whole balance at a month-band rate, and its first five months hold the same rate. Byzfunder settles at a day-band rate that climbs every 30 days.</li>
+      <li class="brokeronly"><b>Commission is not comparable at equal points.</b> Fora's upsell runs to 15%, Rapid's to 8, Byzfunder's to 5 — the same client cost can pay very differently.</li>
+      <li><b>Byzfunder's term is fixed at 52 weeks here.</b> Their portal allows 16–52 weeks and a shorter term prices at a lower rate, but that rate curve was not in the approval — ask for a re-quote rather than backing into it.</li>
+      <li><b>Only Fora's 18-month</b> was quoted; other terms exist in their portal. Their prepayment schedule covers months 1–9.</li>
+      <li>All three are subject to final underwriting and the stipulations listed. Byzfunder and Fora also require a merchant interview.</li>
+    </ul>
+  </div>
 
-  </section>
-
-  <!-- ══════════════ BYZFUNDER ══════════════ -->
-  <section id="secByz" style="display:none">
-
-    <div class="panel">
-      <h2>Structure the advance</h2>
-      <div class="grid2">
-
-        <div class="field">
-          <div class="row">
-            <label for="bAdvR">Advance amount</label>
-            <input class="numbox" id="bAdvN" type="text" inputmode="numeric" />
-          </div>
-          <input id="bAdvR" type="range" min="50000" max="275000" step="5000" />
-          <div class="hint">Approved range <b>$50,000 – $275,000</b>. Approval issued at the $275,000 max.</div>
-        </div>
-
-        <div class="field" id="bCommField">
-          <div class="row">
-            <label for="bCommR">Commission / upsell points</label>
-            <input class="numbox" id="bCommN" type="text" inputmode="decimal" />
-          </div>
-          <input id="bCommR" type="range" min="0" max="5" step="0.25" />
-          <div class="presets" id="bCommPresets">
-            <button data-p="5">5.00 — as issued</button>
-            <button data-p="3">3.00</button>
-            <button data-p="2">2.00</button>
-            <button data-p="0">0.00 — buy rate</button>
-          </div>
-          <div class="hint">Each point adds <b>0.01</b> to the sell rate. This same upsell is applied to every early-payment-discount tier below, which is how the portal quoted it.</div>
-        </div>
-
-        <div class="field">
-          <div class="row">
-            <label for="bOrigR">Origination fee</label>
-            <input class="numbox" id="bOrigN" type="text" inputmode="decimal" />
-          </div>
-          <input id="bOrigR" type="range" min="0" max="4.5" step="0.25" />
-          <div class="hint">Deducted from the advance, <b>0 – 4.5%</b>. Quoted at 4.5%. Lowering it raises the client's net proceeds and does not change the payback.</div>
-        </div>
-
-        <div class="field">
-          <div class="row"><label>Term</label></div>
-          <div class="locked">
-            <div class="lv">52 weekly payments · ~13 months</div>
-            <div class="ln">Byzfunder's portal allows 16–52 weeks, and a <b>shorter term prices at a lower rate</b> — but the rate curve was not in the approval we received. Ask Byzfunder to re-quote if the client wants a shorter term; don't back into it from the 52-week rate.</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="cards">
-      <div class="card hero"><div class="k">Sell Rate</div><div class="v" id="bRate">—</div><div class="s" id="bRateSub">—</div></div>
-      <div class="card"><div class="k">Weekly Payment</div><div class="v" id="bPay">—</div><div class="s" id="bPaySub">—</div></div>
-      <div class="card"><div class="k">Total Payback</div><div class="v" id="bPayback">—</div><div class="s" id="bPaybackSub">—</div></div>
-    </div>
-    <div class="cards second">
-      <div class="card accent"><div class="k">Net Advance to Client</div><div class="v" id="bNet">—</div><div class="s" id="bNetSub">—</div></div>
-      <div class="card"><div class="k">Cost of Capital</div><div class="v" id="bCost">—</div><div class="s" id="bCostSub">—</div></div>
-      <div class="card" id="bCommCard"><div class="k">Commission to Oval Ventures</div><div class="v" id="bComm">—</div><div class="s" id="bCommSub">—</div></div>
-    </div>
-
-    <div class="panel">
-      <h2>What the client actually receives</h2>
-      <ul class="waterfall" id="bWaterfall"></ul>
-    </div>
-
-    <div class="tablecard">
-      <div class="tablehead">
-        <div>
-          <h2>Early payment discounts</h2>
-          <div class="tier-note" id="bEpdNote"></div>
-        </div>
-        <div class="dlgroup">
-          <button class="btn btn-outline" id="bDlPdf">Download PDF</button>
-        </div>
-      </div>
-      <div class="tablescroll">
-        <table><thead><tr id="bThr"></tr></thead><tbody id="bTb"></tbody></table>
-      </div>
-      <div class="foot" id="bFoot"></div>
-    </div>
-
-    <div class="panel">
-      <h2>Required stipulations — Byzfunder</h2>
-      <div class="stips">
-        <div>
-          <h3>Documents</h3>
-          <ul>
-            <li class="req"><b>Active Driver's License</b></li>
-            <li class="req"><b>Voided Check</b></li>
-            <li class="req"><b>Bank VOD</b><small>Verification of deposit</small></li>
-            <li class="req"><b>Signed Contracts</b></li>
-          </ul>
-        </div>
-        <div>
-          <h3>Verifications</h3>
-          <ul>
-            <li class="req"><b>Merchant Interview</b></li>
-            <li class="req"><b>Verify SSN</b></li>
-          </ul>
-          <div class="poo">
-            <div class="t">File</div>
-            <ul>
-              <li>Account ID 10399731 · approved August 27, 2026</li>
-              <li>DBA: T&amp;R Kitchens / Bootylicious / Bootylicious Muffins / Stud Bites</li>
-              <li>2nd position advance</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <h2>Notes</h2>
-      <div class="notes">
-        <ul>
-          <li><b>This is a purchase of future receivables, not a loan.</b> The sell rate is the total-cost multiple: payback = advance × sell rate. There is no interest and no amortization schedule.</li>
-          <li><b>Two fees come off the top:</b> the origination fee (a percentage of the advance) and a flat <b>$995</b> processing fee. The payback is calculated on the full advance, not the net.</li>
-          <li><b>Early payment discounts are real money</b> and are the strongest part of this offer — paying off inside the first 30 days settles the whole advance at a fraction of the full payback. The tiers below come straight from the lender.</li>
-          <li class="brokeronly"><b>Byzfunder caps the upsell at 12 points</b> for a file to stay eligible for early payment discounts. This calculator stops at the 5 points the portal offered on this approval.</li>
-          <li><b>Weekly payment</b> is rounded up to the cent, so the final payment trues down slightly.</li>
-          <li>Subject to final underwriting, the merchant interview, and signed contracts.</li>
-        </ul>
-      </div>
-    </div>
-
-  </section>
-
-  <!-- ══════════════ COMPARE: RAPID vs FORA ══════════════ -->
-  <section id="secCmp" style="display:none">
-
-    <div class="panel">
-      <h2>Compare at one funding amount</h2>
-      <div class="grid2">
-
-        <div class="field">
-          <div class="row">
-            <label for="cAmtR">Funding amount — both lenders</label>
-            <input class="numbox" id="cAmtN" type="text" inputmode="numeric" />
-          </div>
-          <input id="cAmtR" type="range" min="20000" max="300000" step="5000" />
-          <div class="hint" id="cAmtHint"></div>
-        </div>
-
-        <div class="field">
-          <div class="row"><label>Rapid term to compare</label></div>
-          <div class="seg flex" id="cTermSeg"></div>
-          <div class="hint">Fora only quoted an <b>18-month</b>, so 18 vs 18 is the true like-for-like. Rapid's shorter terms price cheaper — worth showing the client both.</div>
-        </div>
-
-        <div class="field brokeronly">
-          <div class="row">
-            <label for="cPtsR">Rapid commission points</label>
-            <input class="numbox" id="cPtsN" type="text" inputmode="decimal" />
-          </div>
-          <input id="cPtsR" type="range" min="0" max="8" step="0.25" />
-          <div class="hint">Shared with the Rapid Finance tab.</div>
-        </div>
-
-        <div class="field brokeronly">
-          <div class="row">
-            <label for="cUpR">Fora upsell</label>
-            <input class="numbox" id="cUpN" type="text" inputmode="decimal" />
-          </div>
-          <input id="cUpR" type="range" min="0" max="15" step="0.25" />
-          <div class="hint">Shared with the Fora tab. Fora allows up to 15%, Rapid stops at 8.</div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="tablecard">
-      <div class="tablehead">
-        <div>
-          <h2 id="cmpTitle">Side by side</h2>
-          <div class="tier-note">A green check marks the better number for the client on that line. Both are term loans with weekly payments, so the lines are directly comparable.</div>
-        </div>
-        <div class="dlgroup">
-          <button class="btn btn-outline" id="cDlPdf">Download PDF</button>
-        </div>
-      </div>
-      <div class="tablescroll">
-        <table class="cmp"><thead><tr id="cThr"></tr></thead><tbody id="cTb"></tbody></table>
-      </div>
-      <div class="foot" id="cFoot"></div>
-    </div>
-
-    <div class="cmpwrap">
-      <div class="verdict" id="cV1"></div>
-      <div class="verdict alt" id="cV2"></div>
-    </div>
-
-    <div class="panel">
-      <h2>Notes</h2>
-      <div class="notes">
-        <ul>
-          <li><b>Both are term loans, not advances.</b> Payback = amount × factor in both cases, with weekly payments and no interest calculation.</li>
-          <li><b>Fees are where they differ most.</b> Rapid charges no closing or origination cost; Fora takes an origination fee off the top, so the same headline amount does not put the same money in the client's account.</li>
-          <li><b>The early-payoff structures are different animals.</b> Rapid discounts 20% of the fixed fee if repaid inside a window that scales with the term. Fora settles the whole balance at a month-band rate, and its first five months all hold the same rate.</li>
-          <li><b>Payment counts differ</b> — Rapid uses 78 weekly payments on an 18-month, Fora uses 74. That alone moves the weekly payment even at an identical payback.</li>
-          <li class="brokeronly"><b>Commission is not comparable at equal points.</b> Fora's upsell runs to 15% against Rapid's 8, so the same client cost can pay very differently.</li>
-          <li>Byzfunder's MCA sits on its own tab — different product, 2nd position, so it is not compared here.</li>
-        </ul>
-      </div>
-    </div>
-
-  </section>
-
-  <!-- ══════════════ FORA ══════════════ -->
-  <section id="secFora" style="display:none">
-
-    <div class="alert">
-      <div class="ic">⚑</div>
-      <div>
-        <div class="t">Offer is still pending — two items are holding it</div>
-        <div class="b">Fora needs a <b>valid email address directly tied to the merchant/business</b>, and the <b>Wayflyer payoff letter</b> (pending net 30%). <span id="fCheckoutLine"></span></div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <h2>Structure the offer</h2>
-      <div class="grid2">
-
-        <div class="field">
-          <div class="row">
-            <label for="fAmtR">Loan amount</label>
-            <input class="numbox" id="fAmtN" type="text" inputmode="numeric" />
-          </div>
-          <input id="fAmtR" type="range" min="10000" max="300000" step="5000" />
-          <div class="hint">Approved range <b>$10,000 – $300,000</b>. Quoted at the $300,000 max.</div>
-        </div>
-
-        <div class="field" id="fUpField">
-          <div class="row">
-            <label for="fUpR">Upsell</label>
-            <input class="numbox" id="fUpN" type="text" inputmode="decimal" />
-          </div>
-          <input id="fUpR" type="range" min="0" max="15" step="0.25" />
-          <div class="presets" id="fUpPresets">
-            <button data-p="8">8.00% — as quoted</button>
-            <button data-p="6">6.00%</button>
-            <button data-p="4">4.00%</button>
-            <button data-p="0">0.00% — buy rate</button>
-          </div>
-          <div class="hint">Fora allows up to <b>15%</b> here — the widest upsell of the three. Each point adds <b>0.01</b> to the factor rate.</div>
-        </div>
-
-        <div class="field">
-          <div class="row">
-            <label for="fOrigR">Origination fee</label>
-            <input class="numbox" id="fOrigN" type="text" inputmode="decimal" />
-          </div>
-          <input id="fOrigR" type="range" min="0" max="3" step="0.25" />
-          <div class="hint">Quoted at the <b>3.0%</b> max, range <b>0 – 3.0%</b>. Lowering it raises the client's net proceeds without changing the payback.</div>
-        </div>
-
-        <div class="field">
-          <div class="row"><label>Term</label></div>
-          <div class="locked">
-            <div class="lv">18 months · 74 weekly payments</div>
-            <div class="ln">Fora's portal lists other term lengths behind “Show All Terms,” but only the 18-month was in the screenshot we have. Send the rest and they get added as selectable terms. <b>Retention pricing: ineligible</b> on this file.</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="cards">
-      <div class="card hero"><div class="k">Factor Rate</div><div class="v" id="fFactor">—</div><div class="s" id="fFactorSub">—</div></div>
-      <div class="card"><div class="k">Weekly Payment</div><div class="v" id="fPay">—</div><div class="s" id="fPaySub">—</div></div>
-      <div class="card"><div class="k">Total Payback</div><div class="v" id="fPayback">—</div><div class="s" id="fPaybackSub">—</div></div>
-    </div>
-    <div class="cards second">
-      <div class="card accent"><div class="k">Net Proceeds to Client</div><div class="v" id="fNet">—</div><div class="s" id="fNetSub">—</div></div>
-      <div class="card"><div class="k">Cost of Capital</div><div class="v" id="fCost">—</div><div class="s" id="fCostSub">—</div></div>
-      <div class="card" id="fCommCard"><div class="k">Commission to Oval Ventures</div><div class="v" id="fComm">—</div><div class="s" id="fCommSub">—</div></div>
-    </div>
-
-    <div class="panel">
-      <h2>What the client actually receives</h2>
-      <ul class="waterfall" id="fWaterfall"></ul>
-      <div class="notes" style="margin-top:14px">Assumes the origination fee is deducted at funding. Fora's portal shows it as a fee line without a net-proceeds figure — worth confirming before this number goes to the merchant.</div>
-    </div>
-
-    <div class="tablecard">
-      <div class="tablehead">
-        <div>
-          <h2>Prepayment schedule — 18 month term</h2>
-          <div class="tier-note" id="fPreNote"></div>
-        </div>
-        <div class="dlgroup">
-          <button class="btn btn-outline" id="fDlPdf">Download PDF</button>
-        </div>
-      </div>
-      <div class="tablescroll">
-        <table><thead><tr id="fThr"></tr></thead><tbody id="fTb"></tbody></table>
-      </div>
-      <div class="foot" id="fFoot"></div>
-    </div>
-
-    <div class="panel">
-      <h2>Required stipulations — Fora</h2>
-      <div class="stips">
-        <div>
-          <h3>Documents</h3>
-          <ul>
-            <li class="req"><b>Business bank statements</b><small>Last 3 months</small></li>
-            <li class="req"><b>Tax returns</b><small>Most recent year</small></li>
-            <li class="req"><b>YTD Profit &amp; Loss</b></li>
-            <li class="req"><b>YTD Balance Sheet</b></li>
-            <li id="fStipDL" class="req"><b>Driver's License</b><small id="fStipDLSub"></small></li>
-            <li id="fStipVC" class="req"><b>Voided Check</b><small id="fStipVCSub"></small></li>
-          </ul>
-        </div>
-        <div>
-          <h3>Verifications &amp; pending items</h3>
-          <ul>
-            <li class="req"><b>Merchant interview</b></li>
-            <li class="req"><b>Recorded funding call</b></li>
-            <li class="req"><b>Valid merchant email address</b><small>Must be directly associated with the merchant/business — holding the offer</small></li>
-            <li class="req"><b>Wayflyer payoff letter</b><small>Pending net 30%</small></li>
-          </ul>
-          <div class="poo">
-            <div class="t">Checkout</div>
-            <ul>
-              <li id="fCheckoutStip"></li>
-              <li>At <b>$250,000 or less</b> the file qualifies for online checkout, which drops the driver's license and voided check</li>
-              <li>Retention pricing: ineligible</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <h2>Notes</h2>
-      <div class="notes">
-        <ul>
-          <li><b>Factor rate</b> is the total-cost multiple: payback = loan amount × factor. The origination fee is charged on top of that and comes out of the funded proceeds.</li>
-          <li class="brokeronly"><b>Fora's upsell runs to 15%</b> — the widest of the three lenders on this file. It moves the factor on the same one-point-equals-0.01 basis.</li>
-          <li><b>The prepayment schedule is a rate ladder, not a discount off the payback.</b> Pay off inside a month band and the whole balance settles at that month's rate — the first five months all hold at the same rate, so there is no penalty for paying off in month 5 versus month 1.</li>
-          <li class="brokeronly"><b>The ladder was quoted at the 8.00% upsell.</b> Move the upsell and the rates shift with it on the same one-point basis; at 8.00% the table matches Fora's screen exactly. Confirm with Fora before contracting at a different upsell.</li>
-          <li><b>Only the 18-month term</b> was included in the quote we received. Other terms exist in Fora's portal.</li>
-          <li>Offer is pending. Subject to final underwriting, the merchant interview, and the recorded funding call.</li>
-        </ul>
-      </div>
-    </div>
-
-  </section>
+  <footer>T&amp;R Kitchens · prepared for Oval Ventures · BusinessLoans.com</footer>
 
 </div>
 
 <script>
 /* ═══════════════════════════════════════════════════════════════════════════
-   T&R Kitchens — two live approvals, both reactive to commission points.
-   Shared algebra on BOTH lenders: 1 commission point = +0.01 on the factor /
-   sell rate, so buy = quoted − points/100.
+   T&R Kitchens — three live approvals on one reactive page.
+   Shared algebra on ALL THREE: 1 commission point = +0.01 on the factor /
+   sell rate, so buy = quoted − quoted_points/100. Verified per lender:
 
-   RAPID FINANCE (term loan, weekly Thu., 8.00 pts, closing cost $0):
+   RAPID FINANCE  weekly Thu., 8.00 pts, closing cost $0
      18mo 1.49 250,000 → 372,500 / 78 = 4,775.64   15mo 1.41 → 352,500 / 65 = 5,423.08
      12mo 1.35 → 337,500 / 52 = 6,490.38           10mo 1.33 → 332,500 / 43 = 7,732.56
       9mo 1.31 → 327,500 / 39 = 8,397.44            8mo 1.28 → 320,000 / 35 = 9,142.86
       6mo 1.25 214,000 → 267,500 / 26 = 10,288.46   4mo 1.21 147,000 → 177,870 / 17 = 10,462.94
-
-   BYZFUNDER (MCA, 2nd position, 52 weekly, 5.00 pts):
-     advance 275,000 · buy 1.26 + 5 pts = sell 1.31 → payback 360,250
-     payment = ceil(360,250 / 52) = 6,927.89
-     orig 4.5% = 12,375 · processing 995 → net advance 261,630
-     commission 5% = 13,750
-     EPD tier 1: 275,000 × (1.0299 + 0.05) = 296,972.50, saving 63,277.50
+   BYZFUNDER      MCA 2nd position, 52 weekly, 5.00 pts
+     275,000 · buy 1.26 + 5 = 1.31 → 360,250 · ceil(360,250/52) = 6,927.89
+     orig 4.5% 12,375 + proc 995 → net 261,630 · EPD day 1-30: 275,000×1.0799 = 296,972.50
+   FORA           18 months, 74 weekly, 8.00% upsell
+     300,000 · buy 1.31 + 8 = 1.39 → 417,000 / 74 = 5,635.14 · orig 3.0% = 9,000
+     prepay month 1-5 hold 1.18 → 354,000
    ═══════════════════════════════════════════════════════════════════════════ */
 
-var LENDERS=[
-  {id:'rapid', name:'Rapid Finance', kind:'Term Loan · Weekly (Thu.)',
-   valid:'Lender proposal issued at 8.00 points · closing cost $0.00 · minimum funding $15,001 · soft-qualified up to $468,000',
-   validClient:'Closing cost $0.00 · minimum funding $15,001 · qualified up to $468,000'},
-  {id:'byz',   name:'Byzfunder',     kind:'MCA · 2nd Position · Weekly',
-   valid:'Approved August 27, 2026 · valid until September 10, 2026 · 52 weekly payments (~13 months) · issued at 5.00 points',
-   validClient:'Approved August 27, 2026 · valid until September 10, 2026 · 52 weekly payments (~13 months)'},
-  {id:'cmp',   name:'Rapid vs Fora', kind:'Side-by-side comparison',
-   valid:'Both term loans at one shared funding amount · Rapid points and Fora upsell set independently',
-   validClient:'Both term loan options at the same funding amount'},
-  {id:'fora',  name:'Fora',          kind:'Term Loan · 18 Months · Weekly',
-   valid:'Offer pending · quoted at 8.00% upsell and a 3.0% origination fee · 74 weekly payments · retention pricing ineligible',
-   validClient:'Offer pending · 18-month term · 74 weekly payments'}
-];
-
-/* Rapid */
-var R_PTS=8, R_QAMT=250000, R_MIN=15001, R_MAX=468000;
+/* ── Rapid ── */
+var R_PTS=8, R_MIN=15001, R_MAX=468000, EP_DISCOUNT=0.20;
 var TERMS=[
   {m: 4, quoted:1.21, n:17, cap:147000},
   {m: 6, quoted:1.25, n:26, cap:214000},
@@ -779,37 +439,28 @@ var TERMS=[
   {m:15, quoted:1.41, n:65, cap:null},
   {m:18, quoted:1.49, n:78, cap:null}
 ];
-
-/* Byzfunder */
-var B_PTS=5, B_BUY=1.26, B_WEEKS=52, B_PROC=995, B_QADV=275000, B_QORIG=4.5;
+/* ── Byzfunder ── */
+var B_PTS=5, B_BUY=1.26, B_WEEKS=52, B_MONTHS=13, B_PROC=995, B_MAX=275000, B_MIN=50000;
 var EPD=[
-  {lo:  1, hi: 30, buy:1.0299},
-  {lo: 31, hi: 60, buy:1.0499},
-  {lo: 61, hi: 90, buy:1.0599},
-  {lo: 91, hi:120, buy:1.0999},
-  {lo:121, hi:150, buy:1.1199},
-  {lo:151, hi:180, buy:1.1399},
-  {lo:181, hi:210, buy:1.1699},
-  {lo:211, hi:240, buy:1.1899},
-  {lo:241, hi:270, buy:1.2399}
+  {lo:  1, hi: 30, buy:1.0299},{lo: 31, hi: 60, buy:1.0499},{lo: 61, hi: 90, buy:1.0599},
+  {lo: 91, hi:120, buy:1.0999},{lo:121, hi:150, buy:1.1199},{lo:151, hi:180, buy:1.1399},
+  {lo:181, hi:210, buy:1.1699},{lo:211, hi:240, buy:1.1899},{lo:241, hi:270, buy:1.2399}
+];
+/* ── Fora ── */
+var F_UPSELL=8, F_BUY=1.31, F_N=74, F_MONTHS=18, F_MAX=300000, F_MIN=10000, F_UPMAX=15,
+    F_OC_MAX=250000;
+var F_PREPAY=[
+  {mo:1,lo:1,hi:30,rate:1.18},{mo:2,lo:31,hi:60,rate:1.18},{mo:3,lo:61,hi:90,rate:1.18},
+  {mo:4,lo:91,hi:120,rate:1.18},{mo:5,lo:121,hi:150,rate:1.18},{mo:6,lo:151,hi:180,rate:1.20},
+  {mo:7,lo:181,hi:210,rate:1.22},{mo:8,lo:211,hi:240,rate:1.25},{mo:9,lo:241,hi:270,rate:1.27}
 ];
 
-/* Fora */
-var F_UPSELL=8, F_BUY=1.31, F_N=74, F_MONTHS=18, F_QAMT=300000, F_MIN=10000, F_MAX=300000,
-    F_ORIG=3.0, F_UPMAX=15;
-/* Prepayment schedule as quoted at the 8.00% upsell. Rate x loan amount = payback:
-   300,000 x 1.18 = 354,000 · x1.20 = 360,000 · x1.22 = 366,000 · x1.25 = 375,000 · x1.27 = 381,000 */
-var F_PREPAY=[
-  {mo: 1, lo:  1, hi: 30, rate:1.18},
-  {mo: 2, lo: 31, hi: 60, rate:1.18},
-  {mo: 3, lo: 61, hi: 90, rate:1.18},
-  {mo: 4, lo: 91, hi:120, rate:1.18},
-  {mo: 5, lo:121, hi:150, rate:1.18},
-  {mo: 6, lo:151, hi:180, rate:1.20},
-  {mo: 7, lo:181, hi:210, rate:1.22},
-  {mo: 8, lo:211, hi:240, rate:1.25},
-  {mo: 9, lo:241, hi:270, rate:1.27}
-];
+TERMS.forEach(function(t){ t.buy = round4(t.quoted - R_PTS/100); });
+
+var KEY='tr_kitchens_v3';
+var state={amt:250000, view:'broker', rTerm:18, rPts:8, bPts:5, bOrig:4.5, fUp:8, fOrig:3.0};
+try{ var s=JSON.parse(localStorage.getItem(KEY)||'null'); if(s){ for(var k in state) if(s[k]!==undefined) state[k]=s[k]; } }catch(e){}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
 
 function round2(x){ return Math.round((x+Number.EPSILON)*100)/100; }
 function round4(x){ return Math.round((x+Number.EPSILON)*10000)/10000; }
@@ -819,783 +470,461 @@ function money(x,dp){ if(dp===undefined) dp=2;
 function money0(x){ return money(x, x%1===0?0:2); }
 function fct(f){ var s=f.toFixed(4).replace(/0+$/,''); if(s.length-s.indexOf('.')<3) s=f.toFixed(2); return s; }
 function pts(p){ return p.toFixed(2); }
+function pct(p){ return p.toFixed(2)+'%'; }
 
-TERMS.forEach(function(t){ t.buy = round4(t.quoted - R_PTS/100); });
-
-var KEY='tr_kitchens_v2';
-var state={lender:'rapid', view:'broker',
-           amt:250000, pts:8, term:18, plus2:false,
-           adv:275000, bpts:5, orig:4.5,
-           famt:300000, fup:8, forig:3.0,
-           camt:250000, cterm:18};
-try{ var s=JSON.parse(localStorage.getItem(KEY)||'null'); if(s){ for(var k in state) if(s[k]!==undefined) state[k]=s[k]; } }catch(e){}
-function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
-
-/* ── models ───────────────────────────────────────────────────────────────── */
-function rModel(t,over){
-  var want   = (over===undefined)?state.amt:over;
-  var capped = t.cap!==null && want > t.cap;
-  var amt    = capped ? t.cap : want;
-  var factor = round4(t.buy + state.pts/100);
-  var payback= round2(amt * factor);
-  var n      = t.n + (state.plus2?2:0);
-  return { m:t.m, buy:t.buy, factor:factor, amt:amt, capped:capped, payback:payback, n:n,
-           pay: round2(payback/n), comm: round2(amt*state.pts/100), cost: round2(payback-amt) };
+/* ── models, all capped at min(requested, lender max) ─────────────────────── */
+function rTermObj(){ for(var i=0;i<TERMS.length;i++) if(TERMS[i].m===state.rTerm) return TERMS[i];
+                     return TERMS[TERMS.length-1]; }
+function rModel(t){
+  var lim  = t.cap!==null ? Math.min(t.cap,R_MAX) : R_MAX;
+  var amt  = Math.min(state.amt, lim);
+  var factor=round4(t.buy + state.rPts/100), payback=round2(amt*factor);
+  var fee  = round2(payback-amt), disc=round2(fee*EP_DISCOUNT);
+  return { lender:'Rapid Finance', months:t.m, n:t.n, amt:amt, capped:amt<state.amt,
+           factor:factor, payback:payback, pay:round2(payback/t.n),
+           fees:0, net:amt, cost:fee, buy:t.buy,
+           comm:round2(amt*state.rPts/100),
+           epPayoff:round2(payback-disc), epSave:disc, epWin:epWin(t.m) };
 }
-function rSel(){ for(var i=0;i<TERMS.length;i++) if(TERMS[i].m===state.term) return TERMS[i]; return TERMS[TERMS.length-1]; }
-
-/* Rapid early payment amendment: repay in full inside the window and the FIXED FEE
-   (payback − funded, not the payback itself) is discounted 20%.
-   4–6mo → 2 months · 7–9mo → 3 · 10–12mo → 4 · 15mo → 5 · 18mo → 6           */
-var EP_DISCOUNT=0.20;
 function epWin(m){ return m<=6?2 : m<=9?3 : m<=12?4 : m<=15?5 : 6; }
-function epModel(t,over){
-  var r=rModel(t,over), fee=round2(r.payback-r.amt), disc=round2(fee*EP_DISCOUNT);
-  return { m:r.m, amt:r.amt, capped:r.capped, win:epWin(r.m), fee:fee,
-           disc:disc, payoff:round2(r.payback-disc), payback:r.payback };
-}
 
 function bModel(){
-  var rate    = round4(B_BUY + state.bpts/100);
-  var payback = round2(state.adv * rate);
-  var origFee = round2(state.adv * state.orig/100);
-  return { rate:rate, payback:payback, n:B_WEEKS, pay:ceil2(payback/B_WEEKS),
-           origFee:origFee, procFee:B_PROC,
-           net: round2(state.adv - origFee - B_PROC),
-           comm: round2(state.adv * state.bpts/100),
-           cost: round2(payback - state.adv) };
+  var amt   = Math.min(state.amt, B_MAX);
+  var rate  = round4(B_BUY + state.bPts/100), payback=round2(amt*rate);
+  var orig  = round2(amt*state.bOrig/100), fees=round2(orig+B_PROC);
+  var best  = round2(amt*round4(EPD[0].buy + state.bPts/100));
+  return { lender:'Byzfunder', months:B_MONTHS, n:B_WEEKS, amt:amt, capped:amt<state.amt,
+           factor:rate, payback:payback, pay:ceil2(payback/B_WEEKS),
+           fees:fees, orig:orig, proc:B_PROC, net:round2(amt-fees),
+           cost:round2(payback-amt), buy:B_BUY,
+           comm:round2(amt*state.bPts/100),
+           epPayoff:best, epSave:round2(payback-best), epWin:1 };
 }
-function fModel(over){
-  var amt     = (over===undefined)?state.famt:Math.min(over,F_MAX);
-  var factor  = round4(F_BUY + state.fup/100);
-  var payback = round2(amt * factor);
-  var origFee = round2(amt * state.forig/100);
-  return { amt:amt, factor:factor, payback:payback, n:F_N, pay:round2(payback/F_N),
-           origFee:origFee, net:round2(amt-origFee),
-           comm:round2(amt*state.fup/100), cost:round2(payback-amt) };
-}
-/* Prepay rates were quoted at the 8.00% upsell; shift them with the upsell on the same
-   1 point = 0.01 rule the deal factor uses. At 8.00 this returns Fora's numbers exactly. */
-function fPrepay(row,over){
-  var amt  = (over===undefined)?state.famt:Math.min(over,F_MAX);
-  var rate = round4(row.rate - F_UPSELL/100 + state.fup/100);
-  return { mo:row.mo, lo:row.lo, hi:row.hi, rate:rate,
-           payback: round2(amt*rate),
-           save: round2(fModel(over).payback - amt*rate) };
-}
-
 function bEpd(row){
-  var sell = round4(row.buy + state.bpts/100);
-  var pre  = round2(state.adv * sell);
+  var amt=Math.min(state.amt,B_MAX), sell=round4(row.buy+state.bPts/100), pre=round2(amt*sell);
   return { lo:row.lo, hi:row.hi, buy:row.buy, sell:sell, pre:pre,
-           save: round2(bModel().payback - pre) };
+           save:round2(bModel().payback-pre) };
 }
 
-/* ── wiring ───────────────────────────────────────────────────────────────── */
-var lenderSeg=document.getElementById('lenderSeg');
-LENDERS.forEach(function(L){
-  var b=document.createElement('button');
-  b.innerHTML=L.name+'<small>'+L.kind.replace(/·/g,'·')+'</small>';
-  b.dataset.id=L.id;
-  b.onclick=function(){ state.lender=L.id; render(); };
-  lenderSeg.appendChild(b);
+function fModel(){
+  var amt   = Math.min(state.amt, F_MAX);
+  var factor= round4(F_BUY + state.fUp/100), payback=round2(amt*factor);
+  var orig  = round2(amt*state.fOrig/100);
+  var best  = round2(amt*round4(F_PREPAY[0].rate - F_UPSELL/100 + state.fUp/100));
+  return { lender:'Fora', months:F_MONTHS, n:F_N, amt:amt, capped:amt<state.amt,
+           factor:factor, payback:payback, pay:round2(payback/F_N),
+           fees:orig, orig:orig, net:round2(amt-orig),
+           cost:round2(payback-amt), buy:F_BUY,
+           comm:round2(amt*state.fUp/100),
+           epPayoff:best, epSave:round2(payback-best), epWin:5 };
+}
+function fPrepay(row){
+  var amt=Math.min(state.amt,F_MAX), rate=round4(row.rate - F_UPSELL/100 + state.fUp/100);
+  return { mo:row.mo, lo:row.lo, hi:row.hi, rate:rate, payback:round2(amt*rate),
+           save:round2(fModel().payback - amt*rate) };
+}
+
+/* ── controls ─────────────────────────────────────────────────────────────── */
+var amtR=document.getElementById('amtR'), amtN=document.getElementById('amtN'),
+    rPtsR=document.getElementById('rPtsR'), rPtsN=document.getElementById('rPtsN'),
+    bPtsR=document.getElementById('bPtsR'), bPtsN=document.getElementById('bPtsN'),
+    bOrigR=document.getElementById('bOrigR'), bOrigN=document.getElementById('bOrigN'),
+    fUpR=document.getElementById('fUpR'), fUpN=document.getElementById('fUpN'),
+    fOrigR=document.getElementById('fOrigR'), fOrigN=document.getElementById('fOrigN'),
+    rTermSeg=document.getElementById('rTermSeg');
+
+TERMS.slice().reverse().forEach(function(t){
+  var b=document.createElement('button'); b.textContent=t.m; b.dataset.m=t.m;
+  b.onclick=function(){ state.rTerm=t.m; render(); }; rTermSeg.appendChild(b);
 });
 document.getElementById('viewSeg').addEventListener('click',function(e){
   var b=e.target.closest('button[data-view]'); if(!b) return;
   state.view=b.dataset.view; render();
 });
-
-var amtR=document.getElementById('amtR'), amtN=document.getElementById('amtN'),
-    ptsR=document.getElementById('ptsR'), ptsN=document.getElementById('ptsN'),
-    plus2=document.getElementById('plus2'),
-    bAdvR=document.getElementById('bAdvR'), bAdvN=document.getElementById('bAdvN'),
-    bCommR=document.getElementById('bCommR'), bCommN=document.getElementById('bCommN'),
-    bOrigR=document.getElementById('bOrigR'), bOrigN=document.getElementById('bOrigN'),
-    fAmtR=document.getElementById('fAmtR'), fAmtN=document.getElementById('fAmtN'),
-    fUpR=document.getElementById('fUpR'), fUpN=document.getElementById('fUpN'),
-    fOrigR=document.getElementById('fOrigR'), fOrigN=document.getElementById('fOrigN'),
-    cAmtR=document.getElementById('cAmtR'), cAmtN=document.getElementById('cAmtN'),
-    cPtsR=document.getElementById('cPtsR'), cPtsN=document.getElementById('cPtsN'),
-    cUpR=document.getElementById('cUpR'),   cUpN=document.getElementById('cUpN'),
-    cTermSeg=document.getElementById('cTermSeg');
-
-TERMS.slice().reverse().forEach(function(t){
-  var b=document.createElement('button'); b.textContent=t.m+' mo'; b.dataset.m=t.m;
-  b.onclick=function(){ state.cterm=t.m; render(); }; cTermSeg.appendChild(b);
-});
-cAmtR.oninput=function(){ state.camt=parseInt(cAmtR.value,10); render(); };
-cAmtN.onchange=function(){
-  var v=parseFloat(String(cAmtN.value).replace(/[^0-9.]/g,''))||0;
-  state.camt=Math.min(F_MAX,Math.max(R_MIN,Math.round(v))); render();
-};
-cPtsR.oninput=function(){ state.pts=parseFloat(cPtsR.value); render(); };
-cPtsN.onchange=function(){
-  var v=parseFloat(String(cPtsN.value).replace(/[^0-9.]/g,'')); if(isNaN(v)) v=0;
-  state.pts=Math.min(8,Math.max(0,v)); render();
-};
-cUpR.oninput=function(){ state.fup=parseFloat(cUpR.value); render(); };
-cUpN.onchange=function(){
-  var v=parseFloat(String(cUpN.value).replace(/[^0-9.]/g,'')); if(isNaN(v)) v=0;
-  state.fup=Math.min(F_UPMAX,Math.max(0,v)); render();
-};
-
-var termSeg=document.getElementById('termSeg');
-TERMS.slice().reverse().forEach(function(t){
-  var b=document.createElement('button'); b.textContent=t.m+' mo'; b.dataset.m=t.m;
-  b.onclick=function(){ state.term=t.m; render(); }; termSeg.appendChild(b);
-});
-document.getElementById('ptsPresets').addEventListener('click',function(e){
-  var b=e.target.closest('button[data-p]'); if(!b) return;
-  state.pts=parseFloat(b.dataset.p); render();
-});
-document.getElementById('bCommPresets').addEventListener('click',function(e){
-  var b=e.target.closest('button[data-p]'); if(!b) return;
-  state.bpts=parseFloat(b.dataset.p); render();
-});
+function bindNum(rng,box,key,min,max,suffix){
+  rng.oninput=function(){ state[key]=parseFloat(rng.value); render(); };
+  box.onchange=function(){
+    var v=parseFloat(String(box.value).replace(/[^0-9.]/g,'')); if(isNaN(v)) v=min;
+    state[key]=Math.min(max,Math.max(min,v)); render();
+  };
+}
 amtR.oninput=function(){ state.amt=parseInt(amtR.value,10); render(); };
 amtN.onchange=function(){
   var v=parseFloat(String(amtN.value).replace(/[^0-9.]/g,''))||0;
-  state.amt=Math.min(R_MAX,Math.max(R_MIN,Math.round(v))); render();
+  state.amt=Math.min(R_MAX,Math.max(F_MIN,Math.round(v))); render();
 };
-ptsR.oninput=function(){ state.pts=parseFloat(ptsR.value); render(); };
-ptsN.onchange=function(){
-  var v=parseFloat(String(ptsN.value).replace(/[^0-9.]/g,'')); if(isNaN(v)) v=0;
-  state.pts=Math.min(8,Math.max(0,v)); render();
-};
-plus2.onchange=function(){ state.plus2=plus2.checked; render(); };
-bAdvR.oninput=function(){ state.adv=parseInt(bAdvR.value,10); render(); };
-bAdvN.onchange=function(){
-  var v=parseFloat(String(bAdvN.value).replace(/[^0-9.]/g,''))||0;
-  state.adv=Math.min(275000,Math.max(50000,Math.round(v))); render();
-};
-bCommR.oninput=function(){ state.bpts=parseFloat(bCommR.value); render(); };
-bCommN.onchange=function(){
-  var v=parseFloat(String(bCommN.value).replace(/[^0-9.]/g,'')); if(isNaN(v)) v=0;
-  state.bpts=Math.min(5,Math.max(0,v)); render();
-};
-bOrigR.oninput=function(){ state.orig=parseFloat(bOrigR.value); render(); };
-bOrigN.onchange=function(){
-  var v=parseFloat(String(bOrigN.value).replace(/[^0-9.]/g,'')); if(isNaN(v)) v=0;
-  state.orig=Math.min(4.5,Math.max(0,v)); render();
-};
-document.getElementById('fUpPresets').addEventListener('click',function(e){
-  var b=e.target.closest('button[data-p]'); if(!b) return;
-  state.fup=parseFloat(b.dataset.p); render();
-});
-fAmtR.oninput=function(){ state.famt=parseInt(fAmtR.value,10); render(); };
-fAmtN.onchange=function(){
-  var v=parseFloat(String(fAmtN.value).replace(/[^0-9.]/g,''))||0;
-  state.famt=Math.min(F_MAX,Math.max(F_MIN,Math.round(v))); render();
-};
-fUpR.oninput=function(){ state.fup=parseFloat(fUpR.value); render(); };
-fUpN.onchange=function(){
-  var v=parseFloat(String(fUpN.value).replace(/[^0-9.]/g,'')); if(isNaN(v)) v=0;
-  state.fup=Math.min(F_UPMAX,Math.max(0,v)); render();
-};
-fOrigR.oninput=function(){ state.forig=parseFloat(fOrigR.value); render(); };
-fOrigN.onchange=function(){
-  var v=parseFloat(String(fOrigN.value).replace(/[^0-9.]/g,'')); if(isNaN(v)) v=0;
-  state.forig=Math.min(3,Math.max(0,v)); render();
-};
+bindNum(rPtsR,rPtsN,'rPts',0,8);
+bindNum(bPtsR,bPtsN,'bPts',0,5);
+bindNum(bOrigR,bOrigN,'bOrig',0,4.5);
+bindNum(fUpR,fUpN,'fUp',0,F_UPMAX);
+bindNum(fOrigR,fOrigN,'fOrig',0,3);
 
 /* ── render ───────────────────────────────────────────────────────────────── */
-var R_BRO=['Buy Factor','Points','Commission'];
-var B_BRO=['Buy Rate','Upsell','Commission'];
+function cell(tr,txt,opt){
+  opt=opt||{};
+  var td=document.createElement('td');
+  td.textContent=txt;
+  if(opt.label) td.setAttribute('data-label',opt.label);
+  if(opt.sub){ var s=document.createElement('span'); s.className='sub'; s.innerHTML=opt.sub; td.appendChild(s); }
+  if(opt.pill){ var p=document.createElement('span'); p.className='pill '+(opt.pillClass||''); p.textContent=opt.pill; td.appendChild(p); }
+  if(opt.cls) td.className=opt.cls;
+  tr.appendChild(td); return td;
+}
+function headRow(el,cols){
+  el.innerHTML='';
+  cols.forEach(function(c){
+    var th=document.createElement('th');
+    if(typeof c==='string'){ th.textContent=c; }
+    else { th.textContent=c.t; if(c.note){ var n=document.createElement('span'); n.className='th-note'; n.textContent=c.note; th.appendChild(n); } if(c.cls) th.className=c.cls; }
+    el.appendChild(th);
+  });
+}
+
+var BRO=['Points','Commission'];
 
 function render(){
   var broker = state.view==='broker';
-  var L;
-  for(var i=0;i<LENDERS.length;i++) if(LENDERS[i].id===state.lender) L=LENDERS[i];
-  if(!L){ state.lender='rapid'; L=LENDERS[0]; }
 
-  Array.prototype.forEach.call(lenderSeg.children,function(b){
-    b.className = (b.dataset.id===state.lender)?'on':''; });
+  amtR.value=state.amt; amtN.value=state.amt.toLocaleString('en-US');
+  rPtsR.value=state.rPts; rPtsN.value=pts(state.rPts);
+  bPtsR.value=state.bPts; bPtsN.value=pts(state.bPts);
+  bOrigR.value=state.bOrig; bOrigN.value=pct(state.bOrig);
+  fUpR.value=state.fUp; fUpN.value=pct(state.fUp);
+  fOrigR.value=state.fOrig; fOrigN.value=pct(state.fOrig);
+  Array.prototype.forEach.call(rTermSeg.children,function(b){
+    b.className=(+b.dataset.m===state.rTerm)?'on':''; });
   Array.prototype.forEach.call(document.getElementById('viewSeg').children,function(b){
-    b.className = (b.dataset.view===state.view)?'on':''; });
-  document.getElementById('brandLender').innerHTML = L.name+'<small>'+L.kind+'</small>';
-  document.getElementById('validLine').textContent = broker?L.valid:L.validClient;
+    b.className=(b.dataset.view===state.view)?'on':''; });
   Array.prototype.forEach.call(document.querySelectorAll('.brokeronly'),function(el){
     el.style.display = broker?'':'none'; });
-  document.getElementById('secRapid').style.display = state.lender==='rapid'?'':'none';
-  document.getElementById('secByz').style.display   = state.lender==='byz'  ?'':'none';
-  document.getElementById('secFora').style.display  = state.lender==='fora' ?'':'none';
-  document.getElementById('secCmp').style.display   = state.lender==='cmp'  ?'':'none';
-  document.getElementById('viewNote').textContent = broker
-    ? 'Broker view — buy rate and commission are visible.'
-    : 'Client view — safe to screen-share.';
 
-  if(state.lender==='rapid') renderRapid(broker);
-  else if(state.lender==='byz') renderByz(broker);
-  else if(state.lender==='cmp') renderCmp(broker);
-  else renderFora(broker);
+  document.getElementById('viewNote').textContent = broker
+    ? 'Broker view — buy rates and commission are visible.'
+    : 'Client view — safe to screen-share.';
+  document.getElementById('metaLine').textContent = broker
+    ? 'Rapid proposed at 8.00 points · Byzfunder approved Aug 27, 2026 (valid to Sep 10) at 5.00 points · Fora pending at 8.00% upsell'
+    : 'Rapid Finance proposed · Byzfunder approved August 27, 2026, valid to September 10 · Fora pending';
+  document.getElementById('amtLab').textContent =
+    'Requested Amount · approvals up to ' + money(R_MAX,0);
+
+  var R=rModel(rTermObj()), B=bModel(), F=fModel();
+  var caps=[];
+  if(R.capped) caps.push('Rapid’s '+R.months+'-month caps at '+money(R.amt,0));
+  if(B.capped) caps.push('Byzfunder caps at '+money(B_MAX,0));
+  if(F.capped) caps.push('Fora caps at '+money(F_MAX,0));
+  document.getElementById('amtSide').innerHTML = caps.length
+    ? 'At this amount: <b>'+caps.join('</b>; <b>')+'</b>. Those offers are shown at their own maximum.'
+    : 'All three lenders can fund <b>'+money(state.amt,0)+'</b>. Byzfunder tops out at $275,000 and Fora at $300,000.';
+  var help=document.getElementById('amountHelp');
+  if(state.amt>B_MAX){ help.style.display='block';
+    help.textContent='Above $275,000 only Rapid and Fora can fund the full amount.'; }
+  else help.style.display='none';
+
+  renderChart(broker,R,B,F);
+  renderRapid(broker,R);
+  renderByz(broker,B);
+  renderFora(broker,F);
   save();
 }
 
-function renderRapid(broker){
-  amtR.value=state.amt; amtN.value=money(state.amt,0);
-  ptsR.value=state.pts; ptsN.value=pts(state.pts);
-  plus2.checked=state.plus2;
-  Array.prototype.forEach.call(termSeg.children,function(b){
-    b.className = (+b.dataset.m===state.term)?'on':''; });
-  Array.prototype.forEach.call(document.getElementById('ptsPresets').children,function(b){
-    b.className = (parseFloat(b.dataset.p)===state.pts)?'on':''; });
+function renderChart(broker,R,B,F){
+  var offers=[R,B,F].slice().sort(function(a,b){
+    return (a.months-b.months) || (a.amt-b.amt) || (a.factor-b.factor); });
+  offers.forEach(function(o,i){ o.num=i+1; });
 
-  document.getElementById('ptsField').style.display = broker?'':'none';
-  document.getElementById('cCommCard').style.display = broker?'':'none';
-  document.getElementById('amtHint').innerHTML =
-    'Quoted at <b>'+money(R_QAMT,0)+'</b>. Minimum funding <b>'+money(R_MIN,0)
-    +'</b>, soft-qualified to <b>'+money(R_MAX,0)+'</b>. The 6-month caps at <b>$214,000</b> and the 4-month at <b>$147,000</b>.';
+  document.getElementById('chartTitle').textContent =
+    'Three offers at '+money(state.amt,0);
 
-  var o=rModel(rSel());
-  document.getElementById('cFactor').textContent = fct(o.factor);
-  document.getElementById('cFactorSub').textContent =
-    o.m+'-month term · '+o.n+' weekly payments'+(state.plus2?' (2 added)':'');
-  document.getElementById('cPay').textContent = money(o.pay);
-  document.getElementById('cPaySub').textContent = 'Every Thursday · '+o.n+' payments';
-  document.getElementById('cPayback').textContent = money0(o.payback);
-  document.getElementById('cPaybackSub').textContent = money0(o.pay)+' × '+o.n+' payments';
-  document.getElementById('cAmt').textContent = money(o.amt,0);
-  document.getElementById('cAmtSub').textContent = o.capped
-    ? 'Lender max for the '+o.m+'-month term (requested '+money(state.amt,0)+')'
-    : 'Closing cost $0.00 · net to client';
-  document.getElementById('cCost').textContent = money0(o.cost);
-  document.getElementById('cCostSub').textContent =
-    (o.cost/o.amt*100).toFixed(1)+'¢ of total cost per dollar funded';
-  document.getElementById('cComm').textContent = money0(o.comm);
-  document.getElementById('cCommSub').textContent = pts(state.pts)+' points on '+money(o.amt,0);
+  var cols=[{t:'Offer',cls:'lft'},{t:'Term',cls:'lft'},{t:'Lender',cls:'lft'},'Amount',
+            'Fees','Net Amount',{t:'Total Payback',note:'if not repaid early'},
+            'Weekly Payment','# Pmts','Best Early Payoff'];
+  if(broker) cols=cols.concat([{t:'Points',cls:'broker'},{t:'Commission',cls:'broker'}]);
+  headRow(document.getElementById('chartThr'),cols);
 
-  document.getElementById('rapidTblTitle').textContent =
-    broker ? 'All terms at '+pts(state.pts)+' points' : 'All terms';
-
-  var cols=['Term','Amount','Factor Rate','Weekly Payment','Payments','Total Payback','Cost of Capital'];
-  if(broker) cols=cols.concat(R_BRO);
-  var thr=document.getElementById('thr'); thr.innerHTML='';
-  cols.forEach(function(c){
-    var th=document.createElement('th'); th.textContent=c;
-    if(R_BRO.indexOf(c)>-1) th.className='broker'; thr.appendChild(th);
+  var tb=document.getElementById('chartTb'); tb.innerHTML='';
+  offers.forEach(function(o){
+    var tr=document.createElement('tr');
+    cell(tr,'Offer '+o.num,{cls:'offnum',label:'Offer'});
+    cell(tr,o.months+' months',{cls:'lft',label:'Term',
+      sub:o.lender==='Byzfunder'?'52 weekly':o.n+' weekly'});
+    cell(tr,o.lender,{cls:'lft',label:'Lender',
+      sub:o.lender==='Byzfunder'?'2nd position advance':'term loan'});
+    cell(tr,money(o.amt,0),{label:'Amount',
+      pill:o.capped?'max':null,pillClass:'cap'});
+    cell(tr,o.fees?('− '+money0(o.fees)):'None',{label:'Fees',cls:o.fees?'':'none',
+      sub:o.lender==='Byzfunder'?(pct(state.bOrig)+' + $995'):(o.lender==='Fora'?pct(state.fOrig):'no closing cost')});
+    cell(tr,money0(o.net),{label:'Net Amount',cls:'pay'});
+    cell(tr,money0(o.payback),{label:'Total Payback (if not repaid early)'});
+    cell(tr,money(o.pay),{label:'Weekly Payment',cls:'pay'});
+    cell(tr,String(o.n),{label:'# Pmts'});
+    cell(tr,money0(o.epPayoff),{label:'Best Early Payoff',cls:'save',
+      sub:'saves '+money0(o.epSave)+' · '+(o.lender==='Rapid Finance'
+        ? 'in full within '+o.epWin+' mo'
+        : o.lender==='Fora' ? 'in full within 5 months' : 'in full within 30 days')});
+    if(broker){
+      var p = o.lender==='Rapid Finance'?pts(state.rPts)
+            : o.lender==='Byzfunder'?pts(state.bPts):pct(state.fUp);
+      cell(tr,p,{label:'Points',cls:'bro'});
+      cell(tr,money0(o.comm),{label:'Commission',cls:'bro'});
+    }
+    tb.appendChild(tr);
   });
 
-  var tb=document.getElementById('tb'); tb.innerHTML='';
+  document.getElementById('chartFoot').textContent =
+    'Sorted shortest term first. Payback = amount × factor on all three; none of them calculates interest.'
+    +' Net amount is what lands in the account after fees deducted at funding.'
+    +' Best early payoff is a payoff in full inside each lender’s cheapest window.';
+}
+
+function renderRapid(broker,R){
+  document.getElementById('rHead').textContent='Rapid Finance — '+R.months+' months';
+  var st=document.getElementById('rStats'); st.innerHTML='';
+  [['Factor Rate',fct(R.factor),R.n+' weekly payments','hero'],
+   ['Weekly Payment',money(R.pay),'Every Thursday',''],
+   ['Total Payback',money0(R.payback),'if not repaid early',''],
+   ['Funding Amount',money(R.amt,0),R.capped?'lender max for this term':'no closing cost','green'],
+   ['Cost of Capital',money0(R.cost),(R.cost/R.amt*100).toFixed(1)+'¢ per dollar funded','']
+  ].concat(broker?[['Commission',money0(R.comm),pts(state.rPts)+' points','']]:[])
+   .forEach(function(s){
+    var d=document.createElement('div'); d.className='stat '+s[3];
+    d.innerHTML='<div class="k">'+s[0]+'</div><div class="v">'+s[1]+'</div><div class="s">'+s[2]+'</div>';
+    st.appendChild(d);
+  });
+
+  var cols=[{t:'Term',cls:'lft'},'Amount','Factor Rate','Weekly Payment','# Pmts',
+            {t:'Total Payback',note:'if not repaid early'},'Cost of Capital'];
+  if(broker) cols=cols.concat([{t:'Buy Factor',cls:'broker'},{t:'Commission',cls:'broker'}]);
+  headRow(document.getElementById('rThr'),cols);
+
+  var tb=document.getElementById('rTb'); tb.innerHTML='';
   TERMS.slice().reverse().forEach(function(t){
     var r=rModel(t), tr=document.createElement('tr');
-    tr.className='clickable'+(t.m===state.term?' sel':'');
-    tr.onclick=function(){ state.term=t.m; render(); };
-    var badges=(state.plus2?' <span class="pill">+2 wks</span>':'')
-             +(r.capped?' <span class="pill cap">max</span>':'');
-    var cells=[{h:'<div class="termcell">'+r.m+' months'+badges+'</div>'},
-      {t:money(r.amt,0)},{t:fct(r.factor),c:'factor'},{t:money(r.pay),c:'pay'},
-      {t:String(r.n)},{t:money0(r.payback)},{t:money0(r.cost)}];
-    if(broker) cells=cells.concat([{t:fct(r.buy),c:'bro'},{t:pts(state.pts),c:'bro'},{t:money0(r.comm),c:'bro'}]);
-    cells.forEach(function(c){
-      var td=document.createElement('td');
-      if(c.h) td.innerHTML=c.h; else td.textContent=c.t;
-      if(c.c) td.className=c.c; tr.appendChild(td);
-    });
+    tr.style.cursor='pointer';
+    if(t.m===state.rTerm) tr.style.background='rgba(0,205,103,.10)';
+    tr.onclick=function(){ state.rTerm=t.m; render(); };
+    cell(tr,r.months+' months',{cls:'lft',label:'Term',pill:r.capped?'max':null,pillClass:'cap'});
+    cell(tr,money(r.amt,0),{label:'Amount'});
+    cell(tr,fct(r.factor),{label:'Factor Rate',cls:'num'});
+    cell(tr,money(r.pay),{label:'Weekly Payment',cls:'pay'});
+    cell(tr,String(r.n),{label:'# Pmts'});
+    cell(tr,money0(r.payback),{label:'Total Payback'});
+    cell(tr,money0(r.cost),{label:'Cost of Capital'});
+    if(broker){ cell(tr,fct(r.buy),{label:'Buy Factor',cls:'bro'});
+                cell(tr,money0(r.comm),{label:'Commission',cls:'bro'}); }
     tb.appendChild(tr);
   });
+  document.getElementById('rFoot').textContent =
+    'Weekly ACH on Thursdays · closing cost $0.00 · requested '+money(state.amt,0)
+    +' · rows marked "max" are capped at the lender’s limit for that term'
+    +' · minimum funding $15,001, soft-qualified to $468,000.';
 
-  document.getElementById('tblFoot').textContent =
-    'Rapid Finance · term loan · weekly ACH (Thursdays) · closing cost $0.00'
-    +(state.plus2?' · 2 weeks added to every term, payback unchanged':'')
-    +' · requested '+money(state.amt,0)+' · rows marked "max" are capped at the lender’s limit for that term.';
-
-  /* early payment amendment */
-  var epCols=['Term','Repay in full within','Amount','Fixed Fee','Discounted Fee','Early Payoff','Client Saves'];
-  var epThr=document.getElementById('epThr'); epThr.innerHTML='';
-  epCols.forEach(function(c){ var th=document.createElement('th'); th.textContent=c; epThr.appendChild(th); });
-
-  var epTb=document.getElementById('epTb'); epTb.innerHTML='';
+  headRow(document.getElementById('rEpThr'),
+    [{t:'Term',cls:'lft'},{t:'Repay in full within',cls:'lft'},'Amount','Fixed Fee','Early Payoff','Client Saves']);
+  var etb=document.getElementById('rEpTb'); etb.innerHTML='';
   TERMS.slice().reverse().forEach(function(t){
-    var e=epModel(t), tr=document.createElement('tr');
-    tr.className='clickable'+(t.m===state.term?' sel':'');
-    tr.onclick=function(){ state.term=t.m; render(); };
-    [{h:'<div class="termcell">'+e.m+' months'+(e.capped?' <span class="pill cap">max</span>':'')+'</div>'},
-     {t:e.win+' calendar months'},
-     {t:money(e.amt,0)},
-     {t:money0(e.fee)},
-     {t:money0(round2(e.fee-e.disc))},
-     {t:money0(e.payoff), c:'pay'},
-     {t:money0(e.disc), c:'save'}
-    ].forEach(function(c){
-      var td=document.createElement('td');
-      if(c.h) td.innerHTML=c.h; else td.textContent=c.t;
-      if(c.c) td.className=c.c; tr.appendChild(td);
-    });
-    epTb.appendChild(tr);
+    var r=rModel(t), tr=document.createElement('tr');
+    if(t.m===state.rTerm) tr.style.background='rgba(0,205,103,.10)';
+    cell(tr,r.months+' months',{cls:'lft',label:'Term'});
+    cell(tr,r.epWin+' calendar months',{cls:'lft',label:'Repay within'});
+    cell(tr,money(r.amt,0),{label:'Amount'});
+    cell(tr,money0(r.cost),{label:'Fixed Fee'});
+    cell(tr,money0(r.epPayoff),{label:'Early Payoff',cls:'pay'});
+    cell(tr,money0(r.epSave),{label:'Client Saves',cls:'save'});
+    etb.appendChild(tr);
   });
 
-  document.getElementById('epFoot').textContent =
-    'Early payoff = funding amount + 80% of the fixed fee. The window runs in calendar months from funding, and the'
-    +' payoff must be made in full — a partial prepayment does not earn the discount. The amendment is included in the'
-    +' contract package, so this is committed pricing, not a courtesy.';
+  var o150=document.getElementById('rOver150'), o250=document.getElementById('rOver250');
+  if(state.amt>150000){ o150.className='req';
+    o150.innerHTML='<b>Bank Transaction History</b><small>Required over $150,000</small>'; }
+  else { o150.className=''; o150.innerHTML='<small>Bank transaction history only applies over $150,000</small>'; }
+  if(state.amt>250000){ o250.className='req';
+    o250.innerHTML='<b>2025 tax return + YTD P&amp;L + balance sheet</b><small>Required over $250,000. Or 2024 with extension plus 2025 YTD</small>'; }
+  else { o250.className=''; o250.innerHTML='<small>Tax return package only applies over $250,000</small>'; }
 }
 
-var F_OC_MAX=250000;   /* at or below this, the file is online-checkout eligible */
-
-/* ── compare: Rapid vs Fora at one shared amount ───────────────────────────── */
-function cmpTerm(){ for(var i=0;i<TERMS.length;i++) if(TERMS[i].m===state.cterm) return TERMS[i];
-                    return TERMS[TERMS.length-1]; }
-
-function renderCmp(broker){
-  var amt=state.camt;
-  cAmtR.value=amt; cAmtN.value=money(amt,0);
-  cPtsR.value=state.pts; cPtsN.value=pts(state.pts);
-  cUpR.value=state.fup;  cUpN.value=state.fup.toFixed(2)+'%';
-  Array.prototype.forEach.call(cTermSeg.children,function(b){
-    b.className=(+b.dataset.m===state.cterm)?'on':''; });
-
-  var t=cmpTerm(), R=rModel(t,amt), F=fModel(amt), EP=epModel(t,amt), FP=fPrepay(F_PREPAY[0],amt);
-  var rCapped = R.amt!==amt, fCapped = F.amt!==amt;
-
-  document.getElementById('cAmtHint').innerHTML =
-    'Both lenders can fund from <b>$15,001</b> to <b>$300,000</b> (Fora caps at $300,000, Rapid goes to $468,000 alone).'
-    +(rCapped?' <b>Rapid’s '+t.m+'-month caps at '+money(R.amt,0)+'.</b>':'')
-    +(fCapped?' <b>Fora caps at '+money(F.amt,0)+'.</b>':'');
-
-  document.getElementById('cmpTitle').textContent =
-    'Rapid '+t.m+'-month vs Fora 18-month at '+money(amt,0);
-
-  var thr=document.getElementById('cThr'); thr.innerHTML='';
-  ['', 'Rapid Finance', 'Fora'].forEach(function(c){
-    var th=document.createElement('th'); th.textContent=c; thr.appendChild(th); });
-
-  /* lower is better on cost lines, higher is better on proceeds lines */
-  var rows=[
-    {h:'The money'},
-    {k:'Funding amount', r:money(R.amt,0), f:money(F.amt,0),
-     rs:rCapped?'lender cap for this term':'', fs:fCapped?'lender cap':''},
-    {k:'Fees deducted at funding', r:'None', f:'− '+money0(F.origFee),
-     rs:'no closing or origination cost', fs:state.forig.toFixed(2)+'% origination',
-     cmp:'low', rv:0, fv:F.origFee},
-    {k:'Net proceeds to client', r:money0(R.amt), f:money0(F.net),
-     cmp:'high', rv:R.amt, fv:F.net},
-    {h:'The cost'},
-    {k:'Factor rate', r:fct(R.factor), f:fct(F.factor), cmp:'low', rv:R.factor, fv:F.factor},
-    {k:'Total payback', r:money0(R.payback), f:money0(F.payback),
-     cmp:'low', rv:R.payback, fv:F.payback},
-    {k:'Cost of capital', r:money0(R.cost), f:money0(round2(F.cost+F.origFee)),
-     rs:'payback less funding', fs:'payback less funding, plus the fee',
-     cmp:'low', rv:R.cost, fv:round2(F.cost+F.origFee)},
-    {h:'The payments'},
-    {k:'Term', r:t.m+' months', f:'18 months'},
-    {k:'Weekly payment', r:money(R.pay), f:money(F.pay),
-     rs:R.n+' payments, Thursdays', fs:F.n+' payments',
-     cmp:'low', rv:R.pay, fv:F.pay},
-    {h:'Paying it off early'},
-    {k:'Best early payoff', r:money0(EP.payoff), f:money0(FP.payback),
-     rs:'in full within '+EP.win+' calendar months', fs:'in full within the first 5 months',
-     cmp:'low', rv:EP.payoff, fv:FP.payback},
-    {k:'What that saves', r:money0(EP.disc), f:money0(FP.save),
-     rs:'20% of the fixed fee', fs:'settles at the '+fct(FP.rate)+' band rate',
-     cmp:'high', rv:EP.disc, fv:FP.save},
-    {h:'Getting it signed'},
-    {k:'Contracts', r:'E-sign or paper', f:(amt<=F_OC_MAX?'Online checkout eligible':'E-sign or paper'),
-     fs:(amt<=F_OC_MAX?'no license or voided check needed':'above $250,000')},
-    {k:'Status', r:'Proposed — needs the Wayflyer payoff', f:'Pending — needs merchant email + Wayflyer payoff'}
-  ];
-  if(broker) rows=rows.concat([
-    {h:'Your side'},
-    {k:'Buy rate', r:fct(R.buy), f:fct(F_BUY)},
-    {k:'Commission', r:money0(R.comm), f:money0(F.comm),
-     rs:pts(state.pts)+' points', fs:state.fup.toFixed(2)+'% upsell',
-     cmp:'high', rv:R.comm, fv:F.comm}
-  ]);
-
-  var tb=document.getElementById('cTb'); tb.innerHTML='';
-  rows.forEach(function(row){
-    var tr=document.createElement('tr');
-    if(row.h){
-      tr.className='head';
-      var td=document.createElement('td'); td.colSpan=3; td.textContent=row.h;
-      tr.appendChild(td); tb.appendChild(tr); return;
-    }
-    var rWin=false, fWin=false;
-    if(row.cmp && row.rv!==row.fv){
-      if(row.cmp==='low'){ rWin=row.rv<row.fv; fWin=row.fv<row.rv; }
-      else               { rWin=row.rv>row.fv; fWin=row.fv>row.rv; }
-    }
-    [{t:row.k},{t:row.r,s:row.rs,w:rWin},{t:row.f,s:row.fs,w:fWin}].forEach(function(c){
-      var td=document.createElement('td');
-      td.textContent=c.t;
-      if(c.s){ var sp=document.createElement('span'); sp.className='sub'; sp.textContent=c.s; td.appendChild(sp); }
-      if(c.w) td.className='better';
-      tr.appendChild(td);
-    });
-    tb.appendChild(tr);
+function renderByz(broker,B){
+  document.getElementById('bHead').textContent='Byzfunder — '+B.months+' months';
+  var st=document.getElementById('bStats'); st.innerHTML='';
+  [['Sell Rate',fct(B.factor),'52 weekly payments','hero'],
+   ['Weekly Payment',money(B.pay),'52 payments',''],
+   ['Total Payback',money0(B.payback),'if not repaid early',''],
+   ['Net Advance',money0(B.net),'after fees','green'],
+   ['Cost of Capital',money0(B.cost),money0(round2(B.cost+B.fees))+' all-in with fees','']
+  ].concat(broker?[['Commission',money0(B.comm),pts(state.bPts)+' points','']]:[])
+   .forEach(function(s){
+    var d=document.createElement('div'); d.className='stat '+s[3];
+    d.innerHTML='<div class="k">'+s[0]+'</div><div class="v">'+s[1]+'</div><div class="s">'+s[2]+'</div>';
+    st.appendChild(d);
   });
 
-  document.getElementById('cFoot').textContent =
-    'Rapid '+t.m+'-month ('+R.n+' weekly payments) vs Fora 18-month ('+F.n+' weekly payments) at '
-    +money(amt,0)+'. Fora’s figures include its '+state.forig.toFixed(2)+'% origination fee; Rapid has no closing cost.'
-    +' Early-payoff lines assume a payoff in full inside each lender’s window.';
-
-  /* plain-language verdicts */
-  var cheaper   = F.payback < R.payback ? 'Fora' : 'Rapid';
-  var netWinner = F.net > R.amt ? 'Fora' : 'Rapid';
-  var payDiff   = Math.abs(round2(F.pay - R.pay));
-  var backDiff  = Math.abs(round2(F.payback - R.payback));
-  var netDiff   = Math.abs(round2(F.net - R.amt));
-  document.getElementById('cV1').innerHTML =
-    '<div class="k">On total cost</div><div class="v">'+cheaper+' is cheaper by '+money0(backDiff)+'</div>'
-    +'<div class="b">Payback of <b>'+money0(Math.min(R.payback,F.payback))+'</b> against <b>'
-    +money0(Math.max(R.payback,F.payback))+'</b>. Weekly payment differs by <b>'+money(payDiff)+'</b> — '
-    +(R.pay<F.pay?'Rapid':'Fora')+' is the lighter weekly, partly because the payment counts differ ('
-    +R.n+' vs '+F.n+').</div>';
-  document.getElementById('cV2').innerHTML =
-    '<div class="k">On money in hand</div><div class="v">'+netWinner+' nets '+money0(netDiff)+' more</div>'
-    +'<div class="b">Rapid funds the full <b>'+money0(R.amt)+'</b> with no fee. Fora deducts <b>'
-    +money0(F.origFee)+'</b>, wiring <b>'+money0(F.net)+'</b>. '
-    +'If the client is likely to pay off early, weigh that against Fora settling at <b>'
-    +money0(FP.payback)+'</b> inside five months versus Rapid’s <b>'+money0(EP.payoff)+'</b>.</div>';
-}
-
-function renderFora(broker){
-  fAmtR.value=state.famt;  fAmtN.value=money(state.famt,0);
-  fUpR.value=state.fup;    fUpN.value=state.fup.toFixed(2)+'%';
-  fOrigR.value=state.forig;fOrigN.value=state.forig.toFixed(2)+'%';
-  Array.prototype.forEach.call(document.getElementById('fUpPresets').children,function(b){
-    b.className = (parseFloat(b.dataset.p)===state.fup)?'on':''; });
-  document.getElementById('fUpField').style.display  = broker?'':'none';
-  document.getElementById('fCommCard').style.display = broker?'':'none';
-
-  var oc = state.famt <= F_OC_MAX;
-  document.getElementById('fCheckoutLine').innerHTML = oc
-    ? 'At '+money(state.famt,0)+' the file <b>is eligible for online checkout</b>, which drops the driver’s license and voided check from the stip list.'
-    : 'Above '+money(F_OC_MAX,0)+' online checkout is <b>not eligible</b>, so it goes e-sign or paper contracts — which also means the driver’s license and voided check <b>are</b> required.';
-  document.getElementById('fCheckoutStip').innerHTML = oc
-    ? 'Online checkout <b>eligible</b> at '+money(state.famt,0)
-    : 'Online checkout <b>not eligible</b> above '+money(F_OC_MAX,0)+' — e-sign or paper contracts only';
-  document.getElementById('fStipDL').className = oc?'waived':'req';
-  document.getElementById('fStipVC').className = oc?'waived':'req';
-  document.getElementById('fStipDLSub').textContent = oc
-    ? 'Not required — online checkout eligible at this amount'
-    : 'Required — the waiver only applies to online checkout';
-  document.getElementById('fStipVCSub').textContent = oc
-    ? 'Not required — online checkout eligible at this amount'
-    : 'Required for the same reason';
-
-  var o=fModel();
-  document.getElementById('fFactor').textContent = fct(o.factor);
-  document.getElementById('fFactorSub').textContent = '18-month term · 74 weekly payments';
-  document.getElementById('fPay').textContent = money(o.pay);
-  document.getElementById('fPaySub').textContent = 'Weekly · 74 payments';
-  document.getElementById('fPayback').textContent = money0(o.payback);
-  document.getElementById('fPaybackSub').textContent = money(state.famt,0)+' × '+fct(o.factor);
-  document.getElementById('fNet').textContent = money0(o.net);
-  document.getElementById('fNetSub').textContent = 'After the '+state.forig.toFixed(2)+'% origination fee';
-  document.getElementById('fCost').textContent = money0(o.cost);
-  document.getElementById('fCostSub').textContent =
-    money0(round2(o.cost+o.origFee))+' all-in once the origination fee is counted';
-  document.getElementById('fComm').textContent = money0(o.comm);
-  document.getElementById('fCommSub').textContent = state.fup.toFixed(2)+'% upsell on '+money(state.famt,0);
-
-  var wf=document.getElementById('fWaterfall'); wf.innerHTML='';
-  [['Loan amount', money(state.famt,0), ''],
-   ['Origination fee — '+state.forig.toFixed(2)+'%', '− '+money0(o.origFee), 'neg'],
-   ['Net proceeds to client', money0(o.net), 'tot']
+  var wf=document.getElementById('bWf'); wf.innerHTML='';
+  [['Advance amount',money(B.amt,0),''],
+   ['Origination fee — '+pct(state.bOrig),'− '+money0(B.orig),'neg'],
+   ['Processing fee','− '+money(B.proc,0),'neg'],
+   ['Net advance wired to client',money0(B.net),'tot']
   ].forEach(function(r){
     var li=document.createElement('li'); if(r[2]) li.className=r[2];
-    var a=document.createElement('span'); a.textContent=r[0];
-    var b=document.createElement('span'); b.textContent=r[1];
-    li.appendChild(a); li.appendChild(b); wf.appendChild(li);
+    li.innerHTML='<span>'+r[0]+'</span><span>'+r[1]+'</span>'; wf.appendChild(li);
   });
 
-  var shifted = broker && state.fup!==F_UPSELL;
-  document.getElementById('fPreNote').innerHTML =
-    'Pay off inside a month band and the whole balance settles at that band’s rate instead of the full '
-    +money0(o.payback)+' payback. The first five months hold the same rate, so there is no penalty for paying off in month 5 rather than month 1.'
-    +(shifted?' <span class="pill">shifted from the 8.00% quote</span>':'');
+  document.getElementById('bEpdNote').innerHTML =
+    'Pay the advance off inside a tier and the whole thing settles at that tier’s rate instead of the full '
+    +money0(B.payback)+' payback.'+(broker?' Buy rate plus your '+pts(state.bPts)+'-point upsell.':'');
 
-  var cols=['Month','Days','Payoff Rate','Payoff Amount','Client Saves'];
-  var thr=document.getElementById('fThr'); thr.innerHTML='';
-  cols.forEach(function(c){ var th=document.createElement('th'); th.textContent=c; thr.appendChild(th); });
-
-  var tb=document.getElementById('fTb'); tb.innerHTML='';
-  F_PREPAY.forEach(function(row){
-    var r=fPrepay(row), tr=document.createElement('tr');
-    [{t:'Month '+r.mo},{t:'Day '+r.lo+' – '+r.hi},{t:fct(r.rate),c:'factor'},
-     {t:money0(r.payback),c:'pay'},{t:money0(r.save),c:'save'}].forEach(function(c){
-      var td=document.createElement('td'); td.textContent=c.t;
-      if(c.c) td.className=c.c; tr.appendChild(td);
-    });
-    tb.appendChild(tr);
-  });
-
-  document.getElementById('fFoot').textContent =
-    'Fora · 18-month term loan · 74 weekly payments · loan amount '+money(state.famt,0)
-    +' · payoff amount = loan amount × payoff rate. The schedule Fora sent covers months 1–9;'
-    +' ask for months 10–18 to complete it.'
-    +(shifted?' Rates shown are shifted from Fora’s 8.00% quote — confirm before contracting.':'');
-}
-
-function renderByz(broker){
-  bAdvR.value=state.adv;   bAdvN.value=money(state.adv,0);
-  bCommR.value=state.bpts; bCommN.value=pts(state.bpts);
-  bOrigR.value=state.orig; bOrigN.value=state.orig.toFixed(2)+'%';
-  Array.prototype.forEach.call(document.getElementById('bCommPresets').children,function(b){
-    b.className = (parseFloat(b.dataset.p)===state.bpts)?'on':''; });
-  document.getElementById('bCommField').style.display = broker?'':'none';
-  document.getElementById('bCommCard').style.display  = broker?'':'none';
-
-  var o=bModel();
-  document.getElementById('bRate').textContent = fct(o.rate);
-  document.getElementById('bRateSub').textContent = '52 weekly payments · ~13 months';
-  document.getElementById('bPay').textContent = money(o.pay);
-  document.getElementById('bPaySub').textContent = 'Weekly · 52 payments';
-  document.getElementById('bPayback').textContent = money0(o.payback);
-  document.getElementById('bPaybackSub').textContent = money(state.adv,0)+' × '+fct(o.rate);
-  document.getElementById('bNet').textContent = money0(o.net);
-  document.getElementById('bNetSub').textContent =
-    'After '+state.orig.toFixed(2)+'% origination and the $995 processing fee';
-  document.getElementById('bCost').textContent = money0(o.cost);
-  document.getElementById('bCostSub').textContent =
-    money0(round2(o.cost+o.origFee+o.procFee))+' all-in once the fees are counted';
-  document.getElementById('bComm').textContent = money0(o.comm);
-  document.getElementById('bCommSub').textContent = pts(state.bpts)+' points on '+money(state.adv,0);
-
-  var wf=document.getElementById('bWaterfall');
-  var rows=[
-    ['Advance amount', money(state.adv,0), ''],
-    ['Origination fee — '+state.orig.toFixed(2)+'%', '− '+money0(o.origFee), 'neg'],
-    ['Processing fee', '− '+money(o.procFee,0), 'neg'],
-    ['Net advance wired to client', money0(o.net), 'tot']
-  ];
-  wf.innerHTML='';
-  rows.forEach(function(r){
-    var li=document.createElement('li'); if(r[2]) li.className=r[2];
-    var a=document.createElement('span'); a.textContent=r[0];
-    var b=document.createElement('span'); b.textContent=r[1];
-    li.appendChild(a); li.appendChild(b); wf.appendChild(li);
-  });
-
-  document.getElementById('bEpdNote').innerHTML = broker
-    ? 'Pay the advance off inside a tier and the whole thing settles at that tier’s rate instead of the full '
-      +money0(o.payback)+' payback. Buy rate plus your '+pts(state.bpts)+'-point upsell.'
-    : 'Pay the advance off inside a tier and the whole thing settles at that tier’s payoff instead of the full '
-      +money0(o.payback)+' payback.';
-
-  var cols=['Days','Payoff Rate','Payoff Amount','Client Saves'];
-  if(broker) cols=['Days','Buy Rate','Upsell','Payoff Rate','Payoff Amount','Client Saves'];
-  var thr=document.getElementById('bThr'); thr.innerHTML='';
-  cols.forEach(function(c){
-    var th=document.createElement('th'); th.textContent=c;
-    if(B_BRO.indexOf(c)>-1) th.className='broker'; thr.appendChild(th);
-  });
+  var cols = broker
+    ? [{t:'Days',cls:'lft'},{t:'Buy Rate',cls:'broker'},{t:'Upsell',cls:'broker'},'Payoff Rate','Payoff Amount','Client Saves']
+    : [{t:'Days',cls:'lft'},'Payoff Rate','Payoff Amount','Client Saves'];
+  headRow(document.getElementById('bThr'),cols);
 
   var tb=document.getElementById('bTb'); tb.innerHTML='';
   EPD.forEach(function(row){
     var r=bEpd(row), tr=document.createElement('tr');
-    var cells = broker
-      ? [{t:'Day '+r.lo+' – '+r.hi},{t:fct(r.buy),c:'bro'},{t:pts(state.bpts),c:'bro'},
-         {t:fct(r.sell),c:'factor'},{t:money0(r.pre)},{t:money0(r.save),c:'save'}]
-      : [{t:'Day '+r.lo+' – '+r.hi},{t:fct(r.sell),c:'factor'},
-         {t:money0(r.pre)},{t:money0(r.save),c:'save'}];
-    cells.forEach(function(c){
-      var td=document.createElement('td'); td.textContent=c.t;
-      if(c.c) td.className=c.c; tr.appendChild(td);
-    });
+    cell(tr,'Day '+r.lo+' – '+r.hi,{cls:'lft',label:'Days'});
+    if(broker){ cell(tr,fct(r.buy),{label:'Buy Rate',cls:'bro'});
+                cell(tr,pts(state.bPts),{label:'Upsell',cls:'bro'}); }
+    cell(tr,fct(r.sell),{label:'Payoff Rate',cls:'num'});
+    cell(tr,money0(r.pre),{label:'Payoff Amount',cls:'pay'});
+    cell(tr,money0(r.save),{label:'Client Saves',cls:'save'});
     tb.appendChild(tr);
   });
-
   document.getElementById('bFoot').textContent =
-    'Byzfunder · MCA · 2nd position · advance '+money(state.adv,0)+' · 52 weekly payments'
-    +' · payoff amount = advance × payoff rate.'
+    'Advance '+money(B.amt,0)+' · 52 weekly payments · payoff amount = advance × payoff rate.'
     +(broker?' Byzfunder caps the upsell at 12 points for a file to stay EPD-eligible.':'')
-    +' Discounts apply to a full payoff inside the tier, not to partial prepayments.';
+    +' Discounts apply to a full payoff inside the tier, not to partial prepayments.'
+    +' Weekly payment is rounded up to the cent, so the final payment trues down.';
 }
 
-/* ── PDFs ─────────────────────────────────────────────────────────────────── */
-var NAVY=[0,47,104], STEEL=[106,115,154];
-function pdfHead(doc,lenderLine,metaLine){
-  doc.setFont('helvetica','bold'); doc.setFontSize(17); doc.setTextColor.apply(doc,NAVY);
-  doc.text('T&R Kitchens', 48, 54);
-  doc.setFont('helvetica','normal'); doc.setFontSize(10.5); doc.setTextColor.apply(doc,STEEL);
-  doc.text(lenderLine, 48, 72);
-  doc.text(metaLine, 48, 88);
+function renderFora(broker,F){
+  var oc = F.amt <= F_OC_MAX;
+  document.getElementById('fCheckoutLine').innerHTML = oc
+    ? 'At '+money(F.amt,0)+' the file <b>is eligible for online checkout</b>, which drops the driver’s license and voided check from the stip list.'
+    : 'Above '+money(F_OC_MAX,0)+' online checkout is <b>not eligible</b>, so it goes e-sign or paper — which also means the driver’s license and voided check <b>are</b> required.';
+  var dl=document.getElementById('fStipDL'), vc=document.getElementById('fStipVC');
+  dl.className = oc?'waived':'req';
+  vc.className = oc?'waived':'req';
+  dl.innerHTML = '<b>Driver\'s License</b><small>'+(oc?'Not required — online checkout eligible at this amount':'Required — the waiver only applies to online checkout')+'</small>';
+  vc.innerHTML = '<b>Voided Check</b><small>'+(oc?'Not required — online checkout eligible at this amount':'Required for the same reason')+'</small>';
+
+  var st=document.getElementById('fStats'); st.innerHTML='';
+  [['Factor Rate',fct(F.factor),'74 weekly payments','hero'],
+   ['Weekly Payment',money(F.pay),'74 payments',''],
+   ['Total Payback',money0(F.payback),'if not repaid early',''],
+   ['Net Proceeds',money0(F.net),'after the '+pct(state.fOrig)+' origination fee','green'],
+   ['Cost of Capital',money0(F.cost),money0(round2(F.cost+F.orig))+' all-in with the fee','']
+  ].concat(broker?[['Commission',money0(F.comm),pct(state.fUp)+' upsell','']]:[])
+   .forEach(function(s){
+    var d=document.createElement('div'); d.className='stat '+s[3];
+    d.innerHTML='<div class="k">'+s[0]+'</div><div class="v">'+s[1]+'</div><div class="s">'+s[2]+'</div>';
+    st.appendChild(d);
+  });
+
+  var wf=document.getElementById('fWf'); wf.innerHTML='';
+  [['Loan amount',money(F.amt,0),''],
+   ['Origination fee — '+pct(state.fOrig),'− '+money0(F.orig),'neg'],
+   ['Net proceeds to client',money0(F.net),'tot']
+  ].forEach(function(r){
+    var li=document.createElement('li'); if(r[2]) li.className=r[2];
+    li.innerHTML='<span>'+r[0]+'</span><span>'+r[1]+'</span>'; wf.appendChild(li);
+  });
+
+  var shifted = broker && state.fUp!==F_UPSELL;
+  document.getElementById('fPreNote').innerHTML =
+    'Pay off inside a month band and the whole balance settles at that band’s rate instead of the full '
+    +money0(F.payback)+' payback. The first five months hold the same rate, so there is no penalty for paying off in month 5 rather than month 1.'
+    +(shifted?' <span class="pill">shifted from the 8.00% quote</span>':'');
+
+  headRow(document.getElementById('fThr'),
+    [{t:'Month',cls:'lft'},{t:'Days',cls:'lft'},'Payoff Rate','Payoff Amount','Client Saves']);
+  var tb=document.getElementById('fTb'); tb.innerHTML='';
+  F_PREPAY.forEach(function(row){
+    var r=fPrepay(row), tr=document.createElement('tr');
+    cell(tr,'Month '+r.mo,{cls:'lft',label:'Month'});
+    cell(tr,'Day '+r.lo+' – '+r.hi,{cls:'lft',label:'Days'});
+    cell(tr,fct(r.rate),{label:'Payoff Rate',cls:'num'});
+    cell(tr,money0(r.payback),{label:'Payoff Amount',cls:'pay'});
+    cell(tr,money0(r.save),{label:'Client Saves',cls:'save'});
+    tb.appendChild(tr);
+  });
+  document.getElementById('fFoot').textContent =
+    '18-month term · 74 weekly payments · loan amount '+money(F.amt,0)
+    +' · payoff amount = loan amount × payoff rate. The schedule Fora sent covers months 1–9; ask for 10–18 to complete it.'
+    +(shifted?' Rates shown are shifted from Fora’s 8.00% quote — confirm before contracting.':'')
+    +' Retention pricing: ineligible.';
 }
-document.getElementById('dlPdf').onclick=function(){
+
+/* ── PDF ──────────────────────────────────────────────────────────────────── */
+document.getElementById('dlAll').onclick=function(){
   var broker=state.view==='broker';
+  var R=rModel(rTermObj()), B=bModel(), F=fModel();
+  var offers=[R,B,F].slice().sort(function(a,b){
+    return (a.months-b.months)||(a.amt-b.amt)||(a.factor-b.factor); });
+  offers.forEach(function(o,i){ o.num=i+1; });
+  var NAVY=[0,47,104], STEEL=[106,115,154];
   var doc=new window.jspdf.jsPDF({unit:'pt',format:'letter',orientation:'landscape'});
-  pdfHead(doc,'Rapid Finance — term loan, weekly (Thu.)   ·   prepared for Oval Ventures',
-    'Requested '+money(state.amt,0)+'   ·   closing cost $0.00'
-    +(broker?('   ·   '+pts(state.pts)+' commission points'):'')
-    +(state.plus2?'   ·   2 weeks added to each term':''));
-  var head=['Term','Amount','Factor','Weekly Payment','Payments','Total Payback','Cost of Capital'];
-  if(broker) head=head.concat(['Buy Factor','Commission']);
-  var body=TERMS.slice().reverse().map(function(t){
-    var r=rModel(t);
-    var row=[r.m+' mo'+(r.capped?' (max)':''), money(r.amt,0), fct(r.factor), money(r.pay),
-             String(r.n), money0(r.payback), money0(r.cost)];
-    if(broker) row=row.concat([fct(r.buy), money0(r.comm)]);
+  doc.setFont('helvetica','bold'); doc.setFontSize(17); doc.setTextColor.apply(doc,NAVY);
+  doc.text('T&R Kitchens', 40, 46);
+  doc.setFont('helvetica','normal'); doc.setFontSize(10.5); doc.setTextColor.apply(doc,STEEL);
+  doc.text('Funding offers — prepared for Oval Ventures', 40, 63);
+  doc.text('Requested amount '+money(state.amt,0)
+    +(broker?('   ·   Rapid '+pts(state.rPts)+' pts / Byzfunder '+pts(state.bPts)+' pts / Fora '+pct(state.fUp)):''), 40, 79);
+
+  var head=['Offer','Term','Lender','Amount','Fees','Net','Total Payback','Weekly','# Pmts','Best Early Payoff'];
+  if(broker) head=head.concat(['Points','Commission']);
+  var body=offers.map(function(o){
+    var row=['Offer '+o.num, o.months+' mo', o.lender, money(o.amt,0),
+             o.fees?('- '+money0(o.fees)):'None', money0(o.net), money0(o.payback),
+             money(o.pay), String(o.n), money0(o.epPayoff)+' (saves '+money0(o.epSave)+')'];
+    if(broker){ row.push(o.lender==='Rapid Finance'?pts(state.rPts):o.lender==='Byzfunder'?pts(state.bPts):pct(state.fUp));
+                row.push(money0(o.comm)); }
     return row;
   });
-  doc.autoTable({ startY:106, head:[head], body:body,
-    styles:{font:'helvetica',fontSize:9.5,cellPadding:6,textColor:[72,82,130]},
-    headStyles:{fillColor:NAVY,textColor:255,fontStyle:'bold',fontSize:9},
+  doc.autoTable({ startY:94, head:[head], body:body,
+    styles:{font:'helvetica',fontSize:9,cellPadding:5,textColor:[72,82,130]},
+    headStyles:{fillColor:NAVY,textColor:255,fontStyle:'bold',fontSize:8.5},
     alternateRowStyles:{fillColor:[251,251,253]},
-    columnStyles:{0:{halign:'left',fontStyle:'bold',textColor:NAVY}},
-    margin:{left:48,right:48},
-    didParseCell:function(d){ if(d.section==='body'&&d.column.index>0) d.cell.styles.halign='right'; } });
-  doc.autoTable({ startY:doc.lastAutoTable.finalY+22,
-    head:[['Early payment amendment — 20% off the fixed fee','Repay within','Fixed Fee','Early Payoff','Client Saves']],
-    body:TERMS.slice().reverse().map(function(t){ var e=epModel(t);
-      return [e.m+' months'+(e.capped?' (max)':''), e.win+' calendar months',
-              money0(e.fee), money0(e.payoff), money0(e.disc)]; }),
-    styles:{font:'helvetica',fontSize:9.5,cellPadding:5.5,textColor:[72,82,130]},
-    headStyles:{fillColor:NAVY,textColor:255,fontStyle:'bold',fontSize:9},
-    alternateRowStyles:{fillColor:[251,251,253]},
-    columnStyles:{0:{halign:'left',fontStyle:'bold',textColor:NAVY}},
-    margin:{left:48,right:48},
-    didParseCell:function(d){ if(d.section==='body'&&d.column.index>0) d.cell.styles.halign='right'; } });
-  var y=doc.lastAutoTable.finalY+24;
-  doc.setFontSize(9); doc.setTextColor.apply(doc,STEEL);
-  [ 'Payback = funding amount x factor rate. Weekly payment = payback / number of payments; the final payment may differ by a few cents.',
-    'Early payoff = funding amount + 80% of the fixed fee, if repaid in full inside the window (calendar months from funding).',
-    'Rows marked (max) are capped at the lender’s limit for that term: 6-month $214,000, 4-month $147,000. Minimum funding $15,001;',
-    'client soft-qualifies to $468,000. Stipulations: driver’s license, voided check, Wayflyer payoff letter (term loan only), and June/July',
-    '2026 statements for the transfer account ending 4449. Proof of ownership waived. Over $150,000 also requires bank transaction history;',
-    'over $250,000 adds the 2025 business tax return with YTD P&L and balance sheet. A $100,000 line of credit is also approved.',
-    'Subject to final underwriting.'
-  ].forEach(function(l,i){ doc.text(l,48,y+i*13); });
-  doc.save((broker?'TR-Kitchens-RapidFinance-broker':'TR-Kitchens-RapidFinance')
-    +'-'+pts(state.pts).replace('.','_')+'pts.pdf');
-};
-document.getElementById('bDlPdf').onclick=function(){
-  var broker=state.view==='broker', o=bModel();
-  var doc=new window.jspdf.jsPDF({unit:'pt',format:'letter'});
-  pdfHead(doc,'Byzfunder — MCA, 2nd position, 52 weekly payments   ·   prepared for Oval Ventures',
-    'Advance '+money(state.adv,0)+'   ·   sell rate '+fct(o.rate)+'   ·   payback '+money0(o.payback)
-    +(broker?('   ·   '+pts(state.bpts)+' points'):''));
-  var terms=[
-    ['Advance amount', money(state.adv,0)],
-    ['Sell rate', fct(o.rate)],
-    ['Total payback', money0(o.payback)],
-    ['Weekly payment', money(o.pay)+'  (52 payments, ~13 months)'],
-    ['Origination fee — '+state.orig.toFixed(2)+'%', '- '+money0(o.origFee)],
-    ['Processing fee', '- '+money(o.procFee,0)],
-    ['Net advance to client', money0(o.net)],
-    ['Cost of capital', money0(o.cost)]
-  ];
-  if(broker){ terms.push(['Buy rate', fct(B_BUY)]);
-              terms.push(['Commission — '+pts(state.bpts)+' points', money0(o.comm)]); }
-  doc.autoTable({ startY:106, head:[['Deal terms','']], body:terms,
-    styles:{font:'helvetica',fontSize:10,cellPadding:6,textColor:[72,82,130]},
-    headStyles:{fillColor:NAVY,textColor:255,fontStyle:'bold',fontSize:9},
-    alternateRowStyles:{fillColor:[251,251,253]},
-    columnStyles:{0:{cellWidth:260,textColor:NAVY},1:{halign:'right',fontStyle:'bold'}},
-    margin:{left:48,right:48} });
-  var head2 = broker ? ['Days','Buy Rate','Upsell','Payoff Rate','Payoff Amount','Client Saves']
-                     : ['Days','Payoff Rate','Payoff Amount','Client Saves'];
-  var body2 = EPD.map(function(row){ var r=bEpd(row);
-    return broker ? ['Day '+r.lo+'-'+r.hi, fct(r.buy), pts(state.bpts), fct(r.sell), money0(r.pre), money0(r.save)]
-                  : ['Day '+r.lo+'-'+r.hi, fct(r.sell), money0(r.pre), money0(r.save)]; });
-  doc.autoTable({ startY:doc.lastAutoTable.finalY+22, head:[head2], body:body2,
-    styles:{font:'helvetica',fontSize:9.5,cellPadding:5.5,textColor:[72,82,130]},
-    headStyles:{fillColor:NAVY,textColor:255,fontStyle:'bold',fontSize:9},
-    alternateRowStyles:{fillColor:[251,251,253]},
-    columnStyles:{0:{halign:'left',fontStyle:'bold',textColor:NAVY}},
-    margin:{left:48,right:48},
-    didParseCell:function(d){ if(d.section==='body'&&d.column.index>0) d.cell.styles.halign='right'; } });
-  var y=doc.lastAutoTable.finalY+22;
-  doc.setFontSize(9); doc.setTextColor.apply(doc,STEEL);
-  [ 'Purchase of future receivables, not a loan: payback = advance x sell rate. No interest and no amortization schedule.',
-    'Origination and processing fees are deducted from the advance; payback is calculated on the full advance.',
-    'Early payment discounts apply to a full payoff inside the tier. Byzfunder caps the upsell at 12 points for EPD eligibility.',
-    'Weekly payment is rounded up to the cent, so the final payment trues down slightly.',
-    'Stips: active driver’s license, voided check, bank VOD, signed contracts, merchant interview, SSN verification.',
-    'Approved August 27, 2026; valid until September 10, 2026. Subject to final underwriting.'
-  ].forEach(function(l,i){ doc.text(l,48,y+i*13); });
-  doc.save((broker?'TR-Kitchens-Byzfunder-broker':'TR-Kitchens-Byzfunder')
-    +'-'+pts(state.bpts).replace('.','_')+'pts.pdf');
-};
-document.getElementById('fDlPdf').onclick=function(){
-  var broker=state.view==='broker', o=fModel(), oc=state.famt<=F_OC_MAX;
-  var doc=new window.jspdf.jsPDF({unit:'pt',format:'letter'});
-  pdfHead(doc,'Fora — 18-month term loan, 74 weekly payments   ·   prepared for Oval Ventures',
-    'Loan amount '+money(state.famt,0)+'   ·   factor '+fct(o.factor)+'   ·   payback '+money0(o.payback)
-    +(broker?('   ·   '+state.fup.toFixed(2)+'% upsell'):''));
-  var terms=[
-    ['Loan amount', money(state.famt,0)],
-    ['Factor rate', fct(o.factor)],
-    ['Total payback', money0(o.payback)],
-    ['Weekly payment', money(o.pay)+'  (74 payments, 18 months)'],
-    ['Origination fee — '+state.forig.toFixed(2)+'%', '- '+money0(o.origFee)],
-    ['Net proceeds to client', money0(o.net)],
-    ['Cost of capital', money0(o.cost)],
-    ['Online checkout', oc?'Eligible at this amount':'Not eligible above '+money(F_OC_MAX,0)]
-  ];
-  if(broker){ terms.push(['Buy rate', fct(F_BUY)]);
-              terms.push(['Commission — '+state.fup.toFixed(2)+'% upsell', money0(o.comm)]); }
-  doc.autoTable({ startY:106, head:[['Deal terms','']], body:terms,
-    styles:{font:'helvetica',fontSize:10,cellPadding:6,textColor:[72,82,130]},
-    headStyles:{fillColor:NAVY,textColor:255,fontStyle:'bold',fontSize:9},
-    alternateRowStyles:{fillColor:[251,251,253]},
-    columnStyles:{0:{cellWidth:260,textColor:NAVY},1:{halign:'right',fontStyle:'bold'}},
-    margin:{left:48,right:48} });
-  doc.autoTable({ startY:doc.lastAutoTable.finalY+22,
-    head:[['Prepayment schedule','Days','Payoff Rate','Payoff Amount','Client Saves']],
-    body:F_PREPAY.map(function(row){ var r=fPrepay(row);
-      return ['Month '+r.mo, 'Day '+r.lo+'-'+r.hi, fct(r.rate), money0(r.payback), money0(r.save)]; }),
-    styles:{font:'helvetica',fontSize:9.5,cellPadding:5.5,textColor:[72,82,130]},
-    headStyles:{fillColor:NAVY,textColor:255,fontStyle:'bold',fontSize:9},
-    alternateRowStyles:{fillColor:[251,251,253]},
-    columnStyles:{0:{halign:'left',fontStyle:'bold',textColor:NAVY}},
-    margin:{left:48,right:48},
-    didParseCell:function(d){ if(d.section==='body'&&d.column.index>0) d.cell.styles.halign='right'; } });
-  var y=doc.lastAutoTable.finalY+22;
-  doc.setFontSize(9); doc.setTextColor.apply(doc,STEEL);
-  [ 'Payback = loan amount x factor rate. The origination fee is charged on top and comes out of the funded proceeds.',
-    'Pay off inside a month band and the balance settles at that band’s rate. Months 1-5 hold the same rate.',
-    'The schedule Fora sent covers months 1-9; ask for months 10-18 to complete it.'
-      +(broker&&state.fup!==F_UPSELL?' Rates shown are shifted from Fora’s 8.00% quote - confirm before contracting.':''),
-    oc ? 'At '+money(state.famt,0)+' the file is online-checkout eligible: driver’s license and voided check are not required.'
-       : 'Above '+money(F_OC_MAX,0)+' online checkout is not eligible - e-sign or paper contracts, and the license and voided check are required.',
-    'Stips: business bank statements (3 months), most recent tax return, YTD P&L, YTD balance sheet, merchant interview, recorded funding call.',
-    'Offer pending: needs a merchant-associated email address and the Wayflyer payoff letter. Retention pricing ineligible.'
-  ].forEach(function(l,i){ doc.text(l,48,y+i*13); });
-  doc.save((broker?'TR-Kitchens-Fora-broker':'TR-Kitchens-Fora')
-    +'-'+state.fup.toFixed(2).replace('.','_')+'up.pdf');
-};
-document.getElementById('cDlPdf').onclick=function(){
-  var broker=state.view==='broker', amt=state.camt, t=cmpTerm();
-  var R=rModel(t,amt), F=fModel(amt), EP=epModel(t,amt), FP=fPrepay(F_PREPAY[0],amt);
-  var doc=new window.jspdf.jsPDF({unit:'pt',format:'letter'});
-  pdfHead(doc,'Two term loan options side by side   ·   prepared for Oval Ventures',
-    'Funding amount '+money(amt,0)+'   ·   Rapid '+t.m+'-month vs Fora 18-month'
-    +(broker?('   ·   '+pts(state.pts)+' pts / '+state.fup.toFixed(2)+'% upsell'):''));
-  var body=[
-    ['Funding amount', money(R.amt,0), money(F.amt,0)],
-    ['Fees deducted at funding', 'None', '- '+money0(F.origFee)],
-    ['Net proceeds to client', money0(R.amt), money0(F.net)],
-    ['Factor rate', fct(R.factor), fct(F.factor)],
-    ['Total payback', money0(R.payback), money0(F.payback)],
-    ['Cost of capital', money0(R.cost), money0(round2(F.cost+F.origFee))],
-    ['Term', t.m+' months', '18 months'],
-    ['Weekly payment', money(R.pay)+' x'+R.n, money(F.pay)+' x'+F.n],
-    ['Best early payoff', money0(EP.payoff)+' (within '+EP.win+' mo)', money0(FP.payback)+' (within 5 mo)'],
-    ['What that saves', money0(EP.disc), money0(FP.save)],
-    ['Contracts', 'E-sign or paper', amt<=F_OC_MAX?'Online checkout eligible':'E-sign or paper']
-  ];
-  if(broker){ body.push(['Buy rate', fct(R.buy), fct(F_BUY)]);
-              body.push(['Commission', money0(R.comm), money0(F.comm)]); }
-  doc.autoTable({ startY:106, head:[['','Rapid Finance','Fora']], body:body,
-    styles:{font:'helvetica',fontSize:9.5,cellPadding:6,textColor:[72,82,130]},
-    headStyles:{fillColor:NAVY,textColor:255,fontStyle:'bold',fontSize:9,halign:'center'},
-    alternateRowStyles:{fillColor:[251,251,253]},
-    columnStyles:{0:{cellWidth:200,textColor:NAVY},
-                  1:{halign:'center',fontStyle:'bold'},2:{halign:'center',fontStyle:'bold'}},
-    margin:{left:48,right:48} });
-  var y=doc.lastAutoTable.finalY+24;
-  doc.setFontSize(9); doc.setTextColor.apply(doc,STEEL);
-  [ 'Both are term loans with weekly payments: payback = amount x factor. No interest calculation on either.',
-    'Rapid has no closing or origination cost. Fora deducts a '+state.forig.toFixed(2)+'% origination fee at funding,',
-    'so an identical headline amount does not put identical money in the account.',
-    'Rapid discounts 20% of the fixed fee on a full payoff inside its window. Fora settles the whole balance at a',
-    'month-band rate, and its first five months hold the same rate.',
-    'Payment counts differ ('+R.n+' vs '+F.n+'), which moves the weekly payment on its own.',
-    'Byzfunder’s MCA is a different product (2nd position) and is not compared here. Subject to final underwriting.'
-  ].forEach(function(l,i){ doc.text(l,48,y+i*13); });
-  doc.save((broker?'TR-Kitchens-Rapid-vs-Fora-broker':'TR-Kitchens-Rapid-vs-Fora')+'.pdf');
+    columnStyles:{0:{fontStyle:'bold',textColor:NAVY},2:{fontStyle:'bold'}},
+    margin:{left:40,right:40},
+    didParseCell:function(d){ if(d.section==='body'&&d.column.index>2) d.cell.styles.halign='right'; } });
+
+  var y=doc.lastAutoTable.finalY+20;
+  function sched(title,head2,body2){
+    if(y>430){ doc.addPage(); y=50; }
+    doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor.apply(doc,NAVY);
+    doc.text(title,40,y); y+=8;
+    doc.autoTable({ startY:y, head:[head2], body:body2,
+      styles:{font:'helvetica',fontSize:8.5,cellPadding:4,textColor:[72,82,130]},
+      headStyles:{fillColor:NAVY,textColor:255,fontStyle:'bold',fontSize:8},
+      alternateRowStyles:{fillColor:[251,251,253]},
+      columnStyles:{0:{fontStyle:'bold',textColor:NAVY}},
+      margin:{left:40,right:40},
+      didParseCell:function(d){ if(d.section==='body'&&d.column.index>0) d.cell.styles.halign='right'; } });
+    y=doc.lastAutoTable.finalY+18;
+  }
+  sched('Rapid Finance — early payment amendment (20% off the fixed fee)',
+    ['Term','Repay within','Amount','Fixed Fee','Early Payoff','Saves'],
+    TERMS.slice().reverse().map(function(t){ var r=rModel(t);
+      return [r.months+' mo', r.epWin+' calendar months', money(r.amt,0),
+              money0(r.cost), money0(r.epPayoff), money0(r.epSave)]; }));
+  sched('Byzfunder — early payment discounts',
+    ['Days','Payoff Rate','Payoff Amount','Saves'],
+    EPD.map(function(row){ var r=bEpd(row);
+      return ['Day '+r.lo+'-'+r.hi, fct(r.sell), money0(r.pre), money0(r.save)]; }));
+  sched('Fora — prepayment schedule',
+    ['Month','Days','Payoff Rate','Payoff Amount','Saves'],
+    F_PREPAY.map(function(row){ var r=fPrepay(row);
+      return ['Month '+r.mo, 'Day '+r.lo+'-'+r.hi, fct(r.rate), money0(r.payback), money0(r.save)]; }));
+
+  if(y>420){ doc.addPage(); y=50; }
+  doc.setFontSize(8.5); doc.setTextColor.apply(doc,STEEL);
+  [ 'Payback = amount x factor / sell rate. None of the three calculates interest, so there is no amortization schedule.',
+    'Rapid has no closing or origination cost. Fora deducts an origination fee at funding. Byzfunder deducts an origination fee plus a flat $995 processing fee.',
+    'Payment counts differ by lender (Rapid 78 on an 18-month, Fora 74, Byzfunder 52 over ~13 months), which moves the weekly payment on its own.',
+    'Early payoff works three ways: Rapid discounts 20% of the fixed fee inside a term-scaled window; Fora settles at a month-band rate (months 1-5 equal);',
+    'Byzfunder settles at a day-band rate climbing every 30 days. All require a payoff in full inside the window.',
+    'Byzfunder is fixed at 52 weeks here - their portal allows 16-52 and a shorter term prices lower, but that curve was not in the approval.',
+    'Only Fora’s 18-month was quoted, and its schedule covers months 1-9. All three subject to final underwriting and the stipulations listed.'
+  ].forEach(function(l,i){ doc.text(l,40,y+i*12); });
+  doc.save((broker?'TR-Kitchens-3-Offers-broker':'TR-Kitchens-3-Offers')+'.pdf');
 };
 
 render();
