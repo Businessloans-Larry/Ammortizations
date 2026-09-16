@@ -224,7 +224,7 @@ tbody td .sml{display:block;font-size:10.5px;font-weight:400;color:var(--bl-stee
     <div class="tablehead">
       <div class="tier-note">
         <b>The rate is fixed on this approval</b> — buy rate and sell rate are the same, so there is no upsell to move.
-        Two rates per term: the <b>higher rate buys 100% prepayment eligibility</b>, the lower one is 25%. The 6-month offer is 25% only.
+        Each term is quoted twice, once at <b>100% prepayment eligibility</b> and once at <b>25%</b>. The 6-month offer is 25% only.
         Approved to <b>$135,000</b> on every term.
       </div>
     </div>
@@ -534,13 +534,13 @@ function render(){
     + 'a row shows <b>cap</b> when the slider is above that term’s ceiling.';
 
   /* ONDECK */
-  head('oThr',[{t:'Term'},{t:'Prepay Eligibility'},{t:'Amount'},{t:'Rate', n:'buy = sell'},
+  head('oThr',[{t:'Term'},{t:'Prepayment Eligibility'},{t:'Amount'},{t:'Rate', n:'buy = sell'},
     {t:'Weekly Payment'},{t:'Payments', n:'computed'},{t:'Total Payback'},{t:'Cost of Capital'}]);
   body('oTb', ONDECK.slice().reverse().map(function(t){
     var r=oModel(t);
     return [
       {h:'<div class="termcell">'+r.m+' months</div>'},
-      {h:r.pp+(r.pp==='100%'?' <span class="pill">higher rate</span>':' <span class="pill grey">lower rate</span>')},
+      {t:r.pp},
       {h:money(r.amt,0)+(r.capped?' <span class="pill">cap</span>':'')},
       {t:fct(r.rate), c:'factor'},
       {t:money(r.pay), c:'pay'},
@@ -551,7 +551,7 @@ function render(){
   }));
   document.getElementById('oFoot').innerHTML =
     'OnDeck · weekly pay · approved to $135,000 on every term · <b>rate is fixed — no upsell on this approval</b>. '
-    + 'The 100% and 25% rows are the same term priced two ways; 6 months is offered at 25% prepay only. '
+    + 'Each term is quoted at both 100% and 25% prepayment eligibility; 6 months is offered at 25% only. '
     + 'Payment counts are computed as term × 52 ÷ 12 — confirm against OnDeck’s schedule.';
 
   /* PEAC */
@@ -632,7 +632,7 @@ document.getElementById('dlPdf').onclick=function(){
     'Rapid: each term carries its own approved amount (9 mo $71,000, 8 mo $65,000, 6 mo $50,000, 4 mo $35,000); early payoff is Rapid’s',
     'amendment - repay in full within 2 calendar months (4-6 mo) or 3 (7-9 mo) and 20% of the fixed fee is discounted. Stips: July and August',
     'statements (account ending 1000), driver’s license, voided check, proof of time in business, Everest Business Funding payoff.',
-    'OnDeck: buy = sell, no upsell; higher rate per term carries 100% prepayment, lower is 25%; 6 months is 25% only; no stipulations,',
+    'OnDeck: buy = sell, no upsell; each term is quoted at both 100% and 25% prepayment eligibility, 6 months at 25% only; no stipulations,',
     '5-minute online checkout; payment counts computed as term x 52 / 12.',
     'PEAC: origination fee shown deducted at funding (2.5% weekly, 3% monthly, 4% on 100% prepayment). Stips: voided check, driver’s license,',
     'month-to-date business bank statement, zero balance letter for Intuit. Approval expires October 16, 2026.'
