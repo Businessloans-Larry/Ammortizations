@@ -294,7 +294,7 @@ const tabOf = k => Object.keys(SUBLENDERS).find(t => SUBLENDERS[t].some(m=>m.key
 
 const state = {
   lender:DEFAULT_LENDER, funded:300000, factor:1.25, term:18,
-  feePct:0, start:null, tier:"100", borrower:"", locFreq:"weekly"
+  feePct:0, start:null, tier:"100", borrower:"", locFreq:"monthly"
 };
 
 /* ---------- helpers ---------- */
@@ -354,12 +354,16 @@ function buildSchedule(funded, payment, n, rOverride){
 function computeModel(){
   const L = LENDERS[state.lender];
   const funded = state.funded, term = state.term;
-  const n = Math.max(1, L.count(term));
+  // OnDeck LOC amortizes at the SELECTED frequency (monthly or weekly); OnDeck computes it monthly.
+  const cadence = (state.lender === "ondeck_loc") ? state.locFreq : L.cadence;
+  const n = Math.max(1, (state.lender === "ondeck_loc")
+      ? (cadence === "monthly" ? Math.round(term) : Math.round(term*52/12))
+      : L.count(term));
   const mode = L.rateMode || "factor";
   let payback, payment, s;
   if(mode === "apr"){
     // APR-amortizing (OnDeck LOC): periodic rate = APR ÷ payments-per-year; standard amortization payment.
-    const r = ((Number(state.factor)||0)/100) / FREQ[L.cadence].perYear;
+    const r = ((Number(state.factor)||0)/100) / FREQ[cadence].perYear;
     const pmtRaw = (r<=0 ? funded/n : funded*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1));
     payment = round2(pmtRaw);
     payback = round2(pmtRaw * n);
@@ -377,7 +381,7 @@ function computeModel(){
   let cum = 0;
   for(let i=0;i<rows.length;i++){ cum = round2(cum + rows[i].interest); rows[i].cumInt = cum; } // interest accrued through this row
   rows.forEach(row=> row.rtr = round2(row.balance + row.remainingInterest));
-  return { payback, financeCharge, n, payment, r: s.r, rows };
+  return { payback, financeCharge, n, payment, r: s.r, rows, cadence };
 }
 
 /* Per-lender payoff convention, matching each lender's own documentation:
@@ -398,7 +402,7 @@ function render(){
   MODEL = computeModel();
   const m = MODEL;
   const feeAmt = round2(state.feePct/100 * state.funded);
-  const fw = FREQ[L.cadence];
+  const fw = FREQ[m.cadence];
   const base = L.payoffBase;
   const baseLabel = base === "remaining" ? "Balance" : "Total Payback";
 
@@ -451,7 +455,7 @@ function downloadPDF(tierKey){
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({unit:"pt", format:"letter"});
   const W = doc.internal.pageSize.getWidth();
-  const fw = FREQ[L.cadence];
+  const fw = FREQ[m.cadence];
 
   doc.setFillColor(0,47,104); doc.rect(0,0,W,74,"F");
   doc.setTextColor(255,255,255); doc.setFont("times","normal"); doc.setFontSize(20);
@@ -519,13 +523,8 @@ function renderLocPay(m){
     box.style.display="flex"; return;
   }
   if(state.lender !== "ondeck_loc"){ box.style.display="none"; return; }
-  var apr=(Number(state.factor)||0)/100;
-  var nw=m.n, pw=m.payment;
-  var rm=apr/12, nm=state.term;
-  var pm=round2(rm<=0 ? state.funded/nm : state.funded*rm*Math.pow(1+rm,nm)/(Math.pow(1+rm,nm)-1));
   var monthly = state.locFreq==="monthly";
-  var p = monthly?pm:pw, nn = monthly?nm:nw, w = monthly?"month":"week";
-  id("locPayV").textContent = fmt$(p) + " / " + w + "  \u00b7  " + nn + " payments";
+  id("locPayV").textContent = fmt$(m.payment) + " / " + (monthly?"month":"week") + "  \u00b7  " + m.n + " payments";
   id("locFreqSeg").innerHTML =
     '<button data-f="weekly" class="'+(monthly?"":"on")+'">Weekly</button>'+
     '<button data-f="monthly" class="'+(monthly?"on":"")+'">Monthly</button>';
