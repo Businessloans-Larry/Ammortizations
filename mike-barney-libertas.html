@@ -277,7 +277,7 @@ tbody td .sml{display:block;font-size:10.5px;font-weight:400;color:var(--bl-stee
    2% orig $7,000 → net $343,000. Weekly rounds UP to the cent.
    Prepay ladder (printed for Offer 1): buy 1.07 + 0.02/mo through mo 6, with 0.05 commission
    built in at 8 offer pts → $392,000 … $427,000.
-   ASSUMPTION: prepay commission = min(offer points, 5). */
+   CONFIRMED 10/5 by John Bellavia (Libertas): prepay capped at 5 pts on term loans (WebBank rule) → prepay pts = min(offer pts, 5). */
 var AMT_MIN=100000, AMT_MAX=350000, OFEE=0.02, PP_CAP=5;
 var OFFERS=[{k:1,m:18,buy:1.34,n:78},{k:2,m:17,buy:1.32,n:74}];
 var LADDER=[1.07,1.09,1.11,1.13,1.15,1.17];
@@ -331,11 +331,11 @@ function render(){
 
   var shifted = ppPts()!==PP_CAP;
   document.getElementById('ppNote').innerHTML='Pay the loan off in full inside a month and the balance is the <b>loan amount × that month\'s payoff rate</b>, not the full payback. '+
-    'Libertas built <b>5 points</b> into the ladder when the offer carried 8, so prepay commission is capped at 5. '+
+    'Libertas built <b>5 points</b> into the ladder when the offer carried 8, so prepay commission is capped at 5 (WebBank rule on term loans, confirmed by Libertas). '+
     (shifted?'<span class="pill">shifted</span> At '+f2(state.pts)+' points the ladder carries '+f2(ppPts())+', so every month drops '+f2((PP_CAP-ppPts())/100)+' from the printed rates.'
             :'At '+f2(state.pts)+' points the ladder sits at Libertas\' printed rates (1.12 → 1.22).');
   document.getElementById('ppFoot').innerHTML='Libertas printed: month 1 at <b>$392,000</b> through month 6 at <b>$427,000</b> on $350,000. After month 6 there is no discount; the full payback applies. '+
-    '<b>Assumption:</b> the prepay commission tracks your points once you go below 5 (min of your points and 5), on the same 1 point = 0.01 rule. Confirm with Libertas if you price under 5.';
+    '<b>Confirmed by Libertas (John Bellavia, 10/5):</b> prepay is capped at 5 points on term loans, a WebBank rule. Price the offer anywhere from 5 to 8 points and the payoffs stay put; below 5 they drop 0.01 per point.';
   document.getElementById('needCt').textContent=document.querySelectorAll('#needList li:not(.close)').length+' + contract';
 }
 
