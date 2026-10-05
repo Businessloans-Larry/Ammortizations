@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mike Barney's Super Sports, Inc. · Libertas Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<style>
+:root{
+  --bl-green:#00CD67; --bl-cyan:#00CDEF; --bl-navy:#002F68;
+  --bl-navy-900:#1A2763; --bl-slate:#485282; --bl-steel:#6A739A;
+  --bl-silver:#A3A9C1; --bl-line:#D1D4E0; --bl-pale:#E8E9EF;
+  --bl-bg:#F6F6F9; --bl-white:#FFFFFF; --bl-gold:#FFC858; --bl-error:#FB5038;
+  --font-display:'DM Serif Display',Georgia,serif;
+  --font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --radius:16px; --radius-sm:8px;
+  --shadow-md:0 4px 12px rgba(26,39,99,.10);
+  --shadow-lg:0 8px 24px rgba(26,39,99,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-body);background:var(--bl-bg);color:var(--bl-slate);line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 16px 80px}
+
+.topbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+.brand{display:flex;align-items:center;gap:14px}
+.brand svg{height:34px;width:auto;display:block}
+.brand .divider{width:1px;height:30px;background:var(--bl-line)}
+.brand .lender{font-family:var(--font-display);color:var(--bl-navy);font-size:22px;line-height:1}
+.brand .lender small{display:block;font-family:var(--font-body);font-size:11px;letter-spacing:.10em;text-transform:uppercase;color:var(--bl-steel);margin-top:4px;font-weight:600}
+
+h1.page{font-family:var(--font-display);color:var(--bl-navy);font-size:34px;font-weight:400;margin:18px 0 2px}
+.sub{color:var(--bl-steel);font-size:14px;margin-bottom:6px}
+.sub b{color:var(--bl-navy);font-weight:700}
+.validline{font-size:12px;color:var(--bl-steel);margin-bottom:22px}
+
+.amtpanel{background:var(--bl-navy);border-radius:var(--radius);padding:24px 28px;box-shadow:var(--shadow-lg);margin-bottom:26px;display:grid;grid-template-columns:1fr 1fr;gap:24px 40px;align-items:start}
+.amtpanel .lbl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9fb2d6;margin-bottom:10px}
+.amtpanel .row{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:12px}
+.amtpanel .numbox{width:170px;text-align:right;font-family:var(--font-display);font-size:24px;color:#fff;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.28);border-radius:var(--radius-sm);padding:8px 12px}
+.amtpanel .numbox.sm{width:110px}
+.amtpanel .numbox:focus{outline:none;border-color:var(--bl-green)}
+.amtpanel input[type=range]{background:rgba(255,255,255,.18)}
+.amtpanel .hint{font-size:11.5px;color:#9fb2d6;margin-top:10px}
+.amtpanel .hint b{color:#fff}
+.amtpanel .presets button{background:transparent;border-color:rgba(255,255,255,.3);color:#fff}
+.amtpanel .presets button.on{background:var(--bl-green);border-color:var(--bl-green);color:#fff}
+
+input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:999px;background:var(--bl-pale);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--bl-white);border:3px solid var(--bl-green);cursor:pointer;box-shadow:var(--shadow-md)}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.presets button{font-family:var(--font-body);font-size:11.5px;font-weight:600;color:var(--bl-navy);background:var(--bl-white);border:1.5px solid var(--bl-line);border-radius:999px;padding:6px 12px;cursor:pointer;transition:.15s}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.kpi{background:var(--bl-white);border:1px solid var(--bl-pale);border-radius:var(--radius-sm);padding:14px 16px;box-shadow:var(--shadow-md)}
+.kpi .n{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--bl-steel)}
+.kpi .v{font-family:var(--font-display);font-size:24px;color:var(--bl-navy);margin-top:4px}
+.kpi .s{font-size:11px;color:var(--bl-steel);margin-top:2px}
+.kpi.bro{border-color:rgba(0,205,239,.45);background:linear-gradient(0deg,rgba(0,205,239,.05),rgba(0,205,239,.05)),#fff}
+
+.panel{background:var(--bl-white);border:1px solid var(--bl-pale);border-radius:var(--radius);padding:26px 28px;box-shadow:var(--shadow-md);margin-bottom:24px}
+.panel h2{font-family:var(--font-display);color:var(--bl-navy);font-size:22px;font-weight:400;margin-bottom:6px}
+.panel h2.tight{margin-bottom:18px}
+
+.tablecard{background:var(--bl-white);border:1px solid var(--bl-pale);border-radius:var(--radius);box-shadow:var(--shadow-md);overflow:hidden;margin-bottom:24px}
+.tablehead{padding:22px 26px 16px}
+.tablehead h2{font-family:var(--font-display);color:var(--bl-navy);font-size:22px;font-weight:400;margin-bottom:6px}
+.tablehead .tier-note{font-size:12.5px;color:var(--bl-steel);max-width:860px}
+.tablehead .tier-note b{color:var(--bl-navy)}
+.tablescroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:820px}
+thead th{background:var(--bl-navy);color:#fff;font-weight:600;text-align:right;padding:13px 11px;white-space:nowrap;font-size:11.5px;letter-spacing:.02em}
+thead th:first-child{text-align:left}
+thead th.broker{background:#013a80}
+thead th .thnote{display:block;font-weight:400;font-size:10px;color:#9fb2d6;letter-spacing:0;margin-top:3px}
+tbody td{text-align:right;padding:13px 11px;border-bottom:1px solid var(--bl-pale);white-space:nowrap;color:var(--bl-slate);font-variant-numeric:tabular-nums}
+tbody td:first-child{text-align:left;font-variant-numeric:normal;color:var(--bl-navy);font-weight:700}
+tbody tr:nth-child(even){background:#fbfbfd}
+tbody td.factor{color:var(--bl-navy);font-weight:700}
+tbody td.pay{color:var(--bl-navy);font-weight:600}
+tbody td.bro{background:rgba(0,205,239,.06);color:var(--bl-navy);font-weight:600}
+tbody td.save{color:#00964b;font-weight:600}
+tbody td .sml{display:block;font-size:10.5px;font-weight:400;color:var(--bl-steel);margin-top:2px}
+.pill{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:3px 7px;border-radius:999px;background:var(--bl-gold);color:#5a3d00;margin-left:6px;vertical-align:middle}
+.foot{padding:14px 26px;font-size:11.5px;color:var(--bl-steel);border-top:1px solid var(--bl-pale);background:var(--bl-bg);line-height:1.7}
+.foot b{color:var(--bl-navy)}
+
+.callout{display:flex;gap:12px;align-items:flex-start;background:#FFF8E8;border:1px solid var(--bl-gold);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:24px}
+.callout .tx{font-size:12.5px;color:#5a3d00}
+.callout .tx b{color:#3d2900}
+
+.dlgroup{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
+.btn{font-family:var(--font-body);font-weight:600;font-size:13px;border:none;border-radius:var(--radius-sm);padding:11px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:.15s;background:var(--bl-white);color:var(--bl-navy);border:1.5px solid var(--bl-navy)}
+.btn:hover{background:var(--bl-navy);color:#fff}
+
+.stipgrid{display:grid;grid-template-columns:1.35fr 1fr;gap:26px 38px}
+.stipgrid h3{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--bl-navy);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--bl-pale)}
+.stipgrid ol,.stipgrid ul{list-style:none}
+.stipgrid li{font-size:13px;padding:7px 0 7px 24px;position:relative;color:var(--bl-slate)}
+.stipgrid li:before{content:"";position:absolute;left:2px;top:14px;width:9px;height:9px;border-radius:50%;background:var(--bl-gold)}
+.stipgrid li.got:before{background:var(--bl-green)}
+.stipgrid li.close:before{background:var(--bl-silver)}
+.stipgrid li b{color:var(--bl-navy);font-weight:600}
+.stipgrid li small{display:block;color:var(--bl-steel);font-size:11.5px;line-height:1.55;margin-top:1px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:18px;font-size:11.5px;color:var(--bl-steel)}
+.legend span{display:flex;align-items:center;gap:7px}
+.legend i{width:9px;height:9px;border-radius:50%;display:block}
+
+.notes{font-size:12px;color:var(--bl-steel);line-height:1.75}
+.notes b{color:var(--bl-navy)}
+.notes ul{list-style:none}
+.notes li{padding:4px 0 4px 16px;position:relative}
+.notes li:before{content:"•";position:absolute;left:2px;color:var(--bl-silver)}
+
+@media(max-width:900px){
+  .amtpanel,.stipgrid{grid-template-columns:1fr}
+  .kpis{grid-template-columns:1fr 1fr}
+  h1.page{font-size:27px}
+  .amtpanel{padding:20px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 352.47 153.57" role="img" aria-label="BusinessLoans.com"><defs><style>.cls-1{fill:#002f68}.cls-2{fill:#00cd67}.cls-3{fill:#00cdef}.cls-4{fill:#60aff0}</style></defs><g><path class="cls-1" d="M22.92,31.64H16.77V42.82h6.15A11.74,11.74,0,1,1,11.18,54.56h0V25.81a10,10,0,0,0-10-10H0V54.56H0A22.92,22.92,0,1,0,22.92,31.64Z"/><path class="cls-2" d="M18,26.05H16.77V24.87a10,10,0,0,1,10-10H28v1.18A10,10,0,0,1,18,26.05Z"/><path class="cls-3" d="M14,0l-.83.83a10,10,0,0,0,0,14.15l.83.83.84-.83a10,10,0,0,0,0-14.15L14,0Z"/><path class="cls-1" d="M92.24,77H81.32V72.84a15.36,15.36,0,0,1-11.18,4.64,14.47,14.47,0,0,1-10.58-4C56,69.91,55,65.7,55,60.8V32.16H66.18V59.25c0,6.11,3.87,8.17,7.4,8.17s7.48-2.06,7.48-8.17V32.16H92.24Z"/><path class="cls-1" d="M138.42,36.89l-6.88,7c-2.58-2.33-6.45-3-10.4-3-4.48,0-6.37,2.06-6.37,4.3s1.29,3.52,4.65,3.87l7,.68c8.86.86,13.33,5.51,13.33,13.16,0,9.89-8.43,14.62-19,14.62-7.05,0-13.33-.77-19.09-6.45L109,63.72c3.61,3.7,8.51,4.22,11.95,4.22,3.87,0,7.92-1.29,7.92-4.65,0-2.23-1.12-3.78-4.73-4.13l-7.06-.68C109,57.7,104,54.18,104,45.92c0-9.37,8.17-14.28,17.29-14.28C128.36,31.64,134.12,32.93,138.42,36.89Z"/><path class="cls-1" d="M161.73,24.51H150.29V15.39h11.44ZM161.64,77H150.46V33.45h11.18Z"/><path class="cls-1" d="M208.08,35.6c3.61,3.7,4.56,7.83,4.56,12.73V77H201.46V49.88c0-6.11-3.79-8.17-7.4-8.17s-7.48,2.06-7.48,8.17V77H175.4V32.16h10.92v4.13a15.33,15.33,0,0,1,11.18-4.65C202,31.64,205.59,33,208.08,35.6Z"/><path class="cls-1" d="M262.78,53.32v4.73h-28c0,5.84,3.44,10,9.8,10,4.91,0,7.31-1.46,10.07-4.21l6.88,6.62c-4.56,4.64-9,7-17,7-10.67,0-20.73-4.81-20.73-23,0-14.62,7.91-22.88,19.52-22.88C255.72,31.64,262.78,40.59,262.78,53.32Zm-27.09-7.74a10.89,10.89,0,0,0-.95,4.81h16.94a10.89,10.89,0,0,0-.94-4.81,8.41,8.41,0,0,0-15.05,0Z"/><path class="cls-1" d="M306.72,36.89l-6.88,7c-2.58-2.33-6.45-3-10.4-3-4.48,0-6.37,2.06-6.37,4.3s1.29,3.52,4.65,3.87l7,.68c8.86.86,13.33,5.51,13.33,13.16,0,9.89-8.43,14.62-19,14.62-7,0-13.33-.77-19.09-6.45l7.31-7.31c3.61,3.7,8.51,4.22,11.95,4.22,3.87,0,7.92-1.29,7.92-4.65,0-2.23-1.12-3.78-4.73-4.13l-7.06-.68c-8.08-.78-13.07-4.3-13.07-12.56,0-9.37,8.17-14.28,17.29-14.28C296.66,31.64,302.42,32.93,306.72,36.89Z"/><path class="cls-1" d="M351.1,36.89l-6.88,7c-2.58-2.33-6.45-3-10.41-3-4.47,0-6.36,2.06-6.36,4.3s1.29,3.52,4.64,3.87l7.05.68c8.86.86,13.33,5.51,13.33,13.16,0,9.89-8.43,14.62-19,14.62-7.06,0-13.33-.77-19.09-6.45l7.3-7.31c3.62,3.7,8.52,4.22,12,4.22,3.87,0,7.91-1.29,7.91-4.65,0-2.23-1.12-3.78-4.73-4.13l-7.05-.68c-8.09-.78-13.07-4.3-13.07-12.56,0-9.37,8.17-14.28,17.28-14.28C341,31.64,346.8,32.93,351.1,36.89Z"/><path class="cls-4" d="M24.73,139.55c0,2.66,1.12,4,4,4H33v9.46H26.62c-9.2,0-13.07-6.36-13.07-12.81V91.82H24.73Z"/><path class="cls-4" d="M73.32,148.06c-2.84,2.93-7.31,5.51-13.93,5.51s-11-2.58-13.84-5.51c-4-4.3-5.08-9.37-5.08-17.46s1-13.07,5.08-17.37c2.83-2.92,7.22-5.5,13.84-5.5s11.09,2.49,13.93,5.5c4,4.3,5.08,9.29,5.08,17.37S77.45,143.85,73.32,148.06Zm-8.68-28.29a7.07,7.07,0,0,0-5.25-2,7,7,0,0,0-5.16,2c-2.32,2.24-2.58,6.28-2.58,10.83s.26,8.69,2.58,10.93a7,7,0,0,0,5.16,2,7.07,7.07,0,0,0,5.25-2c2.32-2.24,2.58-6.28,2.58-10.93S67,122,64.64,119.77Z"/><path class="cls-4" d="M124.23,123.55v29.5H113.31v-3.87c-3,3-5.84,4.3-11,4.3s-8.86-1.38-11.44-4a14.33,14.33,0,0,1-3.7-10.06c0-7.13,4.9-13,15.48-13h10.4v-2.24c0-4.9-2.4-7-8.34-7-4,0-6.19,1.12-8.6,3.87l-7-7c4.39-4.81,8.6-6.36,16.08-6.36C117.78,107.73,124.23,113.06,124.23,123.55Zm-19.69,10.58c-4.47,0-6.62,1.81-6.62,5.16,0,3.1,2.15,5.07,6.79,5.07,2.76,0,4.73-.34,6.62-2.15,1.29-1.11,1.72-2.83,1.72-5.67v-2.41Z"/><path class="cls-4" d="M170.24,111.69c3.62,3.69,4.56,7.82,4.56,12.72v28.64H163.62V126c0-6.1-3.78-8.17-7.39-8.17s-7.49,2.07-7.49,8.17v27.09H137.56v-44.8h10.93v4.12a15.34,15.34,0,0,1,11.18-4.64C164.14,107.73,167.75,109.11,170.24,111.69Z"/><path class="cls-4" d="M220.47,113l-6.88,7c-2.58-2.32-6.45-3-10.41-3-4.47,0-6.36,2.07-6.36,4.3s1.29,3.53,4.64,3.87l7,.69c8.86.86,13.33,5.5,13.33,13.16,0,9.89-8.42,14.62-19,14.62-7.05,0-13.33-.78-19.09-6.45l7.31-7.31c3.61,3.69,8.51,4.21,11.95,4.21,3.87,0,7.91-1.29,7.91-4.64,0-2.24-1.12-3.79-4.73-4.13l-7.05-.69c-8.08-.77-13.07-4.3-13.07-12.55,0-9.38,8.17-14.28,17.28-14.28C210.41,107.73,216.17,109,220.47,113Z"/></g></svg>
+      <div class="divider"></div>
+      <div class="lender">Libertas Funding<small>Term loan through WebBank · weekly pay</small></div>
+    </div>
+  </div>
+
+  <h1 class="page">Broker Pricing Calculator</h1>
+  <div class="sub"><b>Mike Barney's Super Sports, Inc.</b> &nbsp;·&nbsp; dba Mike Barney Nissan &nbsp;·&nbsp; Amherst, NY &nbsp;·&nbsp; owner Joseph Caldarelli (90%)</div>
+  <div class="validline">Libertas approval dated Oct 5, 2026 · soft offer pending stips and merchant interview · stips due within 21 days (by <b>Oct 26, 2026</b>) or the offer expires</div>
+
+  <div class="amtpanel">
+    <div>
+      <div class="lbl">Loan amount</div>
+      <div class="row">
+        <input id="amtR" type="range" min="100000" max="350000" step="5000" />
+        <input class="numbox" id="amtN" type="text" inputmode="numeric" />
+      </div>
+      <div class="presets" id="amtPresets">
+        <button data-a="350000">$350,000 · max</button>
+        <button data-a="300000">$300,000</button>
+        <button data-a="250000">$250,000</button>
+        <button data-a="200000">$200,000</button>
+        <button data-a="100000">$100,000 · min</button>
+      </div>
+      <div class="hint">Approved to <b>$350,000</b> on both terms. WebBank minimum is <b>$100,000</b> and 12 months; below that Libertas would re-paper it as an MCA.</div>
+    </div>
+    <div>
+      <div class="lbl">Commission points</div>
+      <div class="row">
+        <input id="ptsR" type="range" min="0" max="8" step="0.25" />
+        <input class="numbox sm" id="ptsN" type="text" inputmode="decimal" />
+      </div>
+      <div class="presets" id="ptsPresets">
+        <button data-p="8">8.00 · as issued</button>
+        <button data-p="6">6.00</button>
+        <button data-p="5">5.00</button>
+        <button data-p="3">3.00</button>
+        <button data-p="0">0.00 · buy</button>
+      </div>
+      <div class="hint">1 point = <b>0.01</b> on the rate. Buy rates: Offer 1 <b>1.34</b>, Offer 2 <b>1.32</b>. The prepay ladder moves with these points (see below).</div>
+    </div>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="dlgroup">
+    <button class="btn" id="dlPdf">Download as PDF</button>
+  </div>
+
+  <div class="tablecard">
+    <div class="tablehead">
+      <h2>The two offers</h2>
+      <div class="tier-note">Both weekly, both <b>2% origination</b> deducted at funding, $0 doc stamp tax, no required payoffs.
+        At 8.00 points and $350,000 these match the Libertas approval to the cent.</div>
+    </div>
+    <div class="tablescroll">
+      <table><thead><tr>
+        <th>Offer</th><th>Term</th><th class="broker">Buy rate</th><th>Sell rate</th><th>Loan amount</th>
+        <th>Orig. fee (2%)</th><th>Net funding</th><th>Total payback<span class="thnote">if not repaid early</span></th>
+        <th># weekly</th><th>Weekly payment</th><th class="broker">Commission</th>
+      </tr></thead><tbody id="offTb"></tbody></table>
+    </div>
+  </div>
+
+  <div class="tablecard">
+    <div class="tablehead">
+      <h2>Early payoff (prepay discount) · months 1–6</h2>
+      <div class="tier-note" id="ppNote"></div>
+    </div>
+    <div class="tablescroll">
+      <table><thead><tr>
+        <th>Paid off in</th><th class="broker">Buy rate</th><th class="broker">Prepay pts</th><th>Payoff rate</th>
+        <th>Payoff amount</th><th>Saves vs Offer 1<span class="thnote">18 mo · full payback</span></th>
+        <th>Saves vs Offer 2<span class="thnote">17 mo · full payback</span></th><th class="broker">Commission if prepaid</th>
+      </tr></thead><tbody id="ppTb"></tbody></table>
+    </div>
+    <div class="foot" id="ppFoot"></div>
+  </div>
+
+  <div class="panel">
+    <h2 class="tight">Stipulations</h2>
+    <div class="stipgrid">
+      <div>
+        <h3>Still needed (<span id="needCt"></span>)</h3>
+        <ol id="needList">
+          <li><b>Bank verification</b><small>Libertas runs this on the operating account (BankonBuffalo x8839).</small></li>
+          <li><b>Unexpired driver's license</b><small>Joseph Caldarelli</small></li>
+          <li><b>Voided check</b><small>Account the loan funds into</small></li>
+          <li><b>Bank statements to complete 12 months (Oct 2025 – Sep 2026)</b>
+            <small>BankonBuffalo x8839 Operating: <b>Oct, Nov, Dec 2025</b> (Jan–Sep 2026 on file)<br>
+            BankonBuffalo x8847 Sheridan Drive Capital: <b>Oct 2025 – May 2026</b> (Jun–Sep on file)<br>
+            BankonBuffalo x8855 Payroll: <b>Oct 2025 – Apr 2026</b> (May–Sep on file)<br>
+            BankonBuffalo x8863 Savings: <b>Oct 2025 – Apr 2026</b> (May–Sep on file)<br>
+            None of these are new accounts; every first statement on file opens with a carried balance.</small></li>
+          <li><b>Proof Wells Fargo x0045 and M&amp;T x7433 are closed</b>
+            <small>Bank closure letter or final statement showing the close date for each. The Feb 2026 statements on file still end with balances ($61,800.79 at Wells, $18,877.40 at M&amp;T), so they don't prove closure on their own.
+            Libertas' 12-month rule also reaches <b>Oct 2025 – Jan 2026</b> on both while they were open; worth requesting with the letters.</small></li>
+          <li><b>Year-end 2025 P&amp;L and balance sheet</b><small>The December 2025 dealer financial statement works.</small></li>
+          <li><b>Clearer YTD 2026 financials</b><small>The July 2026 Nissan dealer statement on file is the blurry scan Libertas flagged. A clean copy (or the August statement) replaces it.</small></li>
+          <li><b>AR / AP aging reports</b></li>
+          <li><b>Recent floor plan statement, every floor plan lender</b><small>On file is the NMAC <i>audit</i> report (Aug 2026), not the statement. The M&amp;T account also lists M&amp;T Auto Floor Planning, so confirm whether M&amp;T is still a floor plan lender.</small></li>
+          <li><b>Written explanation of how the three entities relate</b><small>Mike Barney's Super Sports, Inc., Sheridan Drive Capital, LLC and Mike Barney Nissan, Inc.
+            What the file already shows: Mike Barney Nissan, Inc. files under the same EIN as the applicant (16-1128183), so it's the same company; Sheridan Drive Capital is a rental real estate partnership at the same address and has its own account (x8847) under Super Sports' name. The client just needs to put that in writing.</small></li>
+          <li><b>Lease with last two rent checks, or most recent mortgage statement</b><small>If Sheridan Drive Capital is the landlord, the lease between the two plus two rent payments covers it.</small></li>
+          <li><b>Live video virtual site inspection</b></li>
+          <li><b>Signed 8821s</b></li>
+          <li class="close"><b>Signed contract &amp; addendums</b><small>At closing</small></li>
+        </ol>
+      </div>
+      <div>
+        <h3>Already on file (removed)</h3>
+        <ul>
+          <li class="got"><b>Most recent business tax return w/ exhibits and ownership</b><small>2024 Form 1120-S, Mike Barney Nissan, Inc. (same EIN as the applicant) with K-1s, plus 2023. Sheridan Drive Capital 2023 and 2024 Form 1065s. Note: a 2025 return was due 9/15/26 on extension; if it's been filed, Libertas may ask for it.</small></li>
+          <li class="got"><b>All other business bank accounts disclosed</b><small>Six accounts: BankonBuffalo x8839, x8847, x8855, x8863, plus Wells Fargo x0045 and M&amp;T x7433 (closed per client).</small></li>
+          <li class="got"><b>Bank statements on file</b><small>x8839 Jan–Sep 2026 · x8847 Jun–Sep · x8855 May–Sep · x8863 May–Sep · Wells x0045 and M&amp;T x7433 Feb 2026</small></li>
+          <li class="got"><b>Signed application</b></li>
+          <li class="got"><b>Personal returns</b><small>Miranda Caldarelli (not on Libertas' list)</small></li>
+        </ul>
+        <div class="callout" style="margin:18px 0 0">
+          <div class="tx"><b>Not revenue:</b> the $769,921 deposit into x8839 on 9/23/2026 is loan proceeds (per Jon Mateczun, 10/5). Flag it to Libertas so it isn't counted in the deposit average.</div>
+        </div>
+      </div>
+    </div>
+    <div class="legend">
+      <span><i style="background:var(--bl-gold)"></i> Still needed</span>
+      <span><i style="background:var(--bl-silver)"></i> At closing</span>
+      <span><i style="background:var(--bl-green)"></i> On file</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2 class="tight">Notes</h2>
+    <div class="notes"><ul>
+      <li><b>Sell rate = buy rate + points ÷ 100.</b> Payback = loan amount × sell rate. Weekly count = term × 52 ÷ 12, rounded (18 mo → 78, 17 mo → 74), which is how Libertas' own $6,371.80 and $6,621.63 come out. The weekly payment rounds up to the cent.</li>
+      <li><b>Commission</b> = loan amount × points ÷ 100. The 2% origination fee is the lender's charge to the merchant and is separate from commission.</li>
+      <li><b>Libertas only printed the prepay ladder for Offer 1.</b> It's applied to Offer 2 here as well; the payoff by month doesn't depend on the term, so only the savings column changes. Confirm with Libertas before quoting Offer 2's prepay.</li>
+      <li>APR is on the Libertas approval (52.40% / 52.93% at 8 points) but deliberately not shown here.</li>
+      <li>Soft offer: subject to Libertas' review of the stips above and the merchant interview, and may change.</li>
+    </ul></div>
+  </div>
+
+</div>
+
+<script>
+/* MIKE BARNEY'S SUPER SPORTS, INC. · Libertas approval 10/05/2026, issued at 8 pts.
+   Offer 1: 18 mo, FCR 1.42 → $497,000 / 78 = $6,371.80   (buy 1.34)
+   Offer 2: 17 mo, FCR 1.40 → $490,000 / 74 = $6,621.63   (buy 1.32)
+   2% orig $7,000 → net $343,000. Weekly rounds UP to the cent.
+   Prepay ladder (printed for Offer 1): buy 1.07 + 0.02/mo through mo 6, with 0.05 commission
+   built in at 8 offer pts → $392,000 … $427,000.
+   ASSUMPTION: prepay commission = min(offer points, 5). */
+var AMT_MIN=100000, AMT_MAX=350000, OFEE=0.02, PP_CAP=5;
+var OFFERS=[{k:1,m:18,buy:1.34,n:78},{k:2,m:17,buy:1.32,n:74}];
+var LADDER=[1.07,1.09,1.11,1.13,1.15,1.17];
+
+var KEY='mike_barney_libertas_v1';
+var state={amt:350000, pts:8};
+try{ var s=JSON.parse(localStorage.getItem(KEY)||'null'); if(s){ for(var k in state) if(typeof s[k]==='number') state[k]=s[k]; } }catch(e){}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+
+function r2(x){ return Math.round((x+Number.EPSILON)*100)/100; }
+function r4(x){ return Math.round((x+Number.EPSILON)*10000)/10000; }
+function ceil2(x){ return Math.ceil(r4(x*100))/100; }
+function money(x,dp){ if(dp===undefined) dp=2; return '$'+x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp}); }
+function m0(x){ return money(x, Math.abs(x%1)<1e-9?0:2); }
+function f2(x){ return x.toFixed(2); }
+function ppPts(){ return Math.min(state.pts, PP_CAP); }
+
+function calc(o){
+  var sell=r4(o.buy+state.pts/100), payback=r2(state.amt*sell), fee=r2(state.amt*OFEE);
+  return {sell:sell,payback:payback,fee:fee,net:r2(state.amt-fee),weekly:ceil2(payback/o.n),comm:r2(state.amt*state.pts/100)};
+}
+function ladder(){
+  var p=ppPts();
+  return LADDER.map(function(b,i){ var rate=r4(b+p/100); return {mo:i+1,buy:b,rate:rate,payoff:r2(state.amt*rate),comm:r2(state.amt*p/100)}; });
+}
+
+function render(){
+  var c=OFFERS.map(calc), L=ladder();
+  document.getElementById('amtR').value=state.amt;
+  if(document.activeElement!==document.getElementById('amtN')) document.getElementById('amtN').value=money(state.amt,0);
+  document.getElementById('ptsR').value=state.pts;
+  if(document.activeElement!==document.getElementById('ptsN')) document.getElementById('ptsN').value=f2(state.pts);
+  [].forEach.call(document.querySelectorAll('#amtPresets button'),function(b){ b.classList.toggle('on',+b.dataset.a===state.amt); });
+  [].forEach.call(document.querySelectorAll('#ptsPresets button'),function(b){ b.classList.toggle('on',+b.dataset.p===state.pts); });
+
+  document.getElementById('kpis').innerHTML=
+    '<div class="kpi"><div class="n">Net to merchant</div><div class="v">'+m0(c[0].net)+'</div><div class="s">after 2% origination '+m0(c[0].fee)+'</div></div>'+
+    '<div class="kpi"><div class="n">Offer 1 · 18 mo</div><div class="v">'+money(c[0].weekly)+'</div><div class="s">weekly · rate '+f2(c[0].sell)+'</div></div>'+
+    '<div class="kpi"><div class="n">Offer 2 · 17 mo</div><div class="v">'+money(c[1].weekly)+'</div><div class="s">weekly · rate '+f2(c[1].sell)+'</div></div>'+
+    '<div class="kpi bro"><div class="n">Your commission</div><div class="v">'+m0(c[0].comm)+'</div><div class="s">'+f2(state.pts)+' pts · '+m0(L[0].comm)+' if prepaid mo 1–6</div></div>';
+
+  document.getElementById('offTb').innerHTML=OFFERS.map(function(o,i){ var x=c[i];
+    return '<tr><td>Offer '+o.k+'</td><td>'+o.m+' months</td><td class="bro">'+f2(o.buy)+'</td><td class="factor">'+f2(x.sell)+
+      '</td><td>'+m0(state.amt)+'</td><td>'+m0(x.fee)+'</td><td class="pay">'+m0(x.net)+'</td><td class="pay">'+m0(x.payback)+
+      '</td><td>'+o.n+'</td><td class="pay">'+money(x.weekly)+'</td><td class="bro">'+m0(x.comm)+'</td></tr>'; }).join('');
+
+  document.getElementById('ppTb').innerHTML=L.map(function(t){
+    return '<tr><td>Month '+t.mo+'</td><td class="bro">'+f2(t.buy)+'</td><td class="bro">'+f2(ppPts())+'</td><td class="factor">'+f2(t.rate)+
+      '</td><td class="pay">'+m0(t.payoff)+'</td><td class="save">'+m0(r2(c[0].payback-t.payoff))+'</td><td class="save">'+m0(r2(c[1].payback-t.payoff))+
+      '</td><td class="bro">'+m0(t.comm)+'</td></tr>'; }).join('');
+
+  var shifted = ppPts()!==PP_CAP;
+  document.getElementById('ppNote').innerHTML='Pay the loan off in full inside a month and the balance is the <b>loan amount × that month\'s payoff rate</b>, not the full payback. '+
+    'Libertas built <b>5 points</b> into the ladder when the offer carried 8, so prepay commission is capped at 5. '+
+    (shifted?'<span class="pill">shifted</span> At '+f2(state.pts)+' points the ladder carries '+f2(ppPts())+', so every month drops '+f2((PP_CAP-ppPts())/100)+' from the printed rates.'
+            :'At '+f2(state.pts)+' points the ladder sits at Libertas\' printed rates (1.12 → 1.22).');
+  document.getElementById('ppFoot').innerHTML='Libertas printed: month 1 at <b>$392,000</b> through month 6 at <b>$427,000</b> on $350,000. After month 6 there is no discount; the full payback applies. '+
+    '<b>Assumption:</b> the prepay commission tracks your points once you go below 5 (min of your points and 5), on the same 1 point = 0.01 rule. Confirm with Libertas if you price under 5.';
+  document.getElementById('needCt').textContent=document.querySelectorAll('#needList li:not(.close)').length+' + contract';
+}
+
+function bindPair(r,n,key,parse,min,max){
+  var R=document.getElementById(r), N=document.getElementById(n);
+  R.oninput=function(){ state[key]=+R.value; save(); render(); };
+  N.onchange=function(){ var v=parse(N.value); if(!isNaN(v)){ state[key]=Math.min(max,Math.max(min,v)); save(); } N.blur(); render(); };
+  N.onkeydown=function(e){ if(e.key==='Enter') N.onchange(); };
+}
+bindPair('amtR','amtN','amt',function(v){ return Math.round(+v.replace(/[^0-9.]/g,'')); },AMT_MIN,AMT_MAX);
+bindPair('ptsR','ptsN','pts',function(v){ return Math.round(+v.replace(/[^0-9.]/g,'')*4)/4; },0,8);
+[].forEach.call(document.querySelectorAll('#amtPresets button'),function(b){ b.onclick=function(){ state.amt=+b.dataset.a; save(); render(); }; });
+[].forEach.call(document.querySelectorAll('#ptsPresets button'),function(b){ b.onclick=function(){ state.pts=+b.dataset.p; save(); render(); }; });
+
+document.getElementById('dlPdf').onclick=function(){
+  var jsPDF=window.jspdf.jsPDF, doc=new jsPDF({unit:'pt',format:'letter',orientation:'landscape'});
+  var NAVY=[0,47,104], STEEL=[106,115,154];
+  var W={styles:{font:'helvetica',fontSize:8.5,cellPadding:5,textColor:[72,82,130]},
+    headStyles:{fillColor:NAVY,textColor:255,fontStyle:'bold',fontSize:8},
+    alternateRowStyles:{fillColor:[251,251,253]}, columnStyles:{0:{halign:'left',fontStyle:'bold',textColor:NAVY}},
+    margin:{left:40,right:40}, didParseCell:function(d){ if(d.column.index>0) d.cell.styles.halign='right'; }};
+  var c=OFFERS.map(calc), L=ladder();
+  doc.setFont('helvetica','bold'); doc.setFontSize(16); doc.setTextColor.apply(doc,NAVY);
+  doc.text("Mike Barney's Super Sports, Inc. · Libertas Funding", 40, 48);
+  doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor.apply(doc,STEEL);
+  doc.text('Loan amount '+money(state.amt,0)+'  ·  '+f2(state.pts)+' points  ·  weekly pay  ·  2% origination  ·  approval dated 10/05/2026, stips due by 10/26/2026', 40, 64);
+  doc.autoTable(Object.assign({startY:80,
+    head:[['Offer','Term','Buy','Sell rate','Loan amount','Orig. fee','Net funding','Total payback','# weekly','Weekly','Commission']],
+    body:OFFERS.map(function(o,i){ var x=c[i]; return ['Offer '+o.k,o.m+' mo',f2(o.buy),f2(x.sell),m0(state.amt),m0(x.fee),m0(x.net),m0(x.payback),o.n,money(x.weekly),m0(x.comm)]; })},W));
+  var y=doc.lastAutoTable.finalY+24;
+  doc.setFont('helvetica','bold'); doc.setFontSize(11.5); doc.setTextColor.apply(doc,NAVY);
+  doc.text('Early payoff, months 1–6 (prepay commission '+f2(ppPts())+' pts)', 40, y);
+  doc.autoTable(Object.assign({startY:y+8,
+    head:[['Paid off in','Buy','Prepay pts','Payoff rate','Payoff amount','Saves vs Offer 1','Saves vs Offer 2','Commission']],
+    body:L.map(function(t){ return ['Month '+t.mo,f2(t.buy),f2(ppPts()),f2(t.rate),m0(t.payoff),m0(r2(c[0].payback-t.payoff)),m0(r2(c[1].payback-t.payoff)),m0(t.comm)]; })},W));
+  doc.addPage();
+  doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor.apply(doc,NAVY);
+  doc.text('Stipulations still needed', 40, 48);
+  var yy=68; doc.setFontSize(9);
+  [].forEach.call(document.querySelectorAll('#needList li'),function(li,i){
+    var b=li.querySelector('b').textContent, sm=li.querySelector('small');
+    doc.setFont('helvetica','bold'); doc.setTextColor.apply(doc,NAVY);
+    var t=doc.splitTextToSize((i+1)+'. '+b, 710); doc.text(t,40,yy); yy+=t.length*12;
+    if(sm){ doc.setFont('helvetica','normal'); doc.setTextColor.apply(doc,STEEL);
+      var u=doc.splitTextToSize(sm.innerText.replace(/\n/g,' · '), 690); doc.text(u,54,yy); yy+=u.length*11; }
+    yy+=5;
+  });
+  doc.save('Mike-Barney-Super-Sports-Libertas.pdf');
+};
+
+render();
+</script>
+</body>
+</html>
