@@ -53,7 +53,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;heigh
 .presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .presets button{font-family:var(--font-body);font-size:11.5px;font-weight:600;color:var(--bl-navy);background:var(--bl-white);border:1.5px solid var(--bl-line);border-radius:999px;padding:6px 12px;cursor:pointer;transition:.15s}
 
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px}
 .kpi{background:var(--bl-white);border:1px solid var(--bl-pale);border-radius:var(--radius-sm);padding:14px 16px;box-shadow:var(--shadow-md)}
 .kpi .n{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--bl-steel)}
 .kpi .v{font-family:var(--font-display);font-size:24px;color:var(--bl-navy);margin-top:4px}
@@ -82,6 +82,8 @@ tbody td.factor{color:var(--bl-navy);font-weight:700}
 tbody td.pay{color:var(--bl-navy);font-weight:600}
 tbody td.bro{background:rgba(0,205,239,.06);color:var(--bl-navy);font-weight:600}
 tbody td.save{color:#00964b;font-weight:600}
+tbody td.claw{background:#FFF1EE;color:#B3261E;font-weight:700}
+thead th.claw{background:#8c2413}
 tbody td .sml{display:block;font-size:10.5px;font-weight:400;color:var(--bl-steel);margin-top:2px}
 .pill{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:3px 7px;border-radius:999px;background:var(--bl-gold);color:#5a3d00;margin-left:6px;vertical-align:middle}
 .foot{padding:14px 26px;font-size:11.5px;color:var(--bl-steel);border-top:1px solid var(--bl-pale);background:var(--bl-bg);line-height:1.7}
@@ -151,7 +153,7 @@ tbody td .sml{display:block;font-size:10.5px;font-weight:400;color:var(--bl-stee
         <button data-a="200000">$200,000</button>
         <button data-a="100000">$100,000 · min</button>
       </div>
-      <div class="hint">Approved to <b>$350,000</b> on both terms. WebBank minimum is <b>$100,000</b> and 12 months; below that Libertas would re-paper it as an MCA.</div>
+      <div class="hint">Approved to <b>$350,000</b> on all three terms. WebBank minimum is <b>$100,000</b> and 12 months; below that Libertas would re-paper it as an MCA.</div>
     </div>
     <div>
       <div class="lbl">Commission points</div>
@@ -166,7 +168,7 @@ tbody td .sml{display:block;font-size:10.5px;font-weight:400;color:var(--bl-stee
         <button data-p="3">3.00</button>
         <button data-p="0">0.00 · buy</button>
       </div>
-      <div class="hint">1 point = <b>0.01</b> on the rate. Buy rates: Offer 1 <b>1.34</b>, Offer 2 <b>1.32</b>. The prepay ladder moves with these points (see below).</div>
+      <div class="hint">1 point = <b>0.01</b> on the rate. Buy rates: Offer 1 <b>1.34</b>, Offer 2 <b>1.21</b>, Offer 3 <b>1.32</b>. Prepays use your points up to the 5-point cap (see below).</div>
     </div>
   </div>
 
@@ -178,8 +180,8 @@ tbody td .sml{display:block;font-size:10.5px;font-weight:400;color:var(--bl-stee
 
   <div class="tablecard">
     <div class="tablehead">
-      <h2>The two offers</h2>
-      <div class="tier-note">Both weekly, both <b>2% origination</b> deducted at funding, $0 doc stamp tax, no required payoffs.
+      <h2>The three offers</h2>
+      <div class="tier-note">All weekly, all <b>2% origination</b> deducted at funding, $0 doc stamp tax, no required payoffs.
         At 8.00 points and $350,000 these match the Libertas approval to the cent.</div>
     </div>
     <div class="tablescroll">
@@ -199,8 +201,9 @@ tbody td .sml{display:block;font-size:10.5px;font-weight:400;color:var(--bl-stee
     <div class="tablescroll">
       <table><thead><tr>
         <th>Paid off in</th><th class="broker">Buy rate</th><th class="broker">Prepay pts</th><th>Payoff rate</th>
-        <th>Payoff amount</th><th>Saves vs Offer 1<span class="thnote">18 mo · full payback</span></th>
-        <th>Saves vs Offer 2<span class="thnote">17 mo · full payback</span></th><th class="broker">Commission if prepaid</th>
+        <th>Payoff amount</th><th>Saves vs Offer 1<span class="thnote">18 mo</span></th><th>Saves vs Offer 2<span class="thnote">12 mo</span></th>
+        <th>Saves vs Offer 3<span class="thnote">17 mo</span></th><th class="broker">Commission kept<span class="thnote">if prepaid</span></th>
+        <th class="claw">Commission returned<span class="thnote">if prepaid</span></th>
       </tr></thead><tbody id="ppTb"></tbody></table>
     </div>
     <div class="foot" id="ppFoot"></div>
@@ -260,10 +263,10 @@ tbody td .sml{display:block;font-size:10.5px;font-weight:400;color:var(--bl-stee
   <div class="panel">
     <h2 class="tight">Notes</h2>
     <div class="notes"><ul>
-      <li><b>Sell rate = buy rate + points ÷ 100.</b> Payback = loan amount × sell rate. Weekly count = term × 52 ÷ 12, rounded (18 mo → 78, 17 mo → 74), which is how Libertas' own $6,371.80 and $6,621.63 come out. The weekly payment rounds up to the cent.</li>
-      <li><b>Commission</b> = loan amount × points ÷ 100. The 2% origination fee is the lender's charge to the merchant and is separate from commission.</li>
-      <li><b>Libertas only printed the prepay ladder for Offer 1.</b> It's applied to Offer 2 here as well; the payoff by month doesn't depend on the term, so only the savings column changes. Confirm with Libertas before quoting Offer 2's prepay.</li>
-      <li>APR is on the Libertas approval (52.40% / 52.93% at 8 points) but deliberately not shown here.</li>
+      <li><b>Sell rate = buy rate + points ÷ 100.</b> Payback = loan amount × sell rate. Weekly count = term × 52 ÷ 12, rounded (18 mo → 78, 12 mo → 52, 17 mo → 74), which is how Libertas' own $6,371.80, $8,682.70 and $6,621.63 come out. The weekly payment rounds up to the cent.</li>
+      <li><b>Commission</b> = loan amount × points ÷ 100, paid at funding. <b>If the merchant uses a prepay, commission is capped at 5 points and anything above 5 is returned</b> (sold at 8 on $350,000: $28,000 paid, $17,500 kept, $10,500 returned). The 2% origination fee is the lender's charge to the merchant and is separate from commission.</li>
+      <li><b>Libertas only printed the prepay ladder for Offer 1.</b> It's applied to Offers 2 and 3 here as well; the payoff by month doesn't depend on the term, so only the savings columns change. Confirm with Libertas before quoting their prepay.</li>
+      <li>APR is on the Libertas approval (52.40% / 56.81% / 52.93% at 8 points) but deliberately not shown here.</li>
       <li>Soft offer: subject to Libertas' review of the stips above and the merchant interview, and may change.</li>
     </ul></div>
   </div>
@@ -273,16 +276,17 @@ tbody td .sml{display:block;font-size:10.5px;font-weight:400;color:var(--bl-stee
 <script>
 /* MIKE BARNEY'S SUPER SPORTS, INC. · Libertas approval 10/05/2026, issued at 8 pts.
    Offer 1: 18 mo, FCR 1.42 → $497,000 / 78 = $6,371.80   (buy 1.34)
-   Offer 2: 17 mo, FCR 1.40 → $490,000 / 74 = $6,621.63   (buy 1.32)
+   Offer 2: 12 mo, FCR 1.29 → $451,500 / 52 = $8,682.70   (buy 1.21)
+   Offer 3: 17 mo, FCR 1.40 → $490,000 / 74 = $6,621.63   (buy 1.32)
    2% orig $7,000 → net $343,000. Weekly rounds UP to the cent.
    Prepay ladder (printed for Offer 1): buy 1.07 + 0.02/mo through mo 6, with 0.05 commission
    built in at 8 offer pts → $392,000 … $427,000.
-   CONFIRMED 10/5 by John Bellavia (Libertas): prepay capped at 5 pts on term loans (WebBank rule) → prepay pts = min(offer pts, 5). */
+   Prepay capped at 5 pts on term loans (WebBank rule) → prepay pts = min(offer pts, 5); commission above 5 is returned if prepaid. */
 var AMT_MIN=100000, AMT_MAX=350000, OFEE=0.02, PP_CAP=5;
-var OFFERS=[{k:1,m:18,buy:1.34,n:78},{k:2,m:17,buy:1.32,n:74}];
+var OFFERS=[{k:1,m:18,buy:1.34,n:78},{k:2,m:12,buy:1.21,n:52},{k:3,m:17,buy:1.32,n:74}];
 var LADDER=[1.07,1.09,1.11,1.13,1.15,1.17];
 
-var KEY='mike_barney_libertas_v1';
+var KEY='mike_barney_libertas_v2';
 var state={amt:350000, pts:8};
 try{ var s=JSON.parse(localStorage.getItem(KEY)||'null'); if(s){ for(var k in state) if(typeof s[k]==='number') state[k]=s[k]; } }catch(e){}
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
@@ -301,7 +305,7 @@ function calc(o){
 }
 function ladder(){
   var p=ppPts();
-  return LADDER.map(function(b,i){ var rate=r4(b+p/100); return {mo:i+1,buy:b,rate:rate,payoff:r2(state.amt*rate),comm:r2(state.amt*p/100)}; });
+  return LADDER.map(function(b,i){ var rate=r4(b+p/100); return {mo:i+1,buy:b,rate:rate,payoff:r2(state.amt*rate),comm:r2(state.amt*p/100),claw:r2(state.amt*(state.pts-p)/100)}; });
 }
 
 function render(){
@@ -315,9 +319,8 @@ function render(){
 
   document.getElementById('kpis').innerHTML=
     '<div class="kpi"><div class="n">Net to merchant</div><div class="v">'+m0(c[0].net)+'</div><div class="s">after 2% origination '+m0(c[0].fee)+'</div></div>'+
-    '<div class="kpi"><div class="n">Offer 1 · 18 mo</div><div class="v">'+money(c[0].weekly)+'</div><div class="s">weekly · rate '+f2(c[0].sell)+'</div></div>'+
-    '<div class="kpi"><div class="n">Offer 2 · 17 mo</div><div class="v">'+money(c[1].weekly)+'</div><div class="s">weekly · rate '+f2(c[1].sell)+'</div></div>'+
-    '<div class="kpi bro"><div class="n">Your commission</div><div class="v">'+m0(c[0].comm)+'</div><div class="s">'+f2(state.pts)+' pts · '+m0(L[0].comm)+' if prepaid mo 1–6</div></div>';
+    OFFERS.map(function(o,i){ return '<div class="kpi"><div class="n">Offer '+o.k+' · '+o.m+' mo</div><div class="v">'+money(c[i].weekly)+'</div><div class="s">weekly · rate '+f2(c[i].sell)+'</div></div>'; }).join('')+
+    '<div class="kpi bro"><div class="n">Your commission</div><div class="v">'+m0(c[0].comm)+'</div><div class="s">'+f2(state.pts)+' pts · keeps '+m0(L[0].comm)+(L[0].claw>0?', returns '+m0(L[0].claw):'')+' if prepaid</div></div>';
 
   document.getElementById('offTb').innerHTML=OFFERS.map(function(o,i){ var x=c[i];
     return '<tr><td>Offer '+o.k+'</td><td>'+o.m+' months</td><td class="bro">'+f2(o.buy)+'</td><td class="factor">'+f2(x.sell)+
@@ -326,16 +329,16 @@ function render(){
 
   document.getElementById('ppTb').innerHTML=L.map(function(t){
     return '<tr><td>Month '+t.mo+'</td><td class="bro">'+f2(t.buy)+'</td><td class="bro">'+f2(ppPts())+'</td><td class="factor">'+f2(t.rate)+
-      '</td><td class="pay">'+m0(t.payoff)+'</td><td class="save">'+m0(r2(c[0].payback-t.payoff))+'</td><td class="save">'+m0(r2(c[1].payback-t.payoff))+
-      '</td><td class="bro">'+m0(t.comm)+'</td></tr>'; }).join('');
+      '</td><td class="pay">'+m0(t.payoff)+'</td>'+c.map(function(x){ return '<td class="save">'+m0(r2(x.payback-t.payoff))+'</td>'; }).join('')+
+      '<td class="bro">'+m0(t.comm)+'</td><td class="claw">'+(t.claw>0?m0(t.claw):'none')+'</td></tr>'; }).join('');
 
   var shifted = ppPts()!==PP_CAP;
   document.getElementById('ppNote').innerHTML='Pay the loan off in full inside a month and the balance is the <b>loan amount × that month\'s payoff rate</b>, not the full payback. '+
-    'Libertas built <b>5 points</b> into the ladder when the offer carried 8, so prepay commission is capped at 5 (WebBank rule on term loans, confirmed by Libertas). '+
-    (shifted?'<span class="pill">shifted</span> At '+f2(state.pts)+' points the ladder carries '+f2(ppPts())+', so every month drops '+f2((PP_CAP-ppPts())/100)+' from the printed rates.'
+    'Prepay commission is <b>capped at 5 points</b> on term loans (WebBank rule). You are paid your full points at funding; if the merchant prepays, anything above 5 is returned. '+
+    (shifted?'<span class="pill">under 5</span> At '+f2(state.pts)+' points the ladder carries '+f2(ppPts())+', so every month drops '+f2((PP_CAP-ppPts())/100)+' from the printed rates.'
             :'At '+f2(state.pts)+' points the ladder sits at Libertas\' printed rates (1.12 → 1.22).');
   document.getElementById('ppFoot').innerHTML='Libertas printed: month 1 at <b>$392,000</b> through month 6 at <b>$427,000</b> on $350,000. After month 6 there is no discount; the full payback applies. '+
-    '<b>Confirmed by Libertas (John Bellavia, 10/5):</b> prepay is capped at 5 points on term loans, a WebBank rule. Price the offer anywhere from 5 to 8 points and the payoffs stay put; below 5 they drop 0.01 per point.';
+    'From 5 to 8 points the payoffs stay at the printed rates; below 5 they drop 0.01 per point.';
   document.getElementById('needCt').textContent=document.querySelectorAll('#needList li:not(.close)').length+' + contract';
 }
 
@@ -369,8 +372,8 @@ document.getElementById('dlPdf').onclick=function(){
   doc.setFont('helvetica','bold'); doc.setFontSize(11.5); doc.setTextColor.apply(doc,NAVY);
   doc.text('Early payoff, months 1–6 (prepay commission '+f2(ppPts())+' pts)', 40, y);
   doc.autoTable(Object.assign({startY:y+8,
-    head:[['Paid off in','Buy','Prepay pts','Payoff rate','Payoff amount','Saves vs Offer 1','Saves vs Offer 2','Commission']],
-    body:L.map(function(t){ return ['Month '+t.mo,f2(t.buy),f2(ppPts()),f2(t.rate),m0(t.payoff),m0(r2(c[0].payback-t.payoff)),m0(r2(c[1].payback-t.payoff)),m0(t.comm)]; })},W));
+    head:[['Paid off in','Buy','Prepay pts','Payoff rate','Payoff amount','Saves vs Offer 1','Saves vs Offer 2','Saves vs Offer 3','Comm. kept','Comm. returned']],
+    body:L.map(function(t){ return ['Month '+t.mo,f2(t.buy),f2(ppPts()),f2(t.rate),m0(t.payoff),m0(r2(c[0].payback-t.payoff)),m0(r2(c[1].payback-t.payoff)),m0(r2(c[2].payback-t.payoff)),m0(t.comm),m0(t.claw)]; })},W));
   doc.addPage();
   doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor.apply(doc,NAVY);
   doc.text('Stipulations still needed', 40, 48);
