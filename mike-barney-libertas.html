@@ -168,7 +168,7 @@ tbody td .sml{display:block;font-size:10.5px;font-weight:400;color:var(--bl-stee
         <button data-p="3">3.00</button>
         <button data-p="0">0.00 · buy</button>
       </div>
-      <div class="hint">1 point = <b>0.01</b> on the rate. Buy rates: Offer 1 <b>1.34</b>, Offer 2 <b>1.21</b>, Offer 3 <b>1.32</b>. Prepays use your points up to the 5-point cap (see below).</div>
+      <div class="hint">1 point = <b>0.01</b> on the rate. Buy rates: Offer 1 <b>1.21</b>, Offer 2 <b>1.32</b>, Offer 3 <b>1.34</b>. Prepays use your points up to the 5-point cap (see below).</div>
     </div>
   </div>
 
@@ -201,8 +201,8 @@ tbody td .sml{display:block;font-size:10.5px;font-weight:400;color:var(--bl-stee
     <div class="tablescroll">
       <table><thead><tr>
         <th>Paid off in</th><th class="broker">Buy rate</th><th class="broker">Prepay pts</th><th>Payoff rate</th>
-        <th>Payoff amount</th><th>Saves vs Offer 1<span class="thnote">18 mo</span></th><th>Saves vs Offer 2<span class="thnote">12 mo</span></th>
-        <th>Saves vs Offer 3<span class="thnote">17 mo</span></th><th class="broker">Commission kept<span class="thnote">if prepaid</span></th>
+        <th>Payoff amount</th><th>Saves vs Offer 1<span class="thnote">12 mo</span></th><th>Saves vs Offer 2<span class="thnote">17 mo</span></th>
+        <th>Saves vs Offer 3<span class="thnote">18 mo</span></th><th class="broker">Commission kept<span class="thnote">if prepaid</span></th>
         <th class="claw">Commission returned<span class="thnote">if prepaid</span></th>
       </tr></thead><tbody id="ppTb"></tbody></table>
     </div>
@@ -265,8 +265,8 @@ tbody td .sml{display:block;font-size:10.5px;font-weight:400;color:var(--bl-stee
     <div class="notes"><ul>
       <li><b>Sell rate = buy rate + points ÷ 100.</b> Payback = loan amount × sell rate. Weekly count = term × 52 ÷ 12, rounded (18 mo → 78, 12 mo → 52, 17 mo → 74), which is how Libertas' own $6,371.80, $8,682.70 and $6,621.63 come out. The weekly payment rounds up to the cent.</li>
       <li><b>Commission</b> = loan amount × points ÷ 100, paid at funding. <b>If the merchant uses a prepay, commission is capped at 5 points and anything above 5 is returned</b> (sold at 8 on $350,000: $28,000 paid, $17,500 kept, $10,500 returned). The 2% origination fee is the lender's charge to the merchant and is separate from commission.</li>
-      <li><b>Libertas only printed the prepay ladder for Offer 1.</b> It's applied to Offers 2 and 3 here as well; the payoff by month doesn't depend on the term, so only the savings columns change. Confirm with Libertas before quoting their prepay.</li>
-      <li>APR is on the Libertas approval (52.40% / 56.81% / 52.93% at 8 points) but deliberately not shown here.</li>
+      <li><b>Libertas only printed the prepay ladder for the 18-month offer.</b> It's applied to the 12- and 17-month offers here as well; the payoff by month doesn't depend on the term, so only the savings columns change. Confirm with Libertas before quoting their prepay.</li>
+      <li>APR is on the Libertas approval (56.81% / 52.93% / 52.40% at 8 points) but deliberately not shown here.</li>
       <li>Soft offer: subject to Libertas' review of the stips above and the merchant interview, and may change.</li>
     </ul></div>
   </div>
@@ -275,15 +275,16 @@ tbody td .sml{display:block;font-size:10.5px;font-weight:400;color:var(--bl-stee
 
 <script>
 /* MIKE BARNEY'S SUPER SPORTS, INC. · Libertas approval 10/05/2026, issued at 8 pts.
-   Offer 1: 18 mo, FCR 1.42 → $497,000 / 78 = $6,371.80   (buy 1.34)
-   Offer 2: 12 mo, FCR 1.29 → $451,500 / 52 = $8,682.70   (buy 1.21)
-   Offer 3: 17 mo, FCR 1.40 → $490,000 / 74 = $6,621.63   (buy 1.32)
+   Ordered by term (Larry 10/6), NOT Libertas' numbering:
+   Offer 1: 12 mo, FCR 1.29 → $451,500 / 52 = $8,682.70   (buy 1.21)  [Libertas #2]
+   Offer 2: 17 mo, FCR 1.40 → $490,000 / 74 = $6,621.63   (buy 1.32)  [Libertas #3]
+   Offer 3: 18 mo, FCR 1.42 → $497,000 / 78 = $6,371.80   (buy 1.34)  [Libertas #1]
    2% orig $7,000 → net $343,000. Weekly rounds UP to the cent.
-   Prepay ladder (printed for Offer 1): buy 1.07 + 0.02/mo through mo 6, with 0.05 commission
+   Prepay ladder (printed for the 18 mo offer): buy 1.07 + 0.02/mo through mo 6, with 0.05 commission
    built in at 8 offer pts → $392,000 … $427,000.
    Prepay capped at 5 pts on term loans (WebBank rule) → prepay pts = min(offer pts, 5); commission above 5 is returned if prepaid. */
 var AMT_MIN=100000, AMT_MAX=350000, OFEE=0.02, PP_CAP=5;
-var OFFERS=[{k:1,m:18,buy:1.34,n:78},{k:2,m:12,buy:1.21,n:52},{k:3,m:17,buy:1.32,n:74}];
+var OFFERS=[{k:1,m:12,buy:1.21,n:52},{k:2,m:17,buy:1.32,n:74},{k:3,m:18,buy:1.34,n:78}];
 var LADDER=[1.07,1.09,1.11,1.13,1.15,1.17];
 
 var KEY='mike_barney_libertas_v2';
@@ -372,7 +373,7 @@ document.getElementById('dlPdf').onclick=function(){
   doc.setFont('helvetica','bold'); doc.setFontSize(11.5); doc.setTextColor.apply(doc,NAVY);
   doc.text('Early payoff, months 1–6 (prepay commission '+f2(ppPts())+' pts)', 40, y);
   doc.autoTable(Object.assign({startY:y+8,
-    head:[['Paid off in','Buy','Prepay pts','Payoff rate','Payoff amount','Saves vs Offer 1','Saves vs Offer 2','Saves vs Offer 3','Comm. kept','Comm. returned']],
+    head:[['Paid off in','Buy','Prepay pts','Payoff rate','Payoff amount','Saves vs 12 mo','Saves vs 17 mo','Saves vs 18 mo','Comm. kept','Comm. returned']],
     body:L.map(function(t){ return ['Month '+t.mo,f2(t.buy),f2(ppPts()),f2(t.rate),m0(t.payoff),m0(r2(c[0].payback-t.payoff)),m0(r2(c[1].payback-t.payoff)),m0(r2(c[2].payback-t.payoff)),m0(t.comm),m0(t.claw)]; })},W));
   doc.addPage();
   doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor.apply(doc,NAVY);
