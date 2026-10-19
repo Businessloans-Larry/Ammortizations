@@ -480,7 +480,7 @@ function downloadPDF(tierKey){
   info.forEach((it,i)=>{
     const cx = 40 + (i%2)*colW, cy = y + Math.floor(i/2)*17;
     doc.setFont("helvetica","normal"); doc.setTextColor(120,130,165); doc.text(it[0]+":", cx, cy);
-    doc.setFont("helvetica","bold"); doc.setTextColor(0,47,104); doc.text(String(it[1]), cx+120, cy);
+    doc.setFont("helvetica","bold"); doc.setTextColor(0,47,104); doc.text(String(it[1]), cx+colW-24, cy, {align:"right"});
   });
   y += Math.ceil(info.length/2)*17 + 12;
 
