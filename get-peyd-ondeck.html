@@ -154,12 +154,7 @@ tbody td .sml{display:block;font-size:10.5px;font-weight:400;color:var(--bl-stee
         <div class="cap"><div class="n">Term loan</div><div class="v">$350,000</div><div class="s">6–24 months · weekly</div></div>
         <div class="cap"><div class="n">Line of credit</div><div class="v">$200,000</div><div class="s">12–24 months · weekly or monthly</div></div>
       </div>
-      <div class="lbl">Early payoff after</div>
-      <div class="row">
-        <input id="poR" type="range" min="1" max="24" step="1" />
-        <input class="numbox sm" id="poN" type="text" inputmode="numeric" />
-      </div>
-      <div class="hint">Drag to see what the client owes if they pay off after <b id="poLbl"></b> — this is where <b>25% vs 100%</b> interest forgiveness shows up.</div>
+      <div class="hint">Per term, the <b>higher rate carries 100% interest forgiveness</b> on early payoff and the <b>lower rate carries 25%</b>. The line of credit prepays at 100%.</div>
     </div>
   </div>
 
@@ -221,7 +216,7 @@ tbody td .sml{display:block;font-size:10.5px;font-weight:400;color:var(--bl-stee
     <div class="notes">
       <ul>
         <li><b>Rates:</b> OnDeck quoted max sell = buy on every row, so the sheet models no commission. Payback = amount × rate; weekly payment = payback ÷ payments.</li>
-        <li><b>Interest forgiveness:</b> on early payoff the client owes principal + interest accrued to date + the unforgiven share of the remaining interest. 100% forgives all remaining interest; 25% forgives a quarter of it. The payoff column uses a declining-balance amortization at the loan's own implied rate, capped at the full payback.</li>
+        <li><b>Interest forgiveness:</b> on early payoff 100% forgives all remaining interest; 25% forgives a quarter of it. The higher rate at each term is the 100% option.</li>
         <li><b>Fees:</b> 2.5% origination on 6–18 month term loans, 4% on 24 months, $0 on the line of credit. Fees are deducted from funding.</li>
         <li><b>Line of credit:</b> APR 41.5% at 12 months, 40.7% at 18, 40% at 24. Weekly view uses APR ÷ 52 over term × 52 ÷ 12 payments; monthly view uses APR ÷ 12 over the term in months (OnDeck's portal runs the line monthly).</li>
       </ul>
@@ -265,7 +260,7 @@ var LOC=[
 ];
 
 var KEY='getpeyd_ondeck_v1';
-var state={amt:350000, po:6, locFreq:'weekly'};
+var state={amt:350000, locFreq:'weekly'};
 try{ var s=JSON.parse(localStorage.getItem(KEY)||'null'); if(s){ for(var k in state) if(s[k]!==undefined) state[k]=s[k]; } }catch(e){}
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
 
@@ -276,44 +271,19 @@ function money0(x){ return money(x, x%1===0?0:2); }
 function fct(f){ var s=f.toFixed(3).replace(/0+$/,''); if(s.length-s.indexOf('.')<3) s=f.toFixed(2); return s; }
 function wkN(m){ return Math.round(m*52/12); }
 
-/* periodic rate that amortizes P with level payment pay over n periods */
-function solveRate(P,pay,n){
-  if(pay*n<=P+1e-9) return 0;
-  var lo=0, hi=1;
-  for(var i=0;i<200;i++){ var mid=(lo+hi)/2; var pv=pay*(1-Math.pow(1+mid,-n))/mid; if(pv>P) lo=mid; else hi=mid; }
-  return (lo+hi)/2;
-}
-/* cumulative interest after k payments (full-precision declining balance) */
-function cumInt(P,pay,n,r,k){
-  var bal=P, cum=0;
-  for(var i=0;i<Math.min(k,n);i++){ var it=bal*r; cum+=it; bal-=(pay-it); }
-  return cum;
-}
-
 function tModel(t){
   var amt=Math.min(state.amt, TERM_CAP), capped=state.amt>TERM_CAP;
   var n=wkN(t.m), payback=amt*t.rate, pay=payback/n;
   var fee=amt*t.fee, net=amt-fee, cost=payback-amt;
-  var r=solveRate(amt,pay,n);
-  var k=Math.min(n, Math.round(state.po*52/12));
-  var ci=cumInt(amt,pay,n,r,k), rem=cost-ci;
-  var forgive=t.pp/100;
-  var payoff=Math.min(payback, amt+ci+(1-forgive)*rem);
-  var paid=pay*k, due=payoff-paid;
   return {m:t.m, pp:t.pp, amt:amt, capped:capped, n:n, rate:t.rate, feePct:t.fee, fee:round2(fee), net:round2(net),
-          pay:round2(pay), payback:round2(payback), cost:round2(cost), k:k, paid:round2(paid),
-          payoff:round2(payoff), due:round2(due), saved:round2(payback-payoff), full:k>=n};
+          pay:round2(pay), payback:round2(payback), cost:round2(cost)};
 }
 function lModel(t){
   var amt=Math.min(state.amt, LOC_CAP), capped=state.amt>LOC_CAP;
   var weekly=state.locFreq==='weekly';
   var n=weekly? wkN(t.m) : t.m, r=t.apr/100/(weekly?52:12);
   var pay=amt*r/(1-Math.pow(1+r,-n)), payback=pay*n, cost=payback-amt;
-  var k=Math.min(n, weekly? Math.round(state.po*52/12) : state.po);
-  var ci=cumInt(amt,pay,n,r,k);
-  var payoff=Math.min(payback, amt+ci), paid=pay*k, due=payoff-paid;
-  return {m:t.m, apr:t.apr, amt:amt, capped:capped, n:n, weekly:weekly, pay:round2(pay), payback:round2(payback), cost:round2(cost),
-          k:k, paid:round2(paid), payoff:round2(payoff), due:round2(due), saved:round2(payback-payoff), full:k>=n};
+  return {m:t.m, apr:t.apr, amt:amt, capped:capped, n:n, weekly:weekly, pay:round2(pay), payback:round2(payback), cost:round2(cost)};
 }
 
 function head(id,cols){
@@ -324,21 +294,15 @@ function body(id,rows){
   document.getElementById(id).innerHTML=rows.map(function(r){
     return '<tr'+(r.sep?' class="sep"':'')+'>'+r.cells.map(function(c){ return '<td'+(c.c?' class="'+c.c+'"':'')+'>'+(c.h!==undefined?c.h:c.t)+'</td>'; }).join('')+'</tr>'; }).join('');
 }
-function poText(){ return state.po+' month'+(state.po===1?'':'s'); }
-
 function render(){
   document.getElementById('amtR').value=state.amt;
   if(document.activeElement!==document.getElementById('amtN')) document.getElementById('amtN').value=money(state.amt,0);
-  document.getElementById('poR').value=state.po;
-  if(document.activeElement!==document.getElementById('poN')) document.getElementById('poN').value=poText();
-  document.getElementById('poLbl').textContent=poText();
   [].forEach.call(document.querySelectorAll('#amtPresets button'),function(b){ b.classList.toggle('on',+b.dataset.a===state.amt); });
   [].forEach.call(document.querySelectorAll('#locSeg button'),function(b){ b.classList.toggle('on',b.dataset.f===state.locFreq); });
 
   /* TERM LOAN */
   head('tThr',[{t:'Term'},{t:'Interest Forgiveness',n:'on early payoff'},{t:'Amount'},{t:'Rate',n:'buy = sell'},
-    {t:'Orig. Fee'},{t:'Net to Client'},{t:'Weekly Payment'},{t:'Payments',n:'computed'},{t:'Total Payback'},{t:'Cost of Capital'},
-    {t:'Payoff after '+poText(),n:'total paid incl. payoff',b:true},{t:'Still Owed',n:'at that point',b:true},{t:'Saved vs Full',b:true}]);
+    {t:'Orig. Fee'},{t:'Net to Client'},{t:'Weekly Payment'},{t:'Payments',n:'computed'},{t:'Total Payback'},{t:'Cost of Capital'}]);
   var last=null;
   body('tTb', TERM.map(function(t){
     var r=tModel(t), sep=(last!==null && last!==t.m); last=t.m;
@@ -352,23 +316,18 @@ function render(){
       {t:money(r.pay), c:'pay'},
       {t:String(r.n)},
       {t:money0(r.payback)},
-      {t:money0(r.cost)},
-      {h:money0(r.payoff)+(r.full?'<span class="sml">loan is complete</span>':''), c:'bro'},
-      {t:r.full?'—':money0(r.due), c:'bro'},
-      {t:r.full?'—':money0(r.saved), c:'save'}
+      {t:money0(r.cost)}
     ]};
   }));
   document.getElementById('tFoot').innerHTML =
     'OnDeck term loan · weekly pay · approved to <b>$350,000</b> on every term · rate is fixed, no upsell. '
     + 'Origination fee <b>2.5%</b> (24 months <b>4%</b>) deducted from funding. '
-    + '“Payoff after '+poText()+'” = principal + interest accrued through payment '+Math.round(state.po*52/12)+' + the unforgiven share of remaining interest; '
-    + '“Still Owed” subtracts the weekly payments already made. Rows with no payoff figure have already run their full term.';
+    + 'Payment counts are computed as term × 52 ÷ 12 — confirm against OnDeck’s schedule.';
 
   /* LOC */
   var per=state.locFreq==='weekly'?'Weekly':'Monthly';
   head('lThr',[{t:'Term'},{t:'Interest Forgiveness'},{t:'Draw'},{t:'APR'},{t:'Fee'},{t:per+' Payment'},{t:'Payments'},
-    {t:'Total Payback'},{t:'Total Interest'},
-    {t:'Payoff after '+poText(),n:'principal + accrued interest',b:true},{t:'Still Owed',n:'at that point',b:true},{t:'Saved vs Full',b:true}]);
+    {t:'Total Payback'},{t:'Total Interest'}]);
   body('lTb', LOC.map(function(t){
     var r=lModel(t);
     return {cells:[
@@ -380,10 +339,7 @@ function render(){
       {t:money(r.pay), c:'pay'},
       {t:String(r.n)},
       {t:money0(r.payback)},
-      {t:money0(r.cost)},
-      {h:money0(r.payoff)+(r.full?'<span class="sml">line is complete</span>':''), c:'bro'},
-      {t:r.full?'—':money0(r.due), c:'bro'},
-      {t:r.full?'—':money0(r.saved), c:'save'}
+      {t:money0(r.cost)}
     ]};
   }));
   document.getElementById('lFoot').innerHTML =
@@ -403,7 +359,6 @@ function bindPair(r,n,key,parse,min,max){
   N.onkeydown=function(e){ if(e.key==='Enter') N.onchange(); };
 }
 bindPair('amtR','amtN','amt',function(v){ return Math.round(+v.replace(/[^0-9.]/g,'')); },AMT_MIN,AMT_MAX);
-bindPair('poR','poN','po',function(v){ return Math.round(+v.replace(/[^0-9.]/g,'')); },1,24);
 [].forEach.call(document.querySelectorAll('#amtPresets button'),function(b){ b.onclick=function(){ state.amt=+b.dataset.a; render(); }; });
 [].forEach.call(document.querySelectorAll('#locSeg button'),function(b){ b.onclick=function(){ state.locFreq=b.dataset.f; render(); }; });
 
@@ -421,30 +376,29 @@ document.getElementById('dlPdf').onclick=function(){
   doc.setFont('helvetica','bold'); doc.setFontSize(16); doc.setTextColor.apply(doc,NAVY);
   doc.text('GET PEYD — OnDeck funding options', 40, 48);
   doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor.apply(doc,STEEL);
-  doc.text('Requested amount '+money(state.amt,0)+'   ·   rate is fixed (buy = sell)   ·   early payoff shown after '+poText(), 40, 64);
+  doc.text('Requested amount '+money(state.amt,0)+'   ·   rate is fixed (buy = sell)', 40, 64);
 
   doc.setFont('helvetica','bold'); doc.setFontSize(11.5); doc.setTextColor.apply(doc,NAVY);
   doc.text('Term loan — weekly, to $350,000', 40, 88);
   doc.autoTable(Object.assign({}, W, {startY:96,
-    head:[['Term','IF','Amount','Rate','Orig Fee','Net to Client','Weekly Pmt','Pmts','Total Payback','Cost of Capital','Payoff after '+poText(),'Still Owed','Saved vs Full']],
+    head:[['Term','IF','Amount','Rate','Orig Fee','Net to Client','Weekly Pmt','Pmts','Total Payback','Cost of Capital']],
     body:TERM.map(function(t){ var r=tModel(t);
       return [r.m+' mo', r.pp+'%', money(r.amt,0), fct(r.rate), money0(r.fee)+' ('+(r.feePct*100)+'%)', money0(r.net), money(r.pay), String(r.n),
-              money0(r.payback), money0(r.cost), money0(r.payoff), r.full?'-':money0(r.due), r.full?'-':money0(r.saved)]; })}));
+              money0(r.payback), money0(r.cost)]; })}));
 
   var y=doc.lastAutoTable.finalY+22;
   var per=state.locFreq==='weekly'?'Weekly':'Monthly';
   doc.setFont('helvetica','bold'); doc.setFontSize(11.5); doc.setTextColor.apply(doc,NAVY);
   doc.text('Line of credit — '+per.toLowerCase()+', $0 fee, 100% prepay, to $200,000', 40, y);
   doc.autoTable(Object.assign({}, W, {startY:y+8,
-    head:[['Term','IF','Draw','APR','Fee',per+' Pmt','Pmts','Total Payback','Total Interest','Payoff after '+poText(),'Still Owed','Saved vs Full']],
+    head:[['Term','IF','Draw','APR','Fee',per+' Pmt','Pmts','Total Payback','Total Interest']],
     body:LOC.map(function(t){ var r=lModel(t);
-      return [r.m+' mo', '100%', money(r.amt,0), r.apr+'%', '$0', money(r.pay), String(r.n), money0(r.payback), money0(r.cost),
-              money0(r.payoff), r.full?'-':money0(r.due), r.full?'-':money0(r.saved)]; })}));
+      return [r.m+' mo', '100%', money(r.amt,0), r.apr+'%', '$0', money(r.pay), String(r.n), money0(r.payback), money0(r.cost)]; })}));
 
   y=doc.lastAutoTable.finalY+22;
   doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor.apply(doc,STEEL);
   [ 'Payback = amount x rate; weekly payment = payback / payments (term x 52 / 12). Max sell = buy on every row, so no commission is modelled.',
-    'Interest forgiveness: early payoff = principal + interest accrued to date + the unforgiven share of remaining interest (100% forgives all of it, 25% forgives a quarter).',
+    'Interest forgiveness: on early payoff 100% forgives all remaining interest, 25% forgives a quarter of it; the higher rate at each term is the 100% option.',
     'Origination fee 2.5% on 6-18 month term loans, 4% on 24 months, deducted from funding. Line of credit: $0 fee, APR amortization, 100% prepay (principal + accrued interest).'
   ].forEach(function(l,i){ doc.text(l,40,y+i*12); });
 
