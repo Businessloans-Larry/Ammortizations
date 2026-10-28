@@ -187,16 +187,6 @@ td.broker .sml{color:#a8503f}
     <div class="cap" id="capTier"><div class="n">Buy Rate Tier</div><div class="v">—</div><div class="s">set by the points</div></div>
   </div>
 
-  <div class="callout green" id="stipCallout">
-    <div class="ic">&#9989;</div>
-    <div class="tx">&nbsp;</div>
-  </div>
-
-  <div class="callout">
-    <div class="ic">&#9888;</div>
-    <div class="tx"><b>Retention pricing turns off above 7 points.</b> Quote 7 or fewer and the buy rate drops a full 2 points on either term. Going from 7 to 7.5 costs you more in buy rate than you gain in commission, so 7 is the sweet spot unless you need the extra points.</div>
-  </div>
-
   <div class="lendhead">
     <h2>Both Terms</h2>
     <div class="tag">priced at the current amount and points</div>
@@ -345,14 +335,6 @@ function render(){
   document.getElementById('amtHint').innerHTML = split
     ? 'Past <b>'+money(CAP_12,0)+'</b> the 12 month is no longer on the table at this size &mdash; it funds at its cap while the 18 month takes the full amount.'
     : 'Both terms fund the full amount. The <b>12 month caps at '+money(CAP_12,0)+'</b>, the 18 month at <b>'+money(CAP_18,0)+'</b>.';
-
-  var stipOk = state.amt<=CAP_18;
-  var sc=document.getElementById('stipCallout');
-  sc.className = 'callout'+(stipOk?' green':'');
-  sc.querySelector('.ic').innerHTML = stipOk ? '&#9989;' : '&#9888;';
-  sc.querySelector('.tx').innerHTML = stipOk
-    ? '<b>At $250,000 or less</b> the Tax Return, P&amp;L, Balance Sheet and Merchant Interview stips are waived.'
-    : '<b>Above $250,000</b> the Tax Return, P&amp;L, Balance Sheet and Merchant Interview stips come back.';
 
   document.getElementById('validline').textContent =
     'Priced ' + new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) +
