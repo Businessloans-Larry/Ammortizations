@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Broker Pricing — 12 &amp; 18 Month</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bl-green:#00CD67; --bl-cyan:#00CDEF; --bl-navy:#002F68;
+  --bl-navy-900:#1A2763; --bl-slate:#485282; --bl-steel:#6A739A;
+  --bl-silver:#A3A9C1; --bl-line:#D1D4E0; --bl-pale:#E8E9EF;
+  --bl-bg:#F6F6F9; --bl-white:#FFFFFF; --bl-gold:#FFC858; --bl-error:#FB5038;
+  --font-display:'DM Serif Display',Georgia,serif;
+  --font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --radius:16px; --radius-sm:8px;
+  --shadow-md:0 4px 12px rgba(26,39,99,.10);
+  --shadow-lg:0 8px 24px rgba(26,39,99,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-body);background:var(--bl-bg);color:var(--bl-slate);line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1240px;margin:0 auto;padding:28px 20px 80px}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:8px}
+.brand{display:flex;align-items:center;gap:14px}
+.brand svg{height:34px;width:auto;display:block}
+.brand .divider{width:1px;height:30px;background:var(--bl-line)}
+.brand .lender{font-family:var(--font-display);color:var(--bl-navy);font-size:22px;line-height:1}
+.brand .lender small{display:block;font-family:var(--font-body);font-size:11px;letter-spacing:.10em;text-transform:uppercase;color:var(--bl-steel);margin-top:4px;font-weight:600}
+.brokertag{font-size:11px;font-weight:800;letter-spacing:.10em;text-transform:uppercase;color:#7a1f12;background:#FFE9E4;border:1.5px solid #FB5038;border-radius:999px;padding:7px 14px}
+
+h1.page{font-family:var(--font-display);color:var(--bl-navy);font-size:34px;font-weight:400;margin:18px 0 2px}
+.sub{color:var(--bl-steel);font-size:14px;margin-bottom:6px}
+.sub b{color:var(--bl-navy);font-weight:700}
+.validline{font-size:12px;color:var(--bl-steel);margin-bottom:22px}
+
+.amtpanel{background:var(--bl-navy);border-radius:var(--radius);padding:24px 28px;box-shadow:var(--shadow-lg);margin-bottom:22px;display:grid;grid-template-columns:1fr 1fr;gap:24px 40px;align-items:start}
+.amtpanel .lbl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9fb2d6;margin-bottom:10px}
+.amtpanel .row{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:12px}
+.amtpanel .numbox{width:170px;text-align:right;font-family:var(--font-display);font-size:24px;color:#fff;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.28);border-radius:var(--radius-sm);padding:8px 12px}
+.amtpanel .numbox.sm{width:118px;font-size:21px}
+.amtpanel .numbox:focus{outline:none;border-color:var(--bl-green)}
+.amtpanel input[type=range]{background:rgba(255,255,255,.18)}
+.amtpanel .hint{font-size:11.5px;color:#9fb2d6;margin-top:10px}
+.amtpanel .hint b{color:#fff}
+.amtpanel .presets button{background:transparent;border-color:rgba(255,255,255,.3);color:#fff}
+.amtpanel .presets button.on{background:var(--bl-green);border-color:var(--bl-green);color:#fff}
+.amtpanel .scale{display:flex;justify-content:space-between;font-size:10.5px;color:#7f93bb;margin-top:5px}
+
+.capgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.capgrid .cap{background:var(--bl-white);border:1px solid var(--bl-pale);border-radius:var(--radius-sm);padding:13px 15px;box-shadow:var(--shadow-md)}
+.capgrid .cap .n{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--bl-steel)}
+.capgrid .cap .v{font-family:var(--font-display);font-size:21px;color:var(--bl-navy);margin-top:5px}
+.capgrid .cap .s{font-size:10.5px;color:var(--bl-steel);margin-top:3px}
+.capgrid .cap.hot{border-color:var(--bl-green);box-shadow:0 0 0 2px rgba(0,205,103,.14),var(--shadow-md)}
+
+input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:999px;background:var(--bl-pale);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--bl-white);border:3px solid var(--bl-green);cursor:pointer;box-shadow:var(--shadow-md)}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#fff;border:3px solid var(--bl-green);cursor:pointer}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.presets button{font-family:var(--font-body);font-size:11.5px;font-weight:600;color:var(--bl-navy);background:var(--bl-white);border:1.5px solid var(--bl-line);border-radius:999px;padding:6px 12px;cursor:pointer;transition:.15s}
+.presets button:hover{border-color:var(--bl-cyan)}
+.presets button.on{background:var(--bl-navy);border-color:var(--bl-navy);color:#fff}
+
+.callout{display:flex;gap:12px;align-items:flex-start;background:#FFF8E8;border:1px solid var(--bl-gold);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:14px}
+.callout.green{background:#E9FBF2;border-color:var(--bl-green)}
+.callout .ic{font-size:15px;line-height:1.2}
+.callout .tx{font-size:12.5px;color:#5a3d00}
+.callout.green .tx{color:#0a4a2c}
+.callout .tx b{color:#3d2900}
+.callout.green .tx b{color:#05351e}
+
+.lendhead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:34px 0 14px}
+.lendhead h2{font-family:var(--font-display);color:var(--bl-navy);font-size:26px;font-weight:400}
+.lendhead .tag{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bl-steel)}
+
+.tablecard{background:var(--bl-white);border:1px solid var(--bl-pale);border-radius:var(--radius);box-shadow:var(--shadow-md);overflow:hidden;margin-bottom:22px}
+.tscroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:900px}
+thead th{background:var(--bl-navy);color:#fff;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:13px 12px;text-align:right;white-space:nowrap;vertical-align:bottom}
+thead th:first-child{text-align:left}
+thead th.broker{background:#7a1f12}
+thead th .thnote{display:block;font-size:9.5px;font-weight:500;letter-spacing:.02em;text-transform:none;color:#9fb2d6;margin-top:3px}
+thead th.broker .thnote{color:#f3c4bb}
+tbody td{padding:14px 12px;text-align:right;border-bottom:1px solid var(--bl-pale);white-space:nowrap}
+tbody td:first-child{text-align:left}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:#FBFBFD}
+.termcell{font-family:var(--font-display);font-size:19px;color:var(--bl-navy)}
+.termcell small{display:block;font-family:var(--font-body);font-size:10.5px;color:var(--bl-steel);letter-spacing:.04em;text-transform:uppercase;font-weight:600;margin-top:2px}
+td.pay{font-weight:700;color:var(--bl-navy);font-size:14px}
+td.factor{font-family:var(--font-display);font-size:17px;color:var(--bl-navy)}
+td.broker{background:#FFF4F2;color:#7a1f12;font-weight:700}
+.sml{display:block;font-size:10.5px;font-weight:500;color:var(--bl-steel);margin-top:2px}
+td.broker .sml{color:#a8503f}
+.pill{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--bl-pale);color:var(--bl-slate)}
+.pill.green{background:#D6F7E8;color:#06663a}
+.pill.red{background:#FFE9E4;color:#7a1f12}
+
+.ladders{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.ladder{background:var(--bl-white);border:1px solid var(--bl-pale);border-radius:var(--radius);box-shadow:var(--shadow-md);overflow:hidden}
+.ladder h3{font-family:var(--font-display);font-size:18px;color:var(--bl-navy);font-weight:400;padding:16px 20px 4px}
+.ladder .meta{font-size:11.5px;color:var(--bl-steel);padding:0 20px 14px}
+.ladder table{min-width:0;font-size:12.5px}
+.ladder thead th{padding:10px 14px}
+.ladder tbody td{padding:9px 14px}
+.ladder .mcell{font-weight:600;color:var(--bl-navy)}
+.ladder .mcell small{display:block;font-size:10px;color:var(--bl-steel);font-weight:500}
+
+.nolad{background:var(--bl-white);border:1px dashed var(--bl-line);border-radius:var(--radius);padding:26px 24px;text-align:center;color:var(--bl-steel);font-size:13px}
+.nolad b{color:var(--bl-navy)}
+
+.foot{margin-top:34px;padding-top:18px;border-top:1px solid var(--bl-line);font-size:11.5px;color:var(--bl-steel)}
+.foot b{color:var(--bl-navy)}
+.foot ul{margin:8px 0 0 18px}
+.foot li{margin-bottom:4px}
+
+@media(max-width:900px){
+  .amtpanel{grid-template-columns:1fr}
+  .capgrid{grid-template-columns:repeat(2,1fr)}
+  .ladders{grid-template-columns:1fr}
+}
+@media print{
+  body{background:#fff}
+  .amtpanel{box-shadow:none}
+  .presets,.brokertag{display:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 352.47 153.57" role="img" aria-label="BusinessLoans.com"><defs><style>.cls-1{fill:#002f68}.cls-2{fill:#00cd67}.cls-3{fill:#00cdef}.cls-4{fill:#60aff0}</style></defs><g><path class="cls-1" d="M22.92,31.64H16.77V42.82h6.15A11.74,11.74,0,1,1,11.18,54.56h0V25.81a10,10,0,0,0-10-10H0V54.56H0A22.92,22.92,0,1,0,22.92,31.64Z"/><path class="cls-2" d="M18,26.05H16.77V24.87a10,10,0,0,1,10-10H28v1.18A10,10,0,0,1,18,26.05Z"/><path class="cls-3" d="M14,0l-.83.83a10,10,0,0,0,0,14.15l.83.83.84-.83a10,10,0,0,0,0-14.15L14,0Z"/><path class="cls-1" d="M92.24,77H81.32V72.84a15.36,15.36,0,0,1-11.18,4.64,14.47,14.47,0,0,1-10.58-4C56,69.91,55,65.7,55,60.8V32.16H66.18V59.25c0,6.11,3.87,8.17,7.4,8.17s7.48-2.06,7.48-8.17V32.16H92.24Z"/><path class="cls-1" d="M138.42,36.89l-6.88,7c-2.58-2.33-6.45-3-10.4-3-4.48,0-6.37,2.06-6.37,4.3s1.29,3.52,4.65,3.87l7,.68c8.86.86,13.33,5.51,13.33,13.16,0,9.89-8.43,14.62-19,14.62-7.05,0-13.33-.77-19.09-6.45L109,63.72c3.61,3.7,8.51,4.22,11.95,4.22,3.87,0,7.92-1.29,7.92-4.65,0-2.23-1.12-3.78-4.73-4.13l-7.06-.68C109,57.7,104,54.18,104,45.92c0-9.37,8.17-14.28,17.29-14.28C128.36,31.64,134.12,32.93,138.42,36.89Z"/><path class="cls-1" d="M161.73,24.51H150.29V15.39h11.44ZM161.64,77H150.46V33.45h11.18Z"/><path class="cls-1" d="M208.08,35.6c3.61,3.7,4.56,7.83,4.56,12.73V77H201.46V49.88c0-6.11-3.79-8.17-7.4-8.17s-7.48,2.06-7.48,8.17V77H175.4V32.16h10.92v4.13a15.33,15.33,0,0,1,11.18-4.65C202,31.64,205.59,33,208.08,35.6Z"/><path class="cls-1" d="M262.78,53.32v4.73h-28c0,5.84,3.44,10,9.8,10,4.91,0,7.31-1.46,10.07-4.21l6.88,6.62c-4.56,4.64-9,7-17,7-10.67,0-20.73-4.81-20.73-23,0-14.62,7.91-22.88,19.52-22.88C255.72,31.64,262.78,40.59,262.78,53.32Zm-27.09-7.74a10.89,10.89,0,0,0-.95,4.81h16.94a10.89,10.89,0,0,0-.94-4.81,8.41,8.41,0,0,0-15.05,0Z"/><path class="cls-1" d="M306.72,36.89l-6.88,7c-2.58-2.33-6.45-3-10.4-3-4.48,0-6.37,2.06-6.37,4.3s1.29,3.52,4.65,3.87l7,.68c8.86.86,13.33,5.51,13.33,13.16,0,9.89-8.43,14.62-19,14.62-7,0-13.33-.77-19.09-6.45l7.31-7.31c3.61,3.7,8.51,4.22,11.95,4.22,3.87,0,7.92-1.29,7.92-4.65,0-2.23-1.12-3.78-4.73-4.13l-7.06-.68c-8.08-.78-13.07-4.3-13.07-12.56,0-9.37,8.17-14.28,17.29-14.28C296.66,31.64,302.42,32.93,306.72,36.89Z"/><path class="cls-1" d="M351.1,36.89l-6.88,7c-2.58-2.33-6.45-3-10.41-3-4.47,0-6.36,2.06-6.36,4.3s1.29,3.52,4.64,3.87l7.05.68c8.86.86,13.33,5.51,13.33,13.16,0,9.89-8.43,14.62-19,14.62-7.06,0-13.33-.77-19.09-6.45l7.3-7.31c3.62,3.7,8.52,4.22,12,4.22,3.87,0,7.91-1.29,7.91-4.65,0-2.23-1.12-3.78-4.73-4.13l-7.05-.68c-8.09-.78-13.07-4.3-13.07-12.56,0-9.37,8.17-14.28,17.28-14.28C341,31.64,346.8,32.93,351.1,36.89Z"/><path class="cls-4" d="M24.73,139.55c0,2.66,1.12,4,4,4H33v9.46H26.62c-9.2,0-13.07-6.36-13.07-12.81V91.82H24.73Z"/><path class="cls-4" d="M73.32,148.06c-2.84,2.93-7.31,5.51-13.93,5.51s-11-2.58-13.84-5.51c-4-4.3-5.08-9.37-5.08-17.46s1-13.07,5.08-17.37c2.83-2.92,7.22-5.5,13.84-5.5s11.09,2.49,13.93,5.5c4,4.3,5.08,9.29,5.08,17.37S77.45,143.85,73.32,148.06Zm-8.68-28.29a7.07,7.07,0,0,0-5.25-2,7,7,0,0,0-5.16,2c-2.32,2.24-2.58,6.28-2.58,10.83s.26,8.69,2.58,10.93a7,7,0,0,0,5.16,2,7.07,7.07,0,0,0,5.25-2c2.32-2.24,2.58-6.28,2.58-10.93S67,122,64.64,119.77Z"/><path class="cls-4" d="M124.23,123.55v29.5H113.31v-3.87c-3,3-5.84,4.3-11,4.3s-8.86-1.38-11.44-4a14.33,14.33,0,0,1-3.7-10.06c0-7.13,4.9-13,15.48-13h10.4v-2.24c0-4.9-2.4-7-8.34-7-4,0-6.19,1.12-8.6,3.87l-7-7c4.39-4.81,8.6-6.36,16.08-6.36C117.78,107.73,124.23,113.06,124.23,123.55Zm-19.69,10.58c-4.47,0-6.62,1.81-6.62,5.16,0,3.1,2.15,5.07,6.79,5.07,2.76,0,4.73-.34,6.62-2.15,1.29-1.11,1.72-2.83,1.72-5.67v-2.41Z"/><path class="cls-4" d="M170.24,111.69c3.62,3.69,4.56,7.82,4.56,12.72v28.64H163.62V126c0-6.1-3.78-8.17-7.39-8.17s-7.49,2.07-7.49,8.17v27.09H137.56v-44.8h10.93v4.12a15.34,15.34,0,0,1,11.18-4.64C164.14,107.73,167.75,109.11,170.24,111.69Z"/><path class="cls-4" d="M220.47,113l-6.88,7c-2.58-2.32-6.45-3-10.41-3-4.47,0-6.36,2.07-6.36,4.3s1.29,3.53,4.64,3.87l7,.69c8.86.86,13.33,5.5,13.33,13.16,0,9.89-8.42,14.62-19,14.62-7.05,0-13.33-.78-19.09-6.45l7.31-7.31c3.61,3.69,8.51,4.21,11.95,4.21,3.87,0,7.91-1.29,7.91-4.64,0-2.24-1.12-3.79-4.73-4.13l-7.05-.69c-8.08-.77-13.07-4.3-13.07-12.55,0-9.38,8.17-14.28,17.28-14.28C210.41,107.73,216.17,109,220.47,113Z"/></g></svg>
+      <div class="divider"></div>
+      <div class="lender">Broker Pricing<small>12 &amp; 18 Month</small></div>
+    </div>
+    <div class="brokertag">Broker only · do not send to client</div>
+  </div>
+
+  <h1 class="page">Pricing Calculator</h1>
+  <div class="sub">Move the amount and the points. Everything else follows.</div>
+  <div class="validline" id="validline"></div>
+
+  <div class="amtpanel">
+    <div>
+      <div class="lbl">Funding Amount</div>
+      <div class="row">
+        <input type="range" id="amtR" min="10000" max="250000" step="1000" />
+        <input type="text" id="amtN" class="numbox" inputmode="numeric" />
+      </div>
+      <div class="scale"><span>$10,000</span><span>$250,000</span></div>
+      <div class="presets" id="amtPresets">
+        <button data-a="100000">$100K</button>
+        <button data-a="150000">$150K</button>
+        <button data-a="182000">$182K</button>
+        <button data-a="200000">$200K</button>
+        <button data-a="250000">$250K</button>
+      </div>
+      <div class="hint">Capped at <b>$250,000</b>. At or below that, the Tax Return, P&amp;L, Balance Sheet and Merchant Interview stips come off.</div>
+    </div>
+
+    <div>
+      <div class="lbl">Commission Points</div>
+      <div class="row">
+        <input type="range" id="ptsR" min="0" max="10" step="0.5" />
+        <input type="text" id="ptsN" class="numbox sm" inputmode="decimal" />
+      </div>
+      <div class="scale"><span>0 pts</span><span>10 pts max</span></div>
+      <div class="presets" id="ptsPresets">
+        <button data-p="0">0</button>
+        <button data-p="5">5</button>
+        <button data-p="7">7</button>
+        <button data-p="8">8</button>
+        <button data-p="10">10</button>
+      </div>
+      <div class="hint" id="tierHint"></div>
+    </div>
+  </div>
+
+  <div class="capgrid">
+    <div class="cap" id="capFee"><div class="n">Origination Fee</div><div class="v">—</div><div class="s">3% of the funded amount</div></div>
+    <div class="cap" id="capNet"><div class="n">Net to Client</div><div class="v">—</div><div class="s">after the fee comes out</div></div>
+    <div class="cap hot" id="capComm"><div class="n">Your Commission</div><div class="v">—</div><div class="s">points &times; amount</div></div>
+    <div class="cap" id="capTier"><div class="n">Buy Rate Tier</div><div class="v">—</div><div class="s">set by the points</div></div>
+  </div>
+
+  <div class="callout green">
+    <div class="ic">&#9989;</div>
+    <div class="tx"><b>At $250,000 or less</b> the Tax Return, P&amp;L, Balance Sheet and Merchant Interview stips are waived. That is the reason for the cap, so pricing above it is not shown here.</div>
+  </div>
+
+  <div class="callout">
+    <div class="ic">&#9888;</div>
+    <div class="tx"><b>Buy rate steps at 7 points.</b> Quote 7 or fewer and the buy rate drops a full 2 points on either term. Going from 7 to 7.5 costs you more in buy rate than you gain in commission, so 7 is the sweet spot unless you need the extra points.</div>
+  </div>
+
+  <div class="lendhead">
+    <h2>Both Terms</h2>
+    <div class="tag">priced at the current amount and points</div>
+  </div>
+
+  <div class="tablecard">
+    <div class="tscroll">
+      <table>
+        <thead><tr id="thr"></tr></thead>
+        <tbody id="tbd"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="lendhead">
+    <h2>Early Payoff</h2>
+    <div class="tag" id="ladTag"></div>
+  </div>
+  <div id="ladderWrap"></div>
+
+  <div class="foot">
+    <b>How these are worked out</b>
+    <ul>
+      <li><b>Factor rate</b> = buy rate + points. One point adds 0.01.</li>
+      <li><b>Buy rate</b> &mdash; 18 month: 1.29 at 7 points or less, 1.31 above. 12 month: 1.21 at 7 or less, 1.23 above.</li>
+      <li><b>Payments</b> &mdash; 74 weekly on the 18 month, 50 on the 12. Weekly payment is the payback divided by that count, rounded up to the cent, matching the portal.</li>
+      <li><b>Origination fee</b> 3%, charged by the lender and deducted from the funded amount.</li>
+      <li><b>Early payoff</b> figures are the lender's own prepayment schedule, read off the portal. They are only shown at 7 and 10 points because those are the two the portal has given us.</li>
+    </ul>
+    <div style="margin-top:12px">Buy rate and commission are on this page. <b>It is for you, not the client.</b></div>
+  </div>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   Broker pricing calc — 12 and 18 month, capped at $250,000.
+
+   Every number below was read off the portal screenshots and reconciled:
+     18 mo @ 7 pts   buy 1.29  factor 1.36  $250,000 -> $340,000 / 74 = $4,594.60
+     18 mo @ 10 pts  buy 1.31  factor 1.41  $250,000 -> $352,500 / 74 = $4,763.52
+     12 mo @ 7 pts   buy 1.21  factor 1.28  $182,000 -> $232,960 / 50 = $4,659.20
+     12 mo @ 10 pts  buy 1.23  factor 1.33  $182,000 -> $242,060 / 50 = $4,841.20
+   Payment counts are 4 x months + 2, which is what gives 50 and 74.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+var AMT_MIN=10000, AMT_MAX=250000;
+var FEE=0.03, PTS_MAX=10, PTS_BREAK=7;
+
+var TERMS=[
+  {m:12, buyLow:1.21, buyHigh:1.23},
+  {m:18, buyLow:1.29, buyHigh:1.31}
+];
+
+/* the lender's own prepayment schedules, at the two point levels we have */
+var LADDER={
+  '12|7' : [[1,4,1.17],[5,5,1.19],[6,6,1.21],[7,12,1.28]],
+  '12|10': [[1,4,1.20],[5,5,1.23],[6,6,1.25],[7,12,1.33]],
+  '18|7' : [[1,5,1.17],[6,6,1.19],[7,7,1.21],[8,8,1.22],[9,9,1.24],[10,18,1.36]],
+  '18|10': [[1,5,1.20],[6,6,1.22],[7,7,1.24],[8,8,1.27],[9,9,1.29],[10,18,1.41]]
+};
+
+var KEY='broker_12_18_v1';
+var state={amt:250000, pts:7};
+try{ var s=JSON.parse(localStorage.getItem(KEY)||'null'); if(s){ for(var k in state) if(s[k]!==undefined) state[k]=s[k]; } }catch(e){}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+
+function round2(x){ return Math.round((x+Number.EPSILON)*100)/100; }
+function ceil2(x){ return Math.ceil((x-Number.EPSILON)*100)/100; }
+function money(x,dp){ if(dp===undefined) dp=2;
+  return '$'+x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp}); }
+function money0(x){ return money(x, x%1===0?0:2); }
+function fct(f){ var s=f.toFixed(3); return s.replace(/0$/,'').replace(/\.$/,''); }
+function pts(p){ return (p%1===0? p.toFixed(0) : p.toFixed(1)); }
+
+function nPmts(m){ return m*4+2; }
+function buyFor(t,p){ return p<=PTS_BREAK ? t.buyLow : t.buyHigh; }
+
+function model(t){
+  var amt=state.amt, p=state.pts;
+  var buy=buyFor(t,p);
+  var factor=buy+p/100;
+  var payback=round2(amt*factor);
+  var n=nPmts(t.m);
+  var pay=ceil2(payback/n);
+  var fee=round2(amt*FEE);
+  var comm=round2(amt*p/100);
+  return {m:t.m, amt:amt, p:p, buy:buy, factor:factor, payback:payback,
+          n:n, pay:pay, fee:fee, net:round2(amt-fee), comm:comm,
+          cost:round2(payback-amt)};
+}
+
+function head(cols){
+  document.getElementById('thr').innerHTML=cols.map(function(c){
+    return '<th'+(c.b?' class="broker"':'')+'>'+c.t+(c.n?'<span class="thnote">'+c.n+'</span>':'')+'</th>';
+  }).join('');
+}
+
+function render(){
+  if(state.amt<AMT_MIN) state.amt=AMT_MIN;
+  if(state.amt>AMT_MAX) state.amt=AMT_MAX;
+  if(state.pts<0) state.pts=0;
+  if(state.pts>PTS_MAX) state.pts=PTS_MAX;
+
+  document.getElementById('amtR').value=state.amt;
+  if(document.activeElement!==document.getElementById('amtN'))
+    document.getElementById('amtN').value=money(state.amt,0);
+  document.getElementById('ptsR').value=state.pts;
+  if(document.activeElement!==document.getElementById('ptsN'))
+    document.getElementById('ptsN').value=pts(state.pts);
+
+  [].forEach.call(document.querySelectorAll('#amtPresets button'),function(b){
+    b.classList.toggle('on', +b.dataset.a===state.amt); });
+  [].forEach.call(document.querySelectorAll('#ptsPresets button'),function(b){
+    b.classList.toggle('on', +b.dataset.p===state.pts); });
+
+  var lowTier = state.pts<=PTS_BREAK;
+  document.getElementById('tierHint').innerHTML = lowTier
+    ? 'At <b>'+pts(state.pts)+' points</b> you are on the better buy rate: <b>1.29</b> on 18 months, <b>1.21</b> on 12.'
+    : 'Above 7 points the buy rate steps up to <b>1.31</b> on 18 months and <b>1.23</b> on 12.';
+
+  var fee=round2(state.amt*FEE), comm=round2(state.amt*state.pts/100);
+  function cap(id,v,s){ var e=document.getElementById(id);
+    e.querySelector('.v').textContent=v; if(s) e.querySelector('.s').textContent=s; }
+  cap('capFee', money0(fee));
+  cap('capNet', money0(state.amt-fee));
+  cap('capComm', money0(comm), pts(state.pts)+' points on '+money(state.amt,0));
+  cap('capTier', lowTier?'Lower':'Higher', lowTier?'7 points or less':'above 7 points');
+
+  document.getElementById('validline').textContent =
+    'Priced ' + new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) +
+    ' · amount capped at $250,000 · 3% origination fee · 10 points maximum';
+
+  head([{t:'Term'},{t:'Amount'},{t:'Buy Rate',n:'yours, not theirs',b:true},{t:'Points',b:true},
+        {t:'Factor Rate'},{t:'Total Payback'},{t:'Weekly'},{t:'# Pmts'},
+        {t:'Orig. Fee',n:'3%'},{t:'Net to Client'},{t:'Commission',b:true}]);
+
+  document.getElementById('tbd').innerHTML = TERMS.map(function(t){
+    var r=model(t);
+    return '<tr>'+
+      '<td><div class="termcell">'+r.m+' months<small>weekly</small></div></td>'+
+      '<td>'+money(r.amt,0)+'</td>'+
+      '<td class="broker">'+r.buy.toFixed(2)+'</td>'+
+      '<td class="broker">'+pts(r.p)+'</td>'+
+      '<td class="factor">'+fct(r.factor)+'</td>'+
+      '<td class="pay">'+money(r.payback)+'</td>'+
+      '<td class="pay">'+money(r.pay)+'</td>'+
+      '<td>'+r.n+'</td>'+
+      '<td>'+money0(r.fee)+'<span class="sml">charged by the lender</span></td>'+
+      '<td class="pay">'+money0(r.net)+'</td>'+
+      '<td class="broker">'+money0(r.comm)+'</td>'+
+    '</tr>';
+  }).join('');
+
+  renderLadders();
+  save();
+}
+
+function renderLadders(){
+  var p=state.pts, wrap=document.getElementById('ladderWrap'), tag=document.getElementById('ladTag');
+
+  if(p!==7 && p!==10){
+    tag.textContent='';
+    wrap.innerHTML='<div class="nolad">The lender has only given us prepayment schedules at '+
+      '<b>7 points</b> and <b>10 points</b>. You are at <b>'+pts(p)+'</b>, so there is nothing to show '+
+      'that would not be guesswork. Set the points to 7 or 10, or pull the schedule off the portal '+
+      'for this level and it can be added.</div>';
+    return;
+  }
+
+  tag.textContent='lender’s own schedule at '+p+' points';
+  wrap.innerHTML='<div class="ladders">'+TERMS.map(function(t){
+    var rows=LADDER[t.m+'|'+p], r=model(t);
+    var body=rows.map(function(seg){
+      var lo=seg[0], hi=seg[1], rate=seg[2];
+      var label = lo===hi ? ('Month '+lo) : ('Months '+lo+'–'+hi);
+      var days  = 'Day '+((lo-1)*30+1)+'–'+(hi*30);
+      var full  = Math.abs(rate-r.factor)<0.0001;
+      return '<tr><td class="mcell" style="text-align:left">'+label+'<small>'+days+'</small></td>'+
+             '<td>'+rate.toFixed(2)+(full?' <span class="pill">full</span>':'')+'</td>'+
+             '<td class="pay">'+money0(round2(state.amt*rate))+'</td></tr>';
+    }).join('');
+    return '<div class="ladder">'+
+      '<h3>'+t.m+' Month</h3>'+
+      '<div class="meta">Factor '+fct(r.factor)+' &middot; payoff figures on '+money(state.amt,0)+'</div>'+
+      '<table><thead><tr><th style="text-align:left">Period</th><th>Rate</th><th>Payoff</th></tr></thead>'+
+      '<tbody>'+body+'</tbody></table></div>';
+  }).join('')+'</div>';
+}
+
+/* ---- wiring ---- */
+document.getElementById('amtR').addEventListener('input',function(){ state.amt=+this.value; render(); });
+document.getElementById('ptsR').addEventListener('input',function(){ state.pts=+this.value; render(); });
+document.getElementById('amtN').addEventListener('input',function(){
+  var v=parseInt(this.value.replace(/[^0-9]/g,''),10); if(!isNaN(v)){ state.amt=v; render(); } });
+document.getElementById('amtN').addEventListener('blur',function(){ render(); });
+document.getElementById('ptsN').addEventListener('input',function(){
+  var v=parseFloat(this.value.replace(/[^0-9.]/g,'')); if(!isNaN(v)){ state.pts=v; render(); } });
+document.getElementById('ptsN').addEventListener('blur',function(){ render(); });
+[].forEach.call(document.querySelectorAll('#amtPresets button'),function(b){
+  b.addEventListener('click',function(){ state.amt=+b.dataset.a; render(); }); });
+[].forEach.call(document.querySelectorAll('#ptsPresets button'),function(b){
+  b.addEventListener('click',function(){ state.pts=+b.dataset.p; render(); }); });
+
+render();
+console.log('RENDER OK');
+</script>
+</body>
+</html>
