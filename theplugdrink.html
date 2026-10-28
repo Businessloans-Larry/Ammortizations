@@ -194,7 +194,7 @@ td.broker .sml{color:#a8503f}
 
   <div class="callout">
     <div class="ic">&#9888;</div>
-    <div class="tx"><b>Buy rate steps at 7 points.</b> Quote 7 or fewer and the buy rate drops a full 2 points on either term. Going from 7 to 7.5 costs you more in buy rate than you gain in commission, so 7 is the sweet spot unless you need the extra points.</div>
+    <div class="tx"><b>Retention pricing turns off above 7 points.</b> Quote 7 or fewer and the buy rate drops a full 2 points on either term. Going from 7 to 7.5 costs you more in buy rate than you gain in commission, so 7 is the sweet spot unless you need the extra points.</div>
   </div>
 
   <div class="lendhead">
@@ -315,8 +315,8 @@ function render(){
 
   var lowTier = state.pts<=PTS_BREAK;
   document.getElementById('tierHint').innerHTML = lowTier
-    ? 'At <b>'+pts(state.pts)+' points</b> you are on the better buy rate: <b>1.29</b> on 18 months, <b>1.21</b> on 12.'
-    : 'Above 7 points the buy rate steps up to <b>1.31</b> on 18 months and <b>1.23</b> on 12.';
+    ? '<b>Retention pricing</b> at '+pts(state.pts)+' points: buy rate <b>1.29</b> on 18 months, <b>1.21</b> on 12.'
+    : 'Retention pricing is off above 7 points &mdash; the buy rate steps up to <b>1.31</b> on 18 months and <b>1.23</b> on 12.';
 
   var fee=round2(state.amt*FEE), comm=round2(state.amt*state.pts/100);
   function cap(id,v,s){ var e=document.getElementById(id);
@@ -324,7 +324,8 @@ function render(){
   cap('capFee', money0(fee));
   cap('capNet', money0(state.amt-fee));
   cap('capComm', money0(comm), pts(state.pts)+' points on '+money(state.amt,0));
-  cap('capTier', lowTier?'Lower':'Higher', lowTier?'7 points or less':'above 7 points');
+  cap('capTier', lowTier?'Retention':'Standard', lowTier?'7 points or less':'above 7 points');
+  document.getElementById('capTier').classList.toggle('hot', lowTier);
 
   document.getElementById('validline').textContent =
     'Priced ' + new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) +
