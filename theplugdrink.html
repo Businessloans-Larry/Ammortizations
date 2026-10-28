@@ -151,15 +151,15 @@ td.broker .sml{color:#a8503f}
         <input type="range" id="amtR" min="10000" max="250000" step="1000" />
         <input type="text" id="amtN" class="numbox" inputmode="numeric" />
       </div>
-      <div class="scale"><span>$10,000</span><span>$250,000</span></div>
+      <div class="scale"><span>$10,000</span><span id="amtScaleMax">—</span></div>
       <div class="presets" id="amtPresets">
-        <button data-a="100000">$100K</button>
         <button data-a="150000">$150K</button>
         <button data-a="182000">$182K</button>
         <button data-a="200000">$200K</button>
         <button data-a="250000">$250K</button>
+        <button data-a="max">Max</button>
       </div>
-      <div class="hint">Capped at <b>$250,000</b>. At or below that, the Tax Return, P&amp;L, Balance Sheet and Merchant Interview stips come off.</div>
+      <div class="hint" id="amtHint"></div>
     </div>
 
     <div>
@@ -181,15 +181,15 @@ td.broker .sml{color:#a8503f}
   </div>
 
   <div class="capgrid">
+    <div class="cap" id="capMax"><div class="n">Approved Max</div><div class="v">—</div><div class="s">&nbsp;</div></div>
     <div class="cap" id="capFee"><div class="n">Origination Fee</div><div class="v">—</div><div class="s">3% of the funded amount</div></div>
-    <div class="cap" id="capNet"><div class="n">Net to Client</div><div class="v">—</div><div class="s">after the fee comes out</div></div>
     <div class="cap hot" id="capComm"><div class="n">Your Commission</div><div class="v">—</div><div class="s">points &times; amount</div></div>
     <div class="cap" id="capTier"><div class="n">Buy Rate Tier</div><div class="v">—</div><div class="s">set by the points</div></div>
   </div>
 
-  <div class="callout green">
+  <div class="callout green" id="stipCallout">
     <div class="ic">&#9989;</div>
-    <div class="tx"><b>At $250,000 or less</b> the Tax Return, P&amp;L, Balance Sheet and Merchant Interview stips are waived. That is the reason for the cap, so pricing above it is not shown here.</div>
+    <div class="tx">&nbsp;</div>
   </div>
 
   <div class="callout">
@@ -224,6 +224,7 @@ td.broker .sml{color:#a8503f}
       <li><b>Buy rate</b> &mdash; 18 month: 1.29 at 7 points or less, 1.31 above. 12 month: 1.21 at 7 or less, 1.23 above.</li>
       <li><b>Payments</b> &mdash; 74 weekly on the 18 month, 50 on the 12. Weekly payment is the payback divided by that count, rounded up to the cent, matching the portal.</li>
       <li><b>Origination fee</b> 3%, charged by the lender and deducted from the funded amount.</li>
+      <li><b>Approved max</b> &mdash; $267,900 while retention pricing is on, $258,400 once it is off. The <b>18 month is capped at $250,000</b>, which is also where the four stips drop off.</li>
       <li><b>Early payoff</b> figures are the lender's own prepayment schedule, read off the portal. They are only shown at 7 and 10 points because those are the two the portal has given us.</li>
     </ul>
     <div style="margin-top:12px">Buy rate and commission are on this page. <b>It is for you, not the client.</b></div>
@@ -243,12 +244,18 @@ td.broker .sml{color:#a8503f}
    Payment counts are 4 x months + 2, which is what gives 50 and 74.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-var AMT_MIN=10000, AMT_MAX=250000;
+var AMT_MIN=10000;
 var FEE=0.03, PTS_MAX=10, PTS_BREAK=7;
 
+/* Approved maximum off the portal, and it moves with the retention toggle:
+   $267,900 while retention pricing is on, $258,400 once it drops off.
+   Only the 18 month is held to $250,000. */
+var MAX_RETENTION=267900, MAX_STANDARD=258400, CAP_18=250000;
+function maxAmt(){ return state.pts<=PTS_BREAK ? MAX_RETENTION : MAX_STANDARD; }
+
 var TERMS=[
-  {m:12, buyLow:1.21, buyHigh:1.23},
-  {m:18, buyLow:1.29, buyHigh:1.31}
+  {m:12, buyLow:1.21, buyHigh:1.23, cap:0},
+  {m:18, buyLow:1.29, buyHigh:1.31, cap:CAP_18}
 ];
 
 /* the lender's own prepayment schedules, at the two point levels we have */
@@ -276,7 +283,9 @@ function nPmts(m){ return m*4+2; }
 function buyFor(t,p){ return p<=PTS_BREAK ? t.buyLow : t.buyHigh; }
 
 function model(t){
-  var amt=state.amt, p=state.pts;
+  var p=state.pts;
+  var amt = t.cap ? Math.min(state.amt, t.cap) : state.amt;
+  var capped = !!(t.cap && state.amt > t.cap);
   var buy=buyFor(t,p);
   var factor=buy+p/100;
   var payback=round2(amt*factor);
@@ -284,7 +293,7 @@ function model(t){
   var pay=ceil2(payback/n);
   var fee=round2(amt*FEE);
   var comm=round2(amt*p/100);
-  return {m:t.m, amt:amt, p:p, buy:buy, factor:factor, payback:payback,
+  return {m:t.m, amt:amt, capped:capped, p:p, buy:buy, factor:factor, payback:payback,
           n:n, pay:pay, fee:fee, net:round2(amt-fee), comm:comm,
           cost:round2(payback-amt)};
 }
@@ -296,11 +305,14 @@ function head(cols){
 }
 
 function render(){
-  if(state.amt<AMT_MIN) state.amt=AMT_MIN;
-  if(state.amt>AMT_MAX) state.amt=AMT_MAX;
   if(state.pts<0) state.pts=0;
   if(state.pts>PTS_MAX) state.pts=PTS_MAX;
+  if(state.amt<AMT_MIN) state.amt=AMT_MIN;
+  /* the ceiling moves when retention drops off, so pull the amount down with it */
+  if(state.amt>maxAmt()) state.amt=maxAmt();
 
+  document.getElementById('amtR').max=maxAmt();
+  document.getElementById('amtScaleMax').textContent=money(maxAmt(),0);
   document.getElementById('amtR').value=state.amt;
   if(document.activeElement!==document.getElementById('amtN'))
     document.getElementById('amtN').value=money(state.amt,0);
@@ -309,7 +321,7 @@ function render(){
     document.getElementById('ptsN').value=pts(state.pts);
 
   [].forEach.call(document.querySelectorAll('#amtPresets button'),function(b){
-    b.classList.toggle('on', +b.dataset.a===state.amt); });
+    b.classList.toggle('on', b.dataset.a==='max' ? state.amt===maxAmt() : +b.dataset.a===state.amt); });
   [].forEach.call(document.querySelectorAll('#ptsPresets button'),function(b){
     b.classList.toggle('on', +b.dataset.p===state.pts); });
 
@@ -318,18 +330,38 @@ function render(){
     ? '<b>Retention pricing</b> at '+pts(state.pts)+' points: buy rate <b>1.29</b> on 18 months, <b>1.21</b> on 12.'
     : 'Retention pricing is off above 7 points &mdash; the buy rate steps up to <b>1.31</b> on 18 months and <b>1.23</b> on 12.';
 
-  var fee=round2(state.amt*FEE), comm=round2(state.amt*state.pts/100);
+  var m12=model(TERMS[0]), m18=model(TERMS[1]);
+  var split = m12.amt!==m18.amt;   /* the 18 month is capped below the 12 */
+
   function cap(id,v,s){ var e=document.getElementById(id);
-    e.querySelector('.v').textContent=v; if(s) e.querySelector('.s').textContent=s; }
-  cap('capFee', money0(fee));
-  cap('capNet', money0(state.amt-fee));
-  cap('capComm', money0(comm), pts(state.pts)+' points on '+money(state.amt,0));
+    e.querySelector('.v').textContent=v; if(s!==undefined) e.querySelector('.s').innerHTML=s; }
+
+  cap('capMax', money(maxAmt(),0),
+      lowTier ? 'approved max on retention pricing' : 'approved max, retention off');
+  cap('capFee', money0(m12.fee),
+      split ? '3% &middot; 18 mo is '+money0(m18.fee)+' on the capped amount' : '3% of the funded amount');
+  cap('capComm', money0(m12.comm),
+      split ? pts(state.pts)+' pts &middot; 18 mo is '+money0(m18.comm)
+            : pts(state.pts)+' points on '+money(state.amt,0));
   cap('capTier', lowTier?'Retention':'Standard', lowTier?'7 points or less':'above 7 points');
   document.getElementById('capTier').classList.toggle('hot', lowTier);
 
+  document.getElementById('amtHint').innerHTML = split
+    ? 'The <b>18 month caps at '+money(CAP_18,0)+'</b>, so it funds there while the 12 month takes the full amount.'
+    : 'Both terms fund the full amount. The 18 month caps at <b>'+money(CAP_18,0)+'</b>.';
+
+  var stipOk = state.amt<=CAP_18;
+  var sc=document.getElementById('stipCallout');
+  sc.className = 'callout'+(stipOk?' green':'');
+  sc.querySelector('.ic').innerHTML = stipOk ? '&#9989;' : '&#9888;';
+  sc.querySelector('.tx').innerHTML = stipOk
+    ? '<b>At $250,000 or less</b> the Tax Return, P&amp;L, Balance Sheet and Merchant Interview stips are waived.'
+    : '<b>Above $250,000</b> the Tax Return, P&amp;L, Balance Sheet and Merchant Interview stips come back. '+
+      'The 18 month funds at $250,000 either way, so the only thing above the cap buys you is the bigger 12 month.';
+
   document.getElementById('validline').textContent =
     'Priced ' + new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) +
-    ' · amount capped at $250,000 · 3% origination fee · 10 points maximum';
+    ' · approved to ' + money(maxAmt(),0) + ' · 18 month capped at $250,000 · 3% origination fee · 10 points maximum';
 
   head([{t:'Term'},{t:'Amount'},{t:'Buy Rate',n:'yours, not theirs',b:true},{t:'Points',b:true},
         {t:'Factor Rate'},{t:'Total Payback'},{t:'Weekly'},{t:'# Pmts'},
@@ -339,7 +371,7 @@ function render(){
     var r=model(t);
     return '<tr>'+
       '<td><div class="termcell">'+r.m+' months<small>weekly</small></div></td>'+
-      '<td>'+money(r.amt,0)+'</td>'+
+      '<td>'+money(r.amt,0)+(r.capped?' <span class="pill red">cap</span>':'')+'</td>'+
       '<td class="broker">'+r.buy.toFixed(2)+'</td>'+
       '<td class="broker">'+pts(r.p)+'</td>'+
       '<td class="factor">'+fct(r.factor)+'</td>'+
@@ -378,11 +410,12 @@ function renderLadders(){
       var full  = Math.abs(rate-r.factor)<0.0001;
       return '<tr><td class="mcell" style="text-align:left">'+label+'<small>'+days+'</small></td>'+
              '<td>'+rate.toFixed(2)+(full?' <span class="pill">full</span>':'')+'</td>'+
-             '<td class="pay">'+money0(round2(state.amt*rate))+'</td></tr>';
+             '<td class="pay">'+money0(round2(r.amt*rate))+'</td></tr>';
     }).join('');
     return '<div class="ladder">'+
       '<h3>'+t.m+' Month</h3>'+
-      '<div class="meta">Factor '+fct(r.factor)+' &middot; payoff figures on '+money(state.amt,0)+'</div>'+
+      '<div class="meta">Factor '+fct(r.factor)+' &middot; payoff figures on '+money(r.amt,0)+
+        (r.capped?' <span class="pill red">capped</span>':'')+'</div>'+
       '<table><thead><tr><th style="text-align:left">Period</th><th>Rate</th><th>Payoff</th></tr></thead>'+
       '<tbody>'+body+'</tbody></table></div>';
   }).join('')+'</div>';
@@ -398,7 +431,8 @@ document.getElementById('ptsN').addEventListener('input',function(){
   var v=parseFloat(this.value.replace(/[^0-9.]/g,'')); if(!isNaN(v)){ state.pts=v; render(); } });
 document.getElementById('ptsN').addEventListener('blur',function(){ render(); });
 [].forEach.call(document.querySelectorAll('#amtPresets button'),function(b){
-  b.addEventListener('click',function(){ state.amt=+b.dataset.a; render(); }); });
+  b.addEventListener('click',function(){
+    state.amt = b.dataset.a==='max' ? maxAmt() : +b.dataset.a; render(); }); });
 [].forEach.call(document.querySelectorAll('#ptsPresets button'),function(b){
   b.addEventListener('click',function(){ state.pts=+b.dataset.p; render(); }); });
 
