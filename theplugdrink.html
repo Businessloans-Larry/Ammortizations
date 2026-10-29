@@ -111,6 +111,21 @@ td.broker .sml{color:#a8503f}
 .nolad{background:var(--bl-white);border:1px dashed var(--bl-line);border-radius:var(--radius);padding:26px 24px;text-align:center;color:var(--bl-steel);font-size:13px}
 .nolad b{color:var(--bl-navy)}
 
+.stipgrid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+.stipcard{padding:20px 24px 22px;margin-bottom:0}
+.stipcard h3{font-family:var(--font-display);font-size:18px;color:var(--bl-navy);font-weight:400;margin-bottom:12px}
+.stipcard ul{margin:0;padding-left:18px}
+.stipcard li{font-size:12.5px;color:var(--bl-slate);margin-bottom:7px;line-height:1.45}
+.stipcard li b{color:var(--bl-navy)}
+.stipcard .meta{font-size:11.5px;color:var(--bl-steel);margin:-4px 0 12px}
+.stipcard .meta b{color:var(--bl-navy)}
+table.mini{min-width:0;font-size:12.5px}
+table.mini thead th{padding:9px 12px}
+table.mini tbody td{padding:8px 12px}
+
+.approvalbar{display:flex;flex-wrap:wrap;gap:8px 22px;background:var(--bl-white);border:1px solid var(--bl-pale);border-radius:var(--radius-sm);padding:14px 18px;font-size:11.5px;color:var(--bl-steel);margin-bottom:8px}
+.approvalbar b{color:var(--bl-navy);font-weight:700}
+
 .foot{margin-top:34px;padding-top:18px;border-top:1px solid var(--bl-line);font-size:11.5px;color:var(--bl-steel)}
 .foot b{color:var(--bl-navy)}
 .foot ul{margin:8px 0 0 18px}
@@ -120,6 +135,7 @@ td.broker .sml{color:#a8503f}
   .amtpanel{grid-template-columns:1fr}
   .capgrid{grid-template-columns:repeat(2,1fr)}
   .ladders{grid-template-columns:1fr}
+  .stipgrid{grid-template-columns:1fr}
 }
 @media print{
   body{background:#fff}
@@ -188,8 +204,8 @@ td.broker .sml{color:#a8503f}
   </div>
 
   <div class="lendhead">
-    <h2>Both Terms</h2>
-    <div class="tag">priced at the current amount and points</div>
+    <h2>Lender A</h2>
+    <div class="tag">12 &amp; 18 month &middot; weekly &middot; retention pricing</div>
   </div>
 
   <div class="tablecard">
@@ -207,6 +223,66 @@ td.broker .sml{color:#a8503f}
   </div>
   <div id="ladderWrap"></div>
 
+  <div class="lendhead">
+    <h2>PEAC</h2>
+    <div class="tag" id="peacTag">12, 18 &amp; 20 month &middot; weekly</div>
+  </div>
+
+  <div class="tablecard">
+    <div class="tscroll">
+      <table>
+        <thead><tr id="pthr"></tr></thead>
+        <tbody id="ptbd"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="stipgrid">
+    <div class="tablecard stipcard">
+      <h3>Approval Stipulations</h3>
+      <ul id="peacStips"></ul>
+    </div>
+    <div class="tablecard stipcard">
+      <h3>Additional Comments</h3>
+      <ul id="peacNotes"></ul>
+    </div>
+  </div>
+
+  <div class="approvalbar">
+    <span><b>Approved</b> Oct 29, 2026</span>
+    <span><b>Expires</b> Nov 27, 2026, 3:01 PM</span>
+    <span><b>Fees</b> 2.5% weekly &middot; 3% monthly &middot; 4% on 100% prepayment</span>
+    <span><b>100% prepayment</b> caps commission at 7 points and the term at 18 months, no change in buy rate</span>
+  </div>
+
+  <div class="lendhead">
+    <h2>Wall Street Funding</h2>
+    <div class="tag" id="wallTag">12 month &middot; weekly</div>
+  </div>
+
+  <div class="tablecard">
+    <div class="tscroll">
+      <table>
+        <thead><tr id="wthr"></tr></thead>
+        <tbody id="wtbd"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="stipgrid">
+    <div class="tablecard stipcard">
+      <h3>Early Repayment Discount</h3>
+      <div class="meta" id="wallPrepayMeta"></div>
+      <table class="mini"><thead><tr><th style="text-align:left">Window</th><th>Factor</th><th>Payoff</th></tr></thead>
+        <tbody id="wallPrepay"></tbody></table>
+    </div>
+    <div class="tablecard stipcard">
+      <h3>Stipulations Needed for Funding</h3>
+      <ul id="wallStips"></ul>
+      <div class="meta" style="margin-top:14px" id="wallFeeNote"></div>
+    </div>
+  </div>
+
   <div class="foot">
     <b>How these are worked out</b>
     <ul>
@@ -214,7 +290,9 @@ td.broker .sml{color:#a8503f}
       <li><b>Buy rate</b> &mdash; 18 month: 1.29 at 7 points or less, 1.31 above. 12 month: 1.21 at 7 or less, 1.23 above.</li>
       <li><b>Payments</b> &mdash; 74 weekly on the 18 month, 50 on the 12. Weekly payment is the payback divided by that count, rounded up to the cent, matching the portal.</li>
       <li><b>Origination fee</b> 3%, charged by the lender and deducted from the funded amount.</li>
-      <li><b>Caps</b> &mdash; the <b>12 month tops out at $182,000</b> and comes off the portal entirely above that. The <b>18 month runs to $250,000</b>, which is also where the four stips drop off.</li>
+      <li><b>Caps</b> &mdash; Lender A's <b>12 month tops out at $182,000</b> and comes off the portal entirely above that. Its <b>18 month runs to $250,000</b>, which is also where the four stips drop off. PEAC and Wall are approved to $250,000.</li>
+      <li><b>PEAC</b> &mdash; buy rate is fixed per term and does not move with points. Payments are months &times; 52/12 (52, 78, 87) and the weekly is rounded, not rounded up. Fee is 2.5% weekly, 3% monthly, 4% on 100% prepayment &mdash; and 100% prepayment caps commission at 7 points and the term at 18 months with no change in buy rate.</li>
+      <li><b>Wall Street Funding</b> &mdash; one point moves the factor <b>0.02</b>, double the other two. Fee is 1.5% plus a flat $35. 51 level weekly payments and a final one trued up. The early repayment grid is printed at 2 points; moving the points shifts every tier by the same 0.02.</li>
       <li><b>Early payoff</b> figures are the lender's own prepayment schedule, read off the portal. They are only shown at 7 and 10 points because those are the two the portal has given us.</li>
     </ul>
     <div style="margin-top:12px">Buy rate and commission are on this page. <b>It is for you, not the client.</b></div>
@@ -245,6 +323,66 @@ var CAP_12=182000, CAP_18=250000, AMT_MAX=CAP_18;
 var TERMS=[
   {m:12, buyLow:1.21, buyHigh:1.23, cap:CAP_12},
   {m:18, buyLow:1.29, buyHigh:1.31, cap:CAP_18}
+];
+
+/* ── PEAC Solutions ────────────────────────────────────────────────────────
+   Approval dated 10/29/2026, expires 11/27/2026 3:01 PM.
+   Buy rate is fixed per term — it does NOT move with points the way the other
+   portal's does. Max Fees is 0.10, so 10 points is the ceiling there too.
+   Two conventions differ from the other lender, both verified across all 11
+   rows of the approval:
+     payments = round(months x 52/12)  -> 52 / 78 / 87, not 4 x months + 2
+     weekly   = payback / payments, ROUNDED (not rounded up)
+   Fee depends on the product: 2.5% weekly, 3% monthly, 4% on 100% prepayment. */
+var PEAC_FEE_WEEKLY=0.025, PEAC_FEE_MONTHLY=0.03, PEAC_FEE_100=0.04;
+var PEAC_PTS_MAX=10, PEAC_100_PTS_CAP=7, PEAC_100_TERM_CAP=18;
+var PEAC=[
+  {m:12, buy:1.19, n:52, offer:250000},
+  {m:18, buy:1.26, n:78, offer:250000},
+  {m:20, buy:1.28, n:87, offer:250000}
+];
+var PEAC_STIPS=[
+  'Proof of ownership',
+  'Quick Track',
+  'Voided Check',
+  'Driver’s License',
+  'Month to Date Business Bank Statement',
+  'Proof of Home Address',
+  'Competitor Payoff Letter'
+];
+/* ── Wall Street Funding ───────────────────────────────────────────────────
+   Pre-approval, 12 month weekly, $250,000 approved.
+   Their point is worth DOUBLE the other two: buy 1.19 at POS 2 gives a 1.23
+   factor, so one point moves the factor 0.02, not 0.01. That is the one thing
+   here resting on a single row of their paperwork — see the note on the page.
+   Fee is 1.5% plus a flat $35 ($250,000 - $3,750 - $35 = the $246,215
+   disbursement they quote). 52 weekly payments, last one trued up. */
+var WALL_PT=0.02, WALL_POS_DOC=2, WALL_PTS_MAX=10;
+var WALL_FEE=0.015, WALL_FLAT=35;
+var WALL=[{m:12, buy:1.19, n:52, offer:250000}];
+
+/* Early repayment discount, exactly as printed at POS 2. Points shift every
+   tier by the same 0.02. At POS 0 the first three tiers fall back onto their
+   printed buy multiples, which is the check that the rule is right. */
+var WALL_PREPAY=[
+  {d:'Days 1–30',    buy:1.04, f2:1.08},
+  {d:'Days 31–60',   buy:1.06, f2:1.10},
+  {d:'Days 61–90',   buy:1.09, f2:1.13},
+  {d:'Days 91–121',  buy:1.10, f2:1.22},
+  {d:'Days 122–152', buy:1.11, f2:1.23},
+  {d:'Days 153–183', buy:1.12, f2:1.24}
+];
+var WALL_STIPS=[
+  'Agreement: <b>BSD Capital</b>',
+  'Signed Agreement, Driver’s License &amp; Voided Check',
+  'Most Recent Business Tax Return — industry, plus CEO and CFO'
+];
+
+var PEAC_NOTES=[
+  'Competitor payoff letter from <b>Lendistry</b> — must net &gt;50% after payoff.',
+  'Proof of LOC for <b>Idea</b> — screenshot from the portal.',
+  'If the product is a term loan, provide a payoff letter; customer must net &gt;50% after payoff.',
+  '90-day <b>Plaid</b> connection on the business operating account.'
 ];
 
 /* the lender's own prepayment schedules, at the two point levels we have */
@@ -285,6 +423,36 @@ function model(t){
   return {m:t.m, amt:amt, capped:capped, p:p, buy:buy, factor:factor, payback:payback,
           n:n, pay:pay, fee:fee, net:round2(amt-fee), comm:comm,
           cost:round2(payback-amt)};
+}
+
+function peacModel(t){
+  var p=Math.min(state.pts, PEAC_PTS_MAX);
+  var amt=Math.min(state.amt, t.offer), capped=state.amt>t.offer;
+  var factor=t.buy+p/100;
+  var payback=round2(amt*factor);
+  var pay=round2(payback/t.n);              /* PEAC rounds, it does not round up */
+  var fee=round2(amt*PEAC_FEE_WEEKLY);
+  return {m:t.m, amt:amt, capped:capped, p:p, buy:t.buy, factor:factor,
+          payback:payback, n:t.n, pay:pay, fee:fee, net:round2(amt-fee),
+          comm:round2(amt*p/100), cost:round2(payback-amt)};
+}
+
+function wallModel(t){
+  var p=Math.min(state.pts, WALL_PTS_MAX);
+  var amt=Math.min(state.amt, t.offer), capped=state.amt>t.offer;
+  var factor=round2(t.buy + p*WALL_PT);
+  var payback=round2(amt*factor);
+  var fee=round2(amt*WALL_FEE);
+  /* 51 level payments and a final one that absorbs the rounding */
+  var pay=Math.floor(payback/t.n*100)/100;
+  var last=round2(payback-pay*(t.n-1));
+  return {m:t.m, amt:amt, capped:capped, p:p, buy:t.buy, factor:factor,
+          payback:payback, n:t.n, pay:pay, last:last, fee:fee, flat:WALL_FLAT,
+          net:round2(amt-fee-WALL_FLAT), comm:round2(amt*p/100),
+          cost:round2(payback-amt)};
+}
+function wallPrepayFactor(row){
+  return round2(row.f2 + (Math.min(state.pts,WALL_PTS_MAX)-WALL_POS_DOC)*WALL_PT);
 }
 
 function head(cols){
@@ -362,7 +530,84 @@ function render(){
   }).join('');
 
   renderLadders();
+  renderPeac();
+  renderWall();
   save();
+}
+
+function renderPeac(){
+  document.getElementById('pthr').innerHTML=
+    [{t:'Term'},{t:'Amount'},{t:'Buy Rate',n:'fixed per term',b:true},{t:'Points',b:true},
+     {t:'Factor Rate'},{t:'Total Payback'},{t:'Weekly'},{t:'# Pmts'},
+     {t:'Orig. Fee',n:'2.5% weekly'},{t:'Net to Client'},{t:'Commission',b:true}]
+    .map(function(c){ return '<th'+(c.b?' class="broker"':'')+'>'+c.t+
+      (c.n?'<span class="thnote">'+c.n+'</span>':'')+'</th>'; }).join('');
+
+  document.getElementById('ptbd').innerHTML = PEAC.map(function(t){
+    var r=peacModel(t);
+    return '<tr>'+
+      '<td><div class="termcell">'+r.m+' months<small>weekly</small></div></td>'+
+      '<td>'+money(r.amt,0)+(r.capped?' <span class="pill red">cap</span>':'')+'</td>'+
+      '<td class="broker">'+r.buy.toFixed(2)+'</td>'+
+      '<td class="broker">'+pts(r.p)+'</td>'+
+      '<td class="factor">'+fct(r.factor)+'</td>'+
+      '<td class="pay">'+money(r.payback)+'</td>'+
+      '<td class="pay">'+money(r.pay)+'</td>'+
+      '<td>'+r.n+'</td>'+
+      '<td>'+money0(r.fee)+'<span class="sml">charged by the lender</span></td>'+
+      '<td class="pay">'+money0(r.net)+'</td>'+
+      '<td class="broker">'+money0(r.comm)+'</td>'+
+    '</tr>';
+  }).join('');
+
+  document.getElementById('peacStips').innerHTML =
+    PEAC_STIPS.map(function(s){ return '<li>'+s+'</li>'; }).join('');
+  document.getElementById('peacNotes').innerHTML =
+    PEAC_NOTES.map(function(s){ return '<li>'+s+'</li>'; }).join('');
+}
+
+function renderWall(){
+  var r=wallModel(WALL[0]);
+
+  document.getElementById('wthr').innerHTML=
+    [{t:'Term'},{t:'Amount'},{t:'Buy Multiple',b:true},{t:'POS',n:'points',b:true},
+     {t:'Factor Multiple'},{t:'Payback'},{t:'Weekly'},{t:'# Pmts'},
+     {t:'Orig. Fee',n:'1.5% + $35'},{t:'Disbursed'},{t:'Commission',b:true}]
+    .map(function(c){ return '<th'+(c.b?' class="broker"':'')+'>'+c.t+
+      (c.n?'<span class="thnote">'+c.n+'</span>':'')+'</th>'; }).join('');
+
+  document.getElementById('wtbd').innerHTML='<tr>'+
+    '<td><div class="termcell">'+r.m+' months<small>weekly</small></div></td>'+
+    '<td>'+money(r.amt,0)+(r.capped?' <span class="pill red">cap</span>':'')+'</td>'+
+    '<td class="broker">'+r.buy.toFixed(2)+'</td>'+
+    '<td class="broker">'+pts(r.p)+'</td>'+
+    '<td class="factor">'+fct(r.factor)+'</td>'+
+    '<td class="pay">'+money(r.payback)+'</td>'+
+    '<td class="pay">'+money(r.pay)+'<span class="sml">last '+money(r.last)+'</span></td>'+
+    '<td>'+r.n+'</td>'+
+    '<td>'+money0(r.fee)+'<span class="sml">+ $35 flat</span></td>'+
+    '<td class="pay">'+money0(r.net)+'</td>'+
+    '<td class="broker">'+money0(r.comm)+'</td>'+
+  '</tr>';
+
+  document.getElementById('wallPrepayMeta').innerHTML =
+    'At <b>'+pts(r.p)+' points</b> on '+money(r.amt,0)+
+    (r.p===WALL_POS_DOC ? ' &mdash; exactly as the approval prints it.'
+                        : ' &mdash; every tier shifted '+((r.p-WALL_POS_DOC)>=0?'+':'')+
+                          ((r.p-WALL_POS_DOC)*WALL_PT).toFixed(2)+' from the printed 2-point grid.');
+
+  document.getElementById('wallPrepay').innerHTML = WALL_PREPAY.map(function(row){
+    var f=wallPrepayFactor(row);
+    return '<tr><td class="mcell" style="text-align:left">'+row.d+'</td>'+
+           '<td>'+f.toFixed(2)+'</td>'+
+           '<td class="pay">'+money0(round2(r.amt*f))+'</td></tr>';
+  }).join('');
+
+  document.getElementById('wallStips').innerHTML =
+    WALL_STIPS.map(function(s){ return '<li>'+s+'</li>'; }).join('');
+  document.getElementById('wallFeeNote').innerHTML =
+    'Disbursement is the amount less the 1.5% fee and a flat $35. At '+money(r.amt,0)+
+    ' that is <b>'+money0(r.net)+'</b>.';
 }
 
 function renderLadders(){
