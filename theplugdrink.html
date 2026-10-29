@@ -291,7 +291,7 @@ table.mini tbody td{padding:8px 12px}
       <li><b>Origination fee</b> 3%, charged by the lender and deducted from the funded amount.</li>
       <li><b>Caps</b> &mdash; Fora's <b>12 month tops out at $182,000</b> and comes off the portal entirely above that. Its <b>18 month runs to $250,000</b>, which is also where the four stips drop off. PEAC and Wall are approved to $250,000.</li>
       <li><b>PEAC</b> &mdash; buy rate is fixed per term and does not move with points. Payments are months &times; 52/12 (52, 78, 87) and the weekly is rounded, not rounded up. Fee is 2.5% weekly, 3% monthly, 4% on 100% prepayment &mdash; and 100% prepayment caps commission at 7 points and the term at 18 months with no change in buy rate.</li>
-      <li><b>Wall Street Funding</b> &mdash; one point moves the factor <b>0.02</b>, double the other two. Fee is 1.5% plus a flat $35. 51 level weekly payments and a final one trued up. The early repayment grid is printed at 2 points; moving the points shifts every tier by the same 0.02.</li>
+      <li><b>Wall Street Funding</b> &mdash; one point moves the factor 0.01, same as the others. Their printed sheet carries a 0.04 spread over buy, so it is a <b>4-point quote</b> even though its POS column reads 2; the page reproduces it exactly at 4 points. Fee is 1.5% plus a flat $35. 51 level weekly payments and a final one trued up. Moving the points shifts every early repayment tier by 0.01.</li>
       <li><b>Early payoff</b> figures are the lender's own prepayment schedule, read off the portal. They are only shown at 7 and 10 points because those are the two the portal has given us.</li>
     </ul>
     <div style="margin-top:12px">Buy rate and commission are on this page. <b>It is for you, not the client.</b></div>
@@ -351,18 +351,22 @@ var PEAC_STIPS=[
 ];
 /* ── Wall Street Funding ───────────────────────────────────────────────────
    Pre-approval, 12 month weekly, $250,000 approved.
-   Their point is worth DOUBLE the other two: buy 1.19 at POS 2 gives a 1.23
-   factor, so one point moves the factor 0.02, not 0.01. That is the one thing
-   here resting on a single row of their paperwork — see the note on the page.
+   One point moves the factor 0.01, same as the other two (Larry, 10/29).
+   Their sheet carries a uniform 0.04 spread over buy — on the main row
+   (1.19 -> 1.23) and on the first three prepay tiers (1.04 -> 1.08,
+   1.06 -> 1.10, 1.09 -> 1.13). At a penny a point that spread is FOUR points,
+   so the printed sheet is a 4-point quote even though its POS column reads 2.
+   Everything here is anchored to that: at 4 points the page reproduces their
+   paperwork exactly, and at 0 points the first three prepay tiers fall back
+   onto their printed buy multiples.
    Fee is 1.5% plus a flat $35 ($250,000 - $3,750 - $35 = the $246,215
    disbursement they quote). 52 weekly payments, last one trued up. */
-var WALL_PT=0.02, WALL_POS_DOC=2, WALL_PTS_MAX=10;
+var WALL_PT=0.01, WALL_POS_DOC=4, WALL_PTS_MAX=10;
 var WALL_FEE=0.015, WALL_FLAT=35;
 var WALL=[{m:12, buy:1.19, n:52, offer:250000}];
 
-/* Early repayment discount, exactly as printed at POS 2. Points shift every
-   tier by the same 0.02. At POS 0 the first three tiers fall back onto their
-   printed buy multiples, which is the check that the rule is right. */
+/* Early repayment discount, exactly as printed on the sheet. Points shift
+   every tier by 0.01 off that 4-point baseline. */
 var WALL_PREPAY=[
   {d:'Days 1–30',    buy:1.04, f2:1.08},
   {d:'Days 31–60',   buy:1.06, f2:1.10},
@@ -567,7 +571,7 @@ function renderWall(){
   var r=wallModel(WALL[0]);
 
   document.getElementById('wthr').innerHTML=
-    [{t:'Term'},{t:'Amount'},{t:'Buy Multiple',b:true},{t:'POS',n:'points',b:true},
+    [{t:'Term'},{t:'Amount'},{t:'Buy Multiple',b:true},{t:'Points',b:true},
      {t:'Factor Multiple'},{t:'Payback'},{t:'Weekly'},{t:'# Pmts'},
      {t:'Orig. Fee',n:'1.5% + $35'},{t:'Disbursed'},{t:'Commission',b:true}]
     .map(function(c){ return '<th'+(c.b?' class="broker"':'')+'>'+c.t+
@@ -589,9 +593,10 @@ function renderWall(){
 
   document.getElementById('wallPrepayMeta').innerHTML =
     'At <b>'+pts(r.p)+' points</b> on '+money(r.amt,0)+
-    (r.p===WALL_POS_DOC ? ' &mdash; exactly as the approval prints it.'
+    (r.p===WALL_POS_DOC ? ' &mdash; exactly as their sheet prints it.'
                         : ' &mdash; every tier shifted '+((r.p-WALL_POS_DOC)>=0?'+':'')+
-                          ((r.p-WALL_POS_DOC)*WALL_PT).toFixed(2)+' from the printed 2-point grid.');
+                          ((r.p-WALL_POS_DOC)*WALL_PT).toFixed(2)+
+                          ' off their printed grid, which is a '+WALL_POS_DOC+'-point quote.');
 
   document.getElementById('wallPrepay').innerHTML = WALL_PREPAY.map(function(row){
     var f=wallPrepayFactor(row);
